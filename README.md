@@ -2,35 +2,42 @@
 
 This is the repository for user-locale-client-hints. You're welcome to
 [contribute](CONTRIBUTING.md)!
-
-To fill this out, please see: https://github.com/w3ctag/w3ctag.github.io/blob/master/explainers.md
 ## Authors:
 
-- [Author 1]
-- [Author 2]
-- [etc.]
+- [Romulo Cintra](@romulocintra)
+- [Ujjwal Sharma](@ryzokuken)
 
 ## Participate
-- [Issue tracker]
-- [Discussion forum]
-
-## Table of Contents [if the explainer is longer than one printed page]
-
-[You can generate a Table of Contents for markdown documents using a tool like [doctoc](https://github.com/thlorenz/doctoc).]
-
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+- [GitHub repository](/)
+- [Issue tracker](/issues)
 
 ## Introduction
 
-[The "executive summary" or "abstract".
-Explain in a few sentences what the goals of the project are,
-and a brief overview of how the solution works.
-This should be no more than 1-2 paragraphs.]
+User preferences, are often system-wide settings (such as in Android, macOS, or Windows). Operating systems allow the user to specify custom overrides for settings such as:
 
-## Goals [or Motivating Use Cases, or Scenarios]
+  * Hour cycle (24-hour or 12-hour time)
+  * Calendar system
+  * Measurement unit preferences (metric or imperial)
+  * Date/time patterns
+  * Number separators (comma or period)
 
-[What is the **end-user need** which this project aims to address?]
+However, there’s currently no reliable way to access this information from the  Web Platform to craft better user experiences. Allowing web developers to access this information would allow them to improve the accessibility and usability of their websites, and bring the user experience of web applications closer to that of native applications.
+
+
+## Goals & Motivation
+
+To allow web applications to get access to higher quality user preferences to assist Internationalization.
+
+Client and server-side applications access and share consistently user preferences  will help solve cases like:
+
+> _Alice, an end user, reads en-US, but prefers using a 24-hour clock. She has set that preference in her operating system settings. Native apps are able to respect her preference. However, web apps cannot access OS user preferences, so on the Web Platform, Alice sees a 12-hour clock, the default for en-US._
+
+For *client side applications*, the best way to get them would be through a browser API that fetches this information from the different platform-specific OS APIs.
+
+For *server side applications*, one way to get access to this information would be via HTTP headers on the request.
+
+
+
 
 ## Non-goals
 
