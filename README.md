@@ -23,7 +23,6 @@ User preferences, are often system-wide settings (such as in Android, macOS, or 
 
 However, there’s currently no reliable way to access this information from the  Web Platform to craft better user experiences. Allowing web developers to access this information would allow them to improve the accessibility and usability of their websites, and bring the user experience of web applications closer to that of native applications.
 
-![locale-hints-flow](https://user-images.githubusercontent.com/1572026/182210112-69fb7769-eafa-43ab-bad0-21eb49489d50.png)
 
 ## Goals & Motivation
 
@@ -38,8 +37,7 @@ For *client side applications*, the best way to get them would be through a brow
 
 For *server side applications*, one way to get access to this information would be via HTTP headers on the request.
 
-
-
+![locale-hints-flow](https://user-images.githubusercontent.com/1572026/182210112-69fb7769-eafa-43ab-bad0-21eb49489d50.png)
 
 ## Non-goals
 
