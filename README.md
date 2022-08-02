@@ -4,8 +4,8 @@ This is the repository for user-locale-client-hints. You're welcome to
 [contribute](CONTRIBUTING.md)!
 ## Authors:
 
-- [Romulo Cintra](@romulocintra)
-- [Ujjwal Sharma](@ryzokuken)
+- [Romulo Cintra](https://github.com/romulocintra)
+- [Ujjwal Sharma](https://github.com/ryzokuken)
 
 ## Participate
 - [GitHub repository](/)
