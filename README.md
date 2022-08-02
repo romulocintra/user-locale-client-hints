@@ -64,8 +64,8 @@ Sec-CH-Locale-Preferences: "en"
 ```
 
 ```
-// Language "en-US" - user set calendar and hour cycle
-Sec-CH-Locale-Preferences: "en-u-ca-gregory-hc-h12"
+// Language "en-US" - user set calendar, hour cycle and metric system
+Sec-CH-Locale-Preferences: "en-u-ca-gregory-hc-h12-ms-uksystem "
 ```
 
 **Maximize Locale Preferences**
@@ -75,115 +75,65 @@ Granular information can be obtained  by using the list of headers bellow , they
 
 | Client Hint | Example output | Allowed Values | Description |
 | --- | --- | --- | --- |
-| Sec-CH-Locale-Preferences-u-ca | mul-u-ca-buddhist |  | Calendar system / Calendar algorithm |
-| Sec-CH-Locale-Preferences-u-cf | mul-u-cf-account | standard, account | Currency Format style, whether to use accounting currency format |
-| Sec-CH-Locale-Preferences-u-co | mul-u-cf-search | standard, search, phonetic... | Collation type, sort order |
-| Sec-CH-Locale-Preferences-u-cu |  | 	ISO 4217 codes | Currency type |
-| Sec-CH-Locale-Preferences-u-em |  | emoji , text, default | Emoji presentation style |
-| Sec-CH-Locale-Preferences-u-fw |  | "sun", "mon" ... "sat" | First day of week  |
-| Sec-CH-Locale-Preferences-u-hc |  | h12 , h23, h11, h24 | Hour cycle, i.e., 12-hour or 24-hour clock |
-| Sec-CH-Locale-Preferences-u-ms |  | metric , ussystem , uksystem | Measurement system, i.e., metric or imperial |
-| Sec-CH-Locale-Preferences-u-nu |  | Unicode script subtag(arabext...)    <br> | Numbering system |
-| Sec-CH-Locale-Preferences-u-tz |  | Unicode short time zone IDs | Time zone |
-| Sec-CH-Locale-Preferences-u-rg |  | [Unicode Region Subtag](https://unicode.org/reports/tr35/tr35.html#unicode_region_subtag) | Region override |
+| Sec-CH-Locale-Preferences-u-ca | `Sec-CH-Locale-Preferences-u-ca : "buddhist"`  |  | Calendar system / Calendar algorithm |
+| Sec-CH-Locale-Preferences-u-cf | `Sec-CH-Locale-Preferences-u-cf: "account"`    | standard, account | Currency Format style, whether to use accounting currency format |
+| Sec-CH-Locale-Preferences-u-co | `Sec-CH-Locale-Preferences-u-co: "search"`     | standard, search, phonetic... | Collation type, sort order |
+| Sec-CH-Locale-Preferences-u-cu | `Sec-CH-Locale-Preferences-u-cu: "EUR"`        | 	ISO 4217 codes | Currency type |
+| Sec-CH-Locale-Preferences-u-em | `Sec-CH-Locale-Preferences-u-em: "emoji"`      | emoji , text, default | Emoji presentation style |
+| Sec-CH-Locale-Preferences-u-fw | `Sec-CH-Locale-Preferences-u-fw: "sun"`        | "sun", "mon" ... "sat" | First day of week  |
+| Sec-CH-Locale-Preferences-u-hc | `Sec-CH-Locale-Preferences-u-fw: "h12"`        | h12 , h23, h11, h24 | Hour cycle, i.e., 12-hour or 24-hour clock |
+| Sec-CH-Locale-Preferences-u-ms | `Sec-CH-Locale-Preferences-u-ms: "metric"`     | metric , ussystem , uksystem | Measurement system |
+| Sec-CH-Locale-Preferences-u-nu | `Sec-CH-Locale-Preferences-u-nu: "latn"`       | Unicode script subtag(arabext...)    <br> | Numbering system |
+| Sec-CH-Locale-Preferences-u-tz | `Sec-CH-Locale-Preferences-u-tz: "Atlantic/Azores"; "Atlantic/Madeira"; "Europe/Lisbon"` | Unicode short time zone IDs | Time zone |
+| Sec-CH-Locale-Preferences-u-rg | `Sec-CH-Locale-Preferences-u-rg: "PT"` | [Unicode Region Subtag](https://unicode.org/reports/tr35/tr35.html#unicode_region_subtag) | Region override |
 
 
-These client hints should also be exposed via JavaScript APIs via a new `navigator.localePreferences` attribute:
+These client hints should also be exposed via JavaScript APIs via `navigator.locales` as suggested in [#68](https://github.com/tc39/ecma402/issues/68) or by creating a new `navigator.localePreferences` that exposes `Locale-Preferences` information.
 
-```
-// TODO CODE
-```
+## Example
 
-## [API 1]
+1. The client makes an initial request to the server:
+   ```
+   GET / HTTP/1.1
+   Host: example.com
+   ```
 
-[For each related element of the proposed solution - be it an additional JS method, a new object, a new element, a new concept etc., create a section which briefly describes it.]
+2. The server responds, telling the client via `Accept-CH` that it accepts the
+   `Sec-CH-Locale-Preferences` and the `Sec-CH-Locale-Preferences-fw` Client Hints.
+   ```
+   HTTP/1.1 200 OK
+   Content-Type: text/html
+   Accept-CH: Sec-CH-Locale-Preferences, Sec-CH-Locale-Preferences-fw
+   ```
 
-```js
-// Provide example code - not IDL - demonstrating the design of the feature.
+3. Then subsequent requests to https://example.com will include the following request headers in case the user sets `calendar` and `first day of week` values:
+   ```
+   GET / HTTP/1.1
+   Host: example.com
+   Sec-CH-Locale-Preferences: "en-u-ca-gregory-fw-sun"
+   Sec-CH-Locale-Preferences-fw: "sun"
+   ```
+   
+   In case the user did not set any `Locale-Preferences`, request headers have the best attempt of information if it's resolved or exists
+   ```
+   GET / HTTP/1.1
+   Host: example.com
+   Sec-CH-Locale-Preferences: "en"
+   Sec-CH-Locale-Preferences-fw: ""
+   ```
 
-// If this API can be used on its own to address a user need,
-// link it back to one of the scenarios in the goals section.
+4. The server can then tailor the response to the client's preferences accordingly.
 
-// If you need to show how to get the feature set up
-// (initialized, or using permissions, etc.), include that too.
-```
+## Privacy and Security Considerations
 
-[Where necessary, provide links to longer explanations of the relevant pre-existing concepts and API.
-If there is no suitable external documentation, you might like to provide supplementary information as an appendix in this document, and provide an internal link where appropriate.]
+Client Hints provides a powerful content negotiation mechanism that enables us to adapt content to users' needs without compromising their privacy. It does that by requiring server opt-in, which guarantees that access to the information requires active and tracable action on the server's side. As such, the mechanism does not increase the web's current active fingerprinting surface. The [Security Considerations](https://datatracker.ietf.org/doc/html/rfc8942#section-4) of HTTP Client Hints and the [Security Considerations](https://tools.ietf.org/html/draft-davidben-http-client-hint-reliability-02#section-5) of Client Hint Reliability likewise apply to this proposal.
 
-[If this is already specced, link to the relevant section of the spec.]
-
-[If spec work is in progress, link to the PR or draft of the spec.]
-
-## [API 2]
-
-[etc.]
-
-## Key scenarios
-
-[If there are a suite of interacting APIs, show how they work together to solve the key scenarios described.]
-
-### Scenario 1
-
-[Description of the end-user scenario]
-
-```js
-// Sample code demonstrating how to use these APIs to address that scenario.
-```
-
-### Scenario 2
-
-[etc.]
-
-## Detailed design discussion
-
-### [Tricky design choice #1]
-
-[Talk through the tradeoffs in coming to the specific design point you want to make.]
-
-```js
-// Illustrated with example code.
-```
-
-[This may be an open question,
-in which case you should link to any active discussion threads.]
-
-### [Tricky design choice 2]
-
-[etc.]
-
-## Considered alternatives
-
-[This should include as many alternatives as you can,
-from high level architectural decisions down to alternative naming choices.]
-
-### [Alternative 1]
-
-[Describe an alternative which was considered,
-and why you decided against it.]
-
-### [Alternative 2]
-
-[etc.]
-
-## Stakeholder Feedback / Opposition
-
-[Implementors and other stakeholders may already have publicly stated positions on this work. If you can, list them here with links to evidence as appropriate.]
-
-- [Implementor A] : Positive
-- [Stakeholder B] : No signals
-- [Implementor C] : Negative
-
-[If appropriate, explain the reasons given by other implementors for their concerns.]
-
-## References & acknowledgements
-
-[Your design will change and be informed by many people; acknowledge them in an ongoing way! It helps build community and, as we only get by through the contributions of many, is only fair.]
-
-[Unless you have a specific reason not to, these should be in alphabetical order.]
-
-Many thanks for valuable feedback and advice from:
-
-- [Person 1]
-- [Person 2]
-- [etc.]
+## References
+- [Design Doc - User Preferences on the Web](https://docs.google.com/document/d/1YWkivRAR8OcKQqIqbdfi4_fksBjAdfGqUumpdCQ_aGs/edit#heading=h.2efe18287cds)
+- [The Lang Client Hint](https://github.com/WICG/lang-client-hint)
+- [Expose datetime formatting user preferences · Issue #38](https://github.com/tc39/ecma402/issues/38)
+- [Add navigator.locales for user preferences · Issue #68](https://github.com/tc39/ecma402/issues/68)
+- [Allow for implementations to retrieve settings from host environment · Issue #109](https://github.com/tc39/ecma402/issues/109) 
+- [RFC: Add user preferences to HTTP header · Issue #416](https://github.com/tc39/ecma402/issues/416)
+- [Region Override Support · Issue #370](https://github.com/tc39/ecma402/issues/370)
+- [[Proposal] Make an API for locale negotiation · Issue #513](https://github.com/tc39/ecma402/issues/513) (`Intl.LocaleMatcher`)
