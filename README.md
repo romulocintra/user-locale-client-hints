@@ -49,7 +49,9 @@ A [HTTP Client Hint](https://datatracker.ietf.org/doc/html/rfc8942) is a request
 
 Servers will receive no information about the user's locale preferences. Servers can instead opt-into receiving such information via a new `Locale-Preferences` Client Hints.
 
-We are inclined to use [BCP47](https://www.rfc-editor.org/rfc/bcp/bcp47.txt) mechanism for delivering user locale  preferences, allowing the handle of these preferences in a consistent way across the industry and with [UTS 35](https://unicode.org/reports/tr35/tr35.html#Key_And_Type_Definitions_) to define a set of the most common user preferences.
+We are inclined to use [BCP47](https://www.rfc-editor.org/rfc/bcp/bcp47.txt) mechanism for delivering user locale  preferences, allowing the handle of these preferences in a consistent way across the industry and with [UTS 35](https://unicode.org/reports/tr35/tr35.html#Key_And_Type_Definitions_) to define a set of the most common user preferences. 
+
+> However scalability it's important and a mechanism that allows non-BCP47 data to be available as user preference it's desirable. 
 
 To accomplish this, Browsers should introduce several new Client Hint header fields:
 
