@@ -51,28 +51,23 @@ Servers will receive no information about the user's locale preferences. Servers
 
 We are inclined to use [BCP47](https://www.rfc-editor.org/rfc/bcp/bcp47.txt) mechanism for delivering user locale  preferences, allowing the handle of these preferences in a consistent way across the industry and with [UTS 35](https://unicode.org/reports/tr35/tr35.html#Key_And_Type_Definitions_) to define a set of the most common user preferences. 
 
-> However scalability it's important and a mechanism that allows non-BCP47 data to be available as user preference it's desirable. 
+To accomplish this, Browsers should introduce several new `Client Hint` header fields where information can be obtained  by using the list of headers bellow , that would represent the best intent of resolving the information using [Add Likely Subtags ](https://www.unicode.org/reports/tr35/#Likely_Subtags) algorithm and by values set by the user in their user locale preferences. 
 
-To accomplish this, Browsers should introduce several new Client Hint header fields:
+**`Sec-CH-Locale-Preferences`**
 
-**Minimize Locale Preferences**
-
-The  `Sec-CH-Locale-Preferences` header field represents a minimum viable set of extension subtags resulting from the [Remove Likely Subtags ](https://www.unicode.org/reports/tr35/#Likely_Subtags) algorithm and overwritten values set by the user locale preferences. For example:
-
+The  `Sec-CH-Locale-Preferences` header field represents the inline representation of locale preferences. For example:
 
 ```
 // Language "en-US" - no user preferences set
-Sec-CH-Locale-Preferences: "en"
-```
+Sec-CH-Locale-Preferences: "en-Latn-US"
 
-```
 // Language "en-US" - user set calendar, hour cycle and metric system
-Sec-CH-Locale-Preferences: "en-u-ca-gregory-hc-h12-ms-uksystem "
+Sec-CH-Locale-Preferences: "en-Latn-US-u-ca-gregory-hc-h24-ms-uksystem"
 ```
 
-**Maximize Locale Preferences**
+**`Sec-CH-Locale-Preferences-u-`**
 
-Granular information can be obtained  by using the list of headers bellow , they represent the best intent of resolving the information from [Add Likely Subtags ](https://www.unicode.org/reports/tr35/#Likely_Subtags) algorithm and by values set by the user in their user locale preferences. 
+The following table represents the list of headers to opt-in for individual `Locale-Preferences`, using the `"-u-key"` suffix. 
 
 
 | Client Hint | Example output | Allowed Values | Description |
@@ -83,12 +78,23 @@ Granular information can be obtained  by using the list of headers bellow , they
 | Sec-CH-Locale-Preferences-u-cu | `Sec-CH-Locale-Preferences-u-cu: "EUR"`        | 	ISO 4217 codes | Currency type |
 | Sec-CH-Locale-Preferences-u-em | `Sec-CH-Locale-Preferences-u-em: "emoji"`      | emoji , text, default | Emoji presentation style |
 | Sec-CH-Locale-Preferences-u-fw | `Sec-CH-Locale-Preferences-u-fw: "sun"`        | "sun", "mon" ... "sat" | First day of week  |
-| Sec-CH-Locale-Preferences-u-hc | `Sec-CH-Locale-Preferences-u-fw: "h12"`        | h12 , h23, h11, h24 | Hour cycle, i.e., 12-hour or 24-hour clock |
+| Sec-CH-Locale-Preferences-u-hc | `Sec-CH-Locale-Preferences-u-hc: "h12"`        | h12 , h23, h11, h24 | Hour cycle, i.e., 12-hour or 24-hour clock |
 | Sec-CH-Locale-Preferences-u-ms | `Sec-CH-Locale-Preferences-u-ms: "metric"`     | metric , ussystem , uksystem | Measurement system |
 | Sec-CH-Locale-Preferences-u-nu | `Sec-CH-Locale-Preferences-u-nu: "latn"`       | Unicode script subtag(arabext...)    <br> | Numbering system |
 | Sec-CH-Locale-Preferences-u-tz | `Sec-CH-Locale-Preferences-u-tz: "Atlantic/Azores"; "Atlantic/Madeira"; "Europe/Lisbon"` | Unicode short time zone IDs | Time zone |
 | Sec-CH-Locale-Preferences-u-rg | `Sec-CH-Locale-Preferences-u-rg: "PT"` | [Unicode Region Subtag](https://unicode.org/reports/tr35/tr35.html#unicode_region_subtag) | Region override |
 
+For example:
+
+```
+// Language "en-US" - no user preferences set
+Sec-CH-Locale-Preferences-u-ca: ""
+Sec-CH-Locale-Preferences-u-hc: ""
+
+// Language "en-US" - user set calendar and hour cycle
+Sec-CH-Locale-Preferences-u-ca: "gregory"
+Sec-CH-Locale-Preferences-u-hc: "h12"
+```
 
 These client hints should also be exposed via JavaScript APIs via `navigator.locales` as suggested in [#68](https://github.com/tc39/ecma402/issues/68) or by creating a new `navigator.localePreferences` that exposes `Locale-Preferences` information.
 
@@ -120,7 +126,7 @@ These client hints should also be exposed via JavaScript APIs via `navigator.loc
    ```
    GET / HTTP/1.1
    Host: example.com
-   Sec-CH-Locale-Preferences: "en"
+   Sec-CH-Locale-Preferences: "en-Latn-US"
    Sec-CH-Locale-Preferences-fw: ""
    ```
 
@@ -128,7 +134,21 @@ These client hints should also be exposed via JavaScript APIs via `navigator.loc
 
 ## Privacy and Security Considerations
 
+There are some concerns that exposing this information would give trackers, advertisers and malicious web services another fingerprinting vector. That said, this information may or may not already be available to a certain extent to such services, based on the host and the user’s settings. So the use of `Sec-CH-` prefix is to forbid access to these headers containing `Locale Preferences` information from JavaScript, and demarcate them as browser-controlled client hints so they can be documented and included in requests without triggering CORS preflights.
+
 Client Hints provides a powerful content negotiation mechanism that enables us to adapt content to users' needs without compromising their privacy. It does that by requiring server opt-in, which guarantees that access to the information requires active and tracable action on the server's side. As such, the mechanism does not increase the web's current active fingerprinting surface. The [Security Considerations](https://datatracker.ietf.org/doc/html/rfc8942#section-4) of HTTP Client Hints and the [Security Considerations](https://tools.ietf.org/html/draft-davidben-http-client-hint-reliability-02#section-5) of Client Hint Reliability likewise apply to this proposal.
+
+## FAQ
+
+- **Q:** Does this proposal support non BCP-47 preferences?
+- **A:** *At the moment we are inclined to use BCP-47, but scalability it's important and a mechanism that allows non-BCP47 data to be available as user preference it's desirable, the `-u-key` prefix might enable ways for doing it*
+
+- **Q:** Aren’t you adding a lot of new headers? Isn’t that going to bloat requests?
+- **A:** *It’s true this proposal adds multiple new headers per request. But we don’t
+expect every site to use or need all the hints for every request, and the `Sec-CH-Locale-Preferences` single header is able to provide most of the needed information.
+
+- **Q:** I have to parse `en-Latn-US-u-ca-gregory-cu-EUR-hc-h24-ms-uksystem` string to get 'hour cycle' value?
+- **A:** *You either parse and search wanted language tags or use individual `Locale-Preferences` options*
 
 ## References
 - [Design Doc - User Preferences on the Web](https://docs.google.com/document/d/1YWkivRAR8OcKQqIqbdfi4_fksBjAdfGqUumpdCQ_aGs/edit#heading=h.2efe18287cds)
