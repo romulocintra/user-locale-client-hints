@@ -49,7 +49,7 @@ A [HTTP Client Hint](https://datatracker.ietf.org/doc/html/rfc8942) is a request
 
 Servers will receive no information about the user's locale preferences. Servers can instead opt-into receiving such information via a new `Locale-Preferences` Client Hints.
 
-We are inclined to use [BCP47](https://www.rfc-editor.org/rfc/bcp/bcp47.txt) mechanism for delivering user locale preferences, allowing the handle of these preferences in a consistent way across the industry and with [UTS 35](https://unicode.org/reports/tr35/tr35.html#Key_And_Type_Definitions_) to define a set of the most common user preferences. 
+We are proposing [BCP47](https://www.rfc-editor.org/rfc/bcp/bcp47.txt) extension subtags or compatible as the mechanism for delivering user locale preferences. This allows the handle of preferences consistently across the industry, using as reference the Unicode Key Extensions defined in [UTS 35](https://unicode.org/reports/tr35/tr35.html#Key_And_Type_Definitions_) to define the baseline for the most common user preferences<sup>[*1](#1)<sup>. 
 
 To accomplish this, Browsers should introduce several new `Client Hint` header fields where information can be obtained by using the list of headers below, which would represent the best intent of resolving the information using [Add Likely Subtags ](https://www.unicode.org/reports/tr35/#Likely_Subtags) algorithm and values set by the user in their user locale preferences. 
 
@@ -97,9 +97,13 @@ Sec-CH-Locale-Preferences-u-ca: "gregory"
 Sec-CH-Locale-Preferences-u-hc: "h12"
 ```
 
+### Javascript API
+
 These client hints should also be exposed via JavaScript APIs via `navigator.locales` as suggested in [#68](https://github.com/tc39/ecma402/issues/68) or by creating a new `navigator.localePreferences` that exposes `Locale-Preferences` information.
 
-## Example
+
+
+## Examples
 
 1. The client makes an initial request to the server:
    ```
@@ -141,7 +145,7 @@ Client Hints provides a powerful content negotiation mechanism that enables us t
 
 ## FAQ
 
-**Q:** Does this proposal support non BCP-47 preferences?
+**Q:** Does this proposal support non BCP-47 compatibile options ? 
    - **A:** *At the moment we are inclined to use BCP-47, but scalability it's important and a mechanism that allows non-BCP47 data to be available as user preference it's desirable, the `-u-key` prefix might enable ways for doing it*
 
 **Q:** Aren’t you adding a lot of new headers? Isn’t that going to bloat requests?
@@ -160,3 +164,6 @@ expect every site to use or need all the hints for every request, and the `Sec-C
 - [RFC: Add user preferences to HTTP header · Issue #416](https://github.com/tc39/ecma402/issues/416)
 - [Region Override Support · Issue #370](https://github.com/tc39/ecma402/issues/370)
 - [[Proposal] Make an API for locale negotiation · Issue #513](https://github.com/tc39/ecma402/issues/513) (`Intl.LocaleMatcher`)
+
+
+[1] - To be discussed - related issues ([#3](https://github.com/tc39/proposal-intl-locale/issues/3), [#6](https://github.com/tc39/ecma402/issues/6), [#38](https://github.com/tc39/ecma402/issues/38), [#68](https://github.com/tc39/ecma402/issues/68), [#580](https://github.com/tc39/ecma402/issues/580))
