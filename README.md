@@ -1,4 +1,4 @@
-# user-locale-client-hints explainer
+# user-locale-client-hints explainer - DRAFT
 
 This is the repository for user-locale-client-hints. You're welcome to
 [contribute](CONTRIBUTING.md)!
