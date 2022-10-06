@@ -49,7 +49,7 @@ A [HTTP Client Hint](https://datatracker.ietf.org/doc/html/rfc8942) is a request
 
 Servers will receive no information about the user's locale preferences. Servers can instead opt-into receiving such information via a new `Locale-Preferences` Client Hints.
 
-We are proposing [BCP47](https://www.rfc-editor.org/rfc/bcp/bcp47.txt) extension subtags or compatible as the mechanism for delivering user locale preferences. This allows the handle of preferences consistently across the industry, using as reference the Unicode Key Extensions defined in [UTS 35](https://unicode.org/reports/tr35/tr35.html#Key_And_Type_Definitions_) to define the baseline for the most common user preferences<sup>[*1](#1)<sup>. 
+We are proposing [BCP47](https://www.rfc-editor.org/rfc/bcp/bcp47.txt) extension subtags or compatible, as the mechanism for delivering user locale preferences. This allows the handle of preferences consistently across the industry, using as reference the Unicode Key Extensions in [UTS 35](https://unicode.org/reports/tr35/tr35.html#Key_And_Type_Definitions_) to define a baseline for the most common user preferences<sup>[*1](#1)<sup>. 
 
 To accomplish this, Browsers should introduce several new `Client Hint` header fields where information can be obtained by using the list of headers below, which would represent the best intent of resolving the information using [Add Likely Subtags ](https://www.unicode.org/reports/tr35/#Likely_Subtags) algorithm and values set by the user in their user locale preferences. 
 
