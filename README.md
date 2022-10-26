@@ -21,6 +21,7 @@
   - [FAQ](#faq)
   - [References](#references)
 
+
 ## Authors:
 
 - [Romulo Cintra](https://github.com/romulocintra)
@@ -240,15 +241,17 @@ Client Hints provides a powerful content negotiation mechanism that enables us t
 
 ## FAQ
 
-**Q:** Does this proposal support non BCP-47 compatibile options ? 
-   - **A:** *At the moment we are inclined to use BCP-47, but scalability it's important and a mechanism that allows non-BCP47 data to be available as user preference it's desirable, the `-u-key` prefix might enable ways for doing it*
+**Q:** Does this proposal support non BCP-47 compatible options ? 
+   - **A:** *At the moment we are inclined to use BCP-47, but scalability it's important and a mechanism that allows non-BCP47 data to be available as user preference it's desirable, so the table that converts user preferences to BCP-47 can be used to extend same values to use different sources and options*
 
 **Q:** Aren’t you adding a lot of new headers? Isn’t that going to bloat requests?
-   - **A:** *It’s true this proposal adds multiple new headers per request. But we don’t
-expect every site to use or need all the hints for every request, and the `Sec-CH-Locale-Preferences` single header is able to provide most of the needed information.
+   - **A:** *It’s true this proposal adds multiple new headers per request. But we don’t expect every site to use or need all the hints for every request, and the `Sec-CH-Locale-Preferences` single header is able to provide most of the needed information.*
 
-**Q:** I have to parse `en-Latn-US-u-ca-gregory-cu-EUR-hc-h24-ms-uksystem` string to get 'hour cycle' value?   
-- **A:** *You either parse and search wanted language tags or use individual `Locale-Preferences` options*
+**Q:** How about `en-Latn-US-u-ca-gregory-cu-EUR-hc-h24-ms-uksystem` ? 
+- **A:** *At the moment there is no support to convert to or from the Unicode format*
+
+**Q:** How about a header that gives access to all user local preferences `Sec-CH-Locale-Preferences-all` `Sec-CH-Locale-Preferences-: calendar="gregory"; timeZone="Europe/London" ... `? 
+- **A:** *There are use cases to simplify how to access this data but at the same time this would increase vectors of fingerprinting*
 
 ## References
 - [Design Doc - User Preferences on the Web](https://docs.google.com/document/d/1YWkivRAR8OcKQqIqbdfi4_fksBjAdfGqUumpdCQ_aGs/edit#heading=h.2efe18287cds)
