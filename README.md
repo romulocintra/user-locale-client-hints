@@ -10,8 +10,7 @@
   - [Proposed Solution](#proposed-solution)
     - [Client Hints](#client-hints)
       - [Proposed Syntax](#proposed-syntax)
-      - [Example Using  `Sec-CH-Locale-Preferences-all`](#example-using--sec-ch-locale-preferences-all)
-      - [Example Using individual `Sec-CH-Locale-Preferences-numberingSystem` and `Sec-CH-Locale-Preferences-timeZone` header fields**](#example-using-individual-sec-ch-locale-preferences-numberingsystem-and-sec-ch-locale-preferences-timezone-header-fields)
+      - [Example](#example)
     - [Javascript API](#javascript-api)
       - [Proposed Syntax](#proposed-syntax-1)
       - [Examples](#examples)
@@ -65,19 +64,19 @@ We propose to address the above use cases by using a group of [`Client Hints`](#
 
 We are proposing [BCP47 extension keys](https://www.rfc-editor.org/rfc/bcp/bcp47.txt) or compatible as the main reference for the base mechanism for delivering user locale preferences. This allows the handling of user preferences consistently across the industry.
 
-So, we will define a new standard `Locale-Preferences` Client Hints and `navigator.localPreferences`, that would map the user preferences using the following steps:
+So, we will define a new standard `Locale-Preferences` Client Hints and `navigator.localePreferences`, that would map the user locale preferences using the following steps:
 
   0.  Validate if there is any fingerprinting mechanism and if OS preferences are allowed to be exposed
-  1.  Read the OS preferences
+  1.  Read the available OS preferences
   2.  For each value compare it against the default  value for the given locale from ICU/CLDR or a list of user preferences to compare against
   3.  If the _user preference_ value differs, return the value
-  4.  If the  _user preference_ value is the same, return null
+  4.  If the  _user preference_ value is the same, return empty value
 
-As an alternative instead of returning `null` values, we could try to do an intent of resolving the missing information using [Add Likely Subtags ](https://www.unicode.org/reports/tr35/#Likely_Subtags) algorithm and merge values set by the user in their user locale preferences. 
+As an alternative instead of returning `undefined` or empty values, we could try to do an intent of resolving the missing information using [Add Likely Subtags ](https://www.unicode.org/reports/tr35/#Likely_Subtags) algorithm and merge values set by the user in their user locale preferences. 
 
 Conceptually both strategies would work but the second won't inform each preference set by the user.
 
-The following table suggests common user preferences [#416](https://github.com/tc39/ecma402/issues/416#issue-574957588) be used, and does the correlation from  `Locale-Preferences` Client Hints and `navigator.localePreferences` to extension keys if they exist, or other values in case table is extended by user demand.
+The following table suggests common user preferences [#416](https://github.com/tc39/ecma402/issues/416#issue-574957588) to be used, and does the correlation from  `Locale-Preferences` Client Hints and `navigator.localePreferences` to extension keys if they exist, or other values in case table is extended by user demand.
 
 | Locale Preferences Name | Extension Key/Unicode Source | Example Values | Description |
 | ----------------------- | -------| ------ |-----|
@@ -107,7 +106,7 @@ Other user preferences that might be included based on user research about OS pr
  - show the day of the week
  - show date
 
-> Note: The table and list are recommendations, they need to be validated by security teams and evaluated by stakeholders, but from now on using them as a reference for the proposal.
+> Note: The table and list are recommendations, they need to be validated and agreed by security teams and stakeholders, but from now on using them as a reference for the proposal.
 
 ### Client Hints
 
@@ -119,18 +118,9 @@ Servers will receive no information about the user's locale preferences. Servers
 
 To accomplish this, Browsers should introduce several new `Client Hint` header fields as part of a [Structured Header](https://datatracker.ietf.org/doc/html/draft-ietf-httpbis-header-structure) sent over request whose value is a list of defined user locale preferences.
 
-**`Sec-CH-Locale-Preferences-all`**
-
-`Sec-CH-Locale-Preferences-all` retrieves a list of all opted-in preferences and the values set by user. For example:
-
-```
-// user set calendar, and timeZone values but not hourCycle and `Accept-CH` includes all of three user preferences
-Sec-CH-Locale-Preferences-all: calendar="chinese"; timeZone="Africa/Lagos"; hourCycle="";
-```
-
 **`Sec-CH-Locale-Preferences-*`**
 
-The following table represents the list of headers tO  return individual opted-in `Locale-Preferences`. For example:
+The following table represents the list of headers returning individual opted-in `Locale-Preferences`. For example:
 
 
 | Client Hint | Example output |
@@ -150,47 +140,9 @@ The following table represents the list of headers tO  return individual opted-i
 
 
 
-```
-// user set calendar, and timeZone values but not hourCycle and `Accept-CH` includes all of three user preferences
-Sec-CH-Locale-Preferences-calendar:"buddhist"
-Sec-CH-Locale-Preferences-timeZone: "Africa/Lagos"
-Sec-CH-Locale-Preferences-hourCycle: ""
-```
+#### Example
 
 
-#### Example Using  `Sec-CH-Locale-Preferences-all`
-
-1. The client makes an initial request to the server:
-   ```
-   GET / HTTP/1.1
-   Host: example.com
-   ```
-
-2. The server responds, telling the client via `Accept-CH` that it accepts the
-   `Sec-CH-Locale-Preferences-all` Client Hint.
-   ```
-   HTTP/1.1 200 OK
-   Content-Type: text/html
-   Accept-CH: Sec-CH-Locale-Preferences-all
-   ```
-
-3. Then subsequent requests to https://example.com will include the following request headers in case the user sets `numberingSystem` and `timeZone` values:
-   ```
-   GET / HTTP/1.1
-   Host: example.com
-   Sec-CH-Locale-Preferences-all: numberingSystem="latn"; timeZone="h23"
-   ```
-   
-   In case the user did not set any `Locale-Preferences`, request headers return empty
-   ```
-   GET / HTTP/1.1
-   Host: example.com
-   Sec-CH-Locale-Preferences-all: numberingSystem=""; timeZone=""
-   ```
-
-4. The server can then tailor the response to the client's preferences accordingly.
-
-#### Example Using individual `Sec-CH-Locale-Preferences-numberingSystem` and `Sec-CH-Locale-Preferences-timeZone` header fields**
 
 1. The client makes an initial request to the server:
    ```
@@ -239,13 +191,31 @@ This might be written like so:
 
 navigator.localePreferences.calendar(); // =>  "gregory"
 navigator.localePreferences.currencyFormat(); // => "EUR"
-navigator.localePreferences.firstDayOfTheWeek(); // =>  "null" user has not set this value in their OS
+navigator.localePreferences.firstDayOfTheWeek(); // =>  `undefined` user has not set this value in their OS
 navigator.localePreferences.timeZone(); // =>  'Europe/London'
 navigator.localePreferences.region(); // => 'GB'
  
 ```
 
 #### Examples
+
+Use the `navigator.localePreferences` to populate data with user preferences
+
+```js
+// User set locale preferences for calendar , region and hourCycle
+navigator.localePreferences.calendar(); // =>  "gregory"
+navigator.localePreferences.region(); // => 'GB'
+navigator.localePreferences.hourCycle(); // => 'h11';
+navigator.localePreferences.timeZone(); // =>  'Europe/London'
+
+new Intl.Locale('es' , navigator.localePreferences ).maximize();
+// => Locale {..., calendar:"gregory" , region:"GB" , hourCycle:"h11" }
+
+new Intl.DateTimeFormat('es', navigator.localePreferences ).resolvedOptions();
+// =>  {locale: 'es', calendar: 'gregory', numberingSystem: 'latn', timeZone: 'Europe/London', ...}
+
+```
+
 
 ## Privacy and Security Considerations
 
