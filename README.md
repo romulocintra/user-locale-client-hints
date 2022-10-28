@@ -145,15 +145,14 @@ The following table represents the list of headers returning individual opted-in
 #### Example
 
 
-
 1. The client makes an initial request to the server:
    ```
    GET / HTTP/1.1
    Host: example.com
    ```
 
-2. The server responds, telling the client via `Accept-CH` that it accepts the
-   `Sec-CH-Locale-Preferences-numberingSystem` and the `Sec-CH-Locale-Preferences-timeZone` Client Hints.
+2. The server responds, telling the client via an `Accept-CH` header (Section 2.2.1 of
+[[!RFC8942]]) along with the initial response with  `Sec-CH-Locale-Preferences-numberingSystem` and the `Sec-CH-Locale-Preferences-timeZone` Client Hints: 
    ```
    HTTP/1.1 200 OK
    Content-Type: text/html

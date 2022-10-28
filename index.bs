@@ -1,0 +1,111 @@
+<pre class='metadata'>
+Title: User Locale Preferences
+Shortname: user-locale-client-hints
+Level: 1
+Status: CG-DRAFT
+Group: WICG
+Repository: WICG/user-locale-client-hints
+URL: https://github.com/romulocintra/user-locale-client-hints
+Editor: Romulo Cintra, Igalia https://igalia.com, rcintra@igalia.com
+Editor: Ujjwal Sharma, Igalia https://igalia.com, usharma@igalia.com
+!Tests: <a href=https://github.com/w3c/web-platform-tests/tree/master/user-locale-client-hints>web-platform-tests user-locale-client-hints/</a> (<a href=https://github.com/w3c/web-platform-tests/labels/user-locale-client-hints>ongoing work</a>)
+Abstract: This specification defines a group of <code>Client Hints</code> headers and a homologous <code>Javascript API</code>, that will allow a reliable way to access User Locale Preferences information from the Web Platform to help craft better user experiences. Allowing web developers to access this information would allow them to improve the accessibility and usability of their websites, and bring the user experience of web applications closer to that of native applications.
+Markup Shorthands: markdown yes
+</pre>
+<pre class=biblio>
+{
+  "CLIENT-HINTS": {
+    "authors": ["Ilya Grigorik", "Yoav Weiss"],
+    "href": "https://datatracker.ietf.org/doc/rfc8942/",
+    "title": "HTTP Client Hints",
+    "status": "RFC - Experimental (February 2021; No errata)",
+    "publisher": "IETF httpbis-WG"
+  },
+  "draft-ietf-httpbis-header-structure-19": {
+    "authors": ["Mark Nottingham", "Poul-Henning Kamp"],
+    "href": "https://tools.ietf.org/html/draft-ietf-httpbis-header-structure-19",
+    "title": "Structured Field Values for HTTP",
+    "status": "ID",
+    "publisher": "IETF httpbis-WG"
+  }
+}
+</pre>
+
+
+Introduction {#intro}
+=====================
+
+*This section is non-normative*.
+
+User preferences are often system-wide settings (such as in Android, macOS, or Windows). Operating systems allow the user to specify custom overrides for settings such as:
+
+  * Hour cycle (24-hour or 12-hour time)
+  * Calendar system
+  * Measurement unit preferences (metric or imperial)
+  * Date/time patterns
+  * Number separators (comma or period)
+
+However, there’s currently no reliable way to access this information from the Web Platform to help craft better user experiences. Allowing web developers to access this information would allow them to improve the accessibility and usability of their websites, and bring the user experience of web applications closer to that of native applications.
+
+## Use cases ## {#use-cases}
+
+To allow web applications to get access to higher quality user preferences to assist Internationalization.
+
+Client and server-side applications should access and share consistently locale user preferences that will help solve cases like:
+
+1. *"Alice, an end user, reads en-US but prefers using a 24-hour clock. She has set that preference in her operating system settings. Native apps are able to respect her preference. However, web apps cannot access OS user preferences, so on the Web Platform, Alice sees a 12-hour clock, the default for en-US."*
+2. *"other use cases: NodeJS programs that want to respect the user's hourCycle preference by passing it in to Intl.DateTimeFormat, Other non browser environments."*
+
+For **client side applications**, the best way to get them would be through a browser API that fetches this information from the different platform-specific OS APIs.
+
+For **server-side applications**, one way to get access to this information would be via HTTP headers on the request.
+
+<img alt="user locale preferences flow" src="https://user-images.githubusercontent.com/1572026/182210112-69fb7769-eafa-43ab-bad0-21eb49489d50.png">
+
+## Use cases ## {#use-cases}
+
+Examples {#examples}
+--------
+
+*This section is non-normative*.
+
+1. The client makes an initial request to the server:
+
+```http
+GET / HTTP/1.1
+Host: example.com
+```
+
+2. The server responds, telling the client via an `Accept-CH` header (Section 2.2.1 of [[!RFC8942]]) along with the initial response with `Sec-CH-Locale-Preferences-numberingSystem` and the `Sec-CH-Locale-Preferences-timeZone` Client Hints: 
+
+```http
+HTTP/1.1 200 OK
+Content-Type: text/html
+Accept-CH: Sec-CH-Locale-Preferences-numberingSystem, Sec-CH-Locale-Preferences-timeZone
+```
+
+3. Then subsequent requests to https://example.com will include the following request headers in case the user sets `numberingSystem` and `timeZone` values:
+
+```http
+GET / HTTP/1.1
+Host: example.com
+Sec-CH-Locale-Preferences-calendar:"buddhist"
+Sec-CH-Locale-Preferences-timeZone: "Africa/Lagos"
+```
+
+In case the user did not set any `Locale-Preferences` for accepted values, request headers return empty
+```http
+GET / HTTP/1.1
+Host: example.com
+Sec-CH-Locale-Preferences-calendar:""
+Sec-CH-Locale-Preferences-timeZone: ""
+```
+
+4. The server can then tailor the response to the client's preferences accordingly.
+
+
+
+
+
+See https://github.com/tabatkins/bikeshed to get started.
+
