@@ -1,7 +1,8 @@
-# user-locale-client-hints explainer
+# Explainer:  User Locale Preferences
+
 ## Table of Contents
 
-- [user-locale-client-hints explainer](#user-locale-client-hints-explainer)
+- [Explainer:  User Locale Preferences](#explainer--user-locale-preferences)
   - [Table of Contents](#table-of-contents)
   - [Authors:](#authors)
   - [Participate](#participate)
@@ -15,12 +16,9 @@
       - [Proposed Syntax](#proposed-syntax-1)
       - [Examples](#examples)
   - [Privacy and Security Considerations](#privacy-and-security-considerations)
-        - [Client Hints](#client-hints-1)
-        - [JavaScript API](#javascript-api-1)
   - [Stakeholder Feedback / Opposition](#stakeholder-feedback--opposition)
   - [FAQ](#faq)
   - [References](#references)
-
 
 ## Authors:
 
@@ -53,6 +51,8 @@ Client and server-side applications should access and share consistently locale 
 
 > _Alice, an end user, reads en-US but prefers using a 24-hour clock. She has set that preference in her operating system settings. Native apps are able to respect her preference. However, web apps cannot access OS user preferences, so on the Web Platform, Alice sees a 12-hour clock, the default for en-US._
 
+> _other use cases: NodeJS programs that want to respect the user's hourCycle preference by passing it in to Intl.DateTimeFormat, Other non browser environments._
+
 For **_client side applications_**, the best way to get them would be through a browser API that fetches this information from the different platform-specific OS APIs.
 
 For **_server-side applications_**, one way to get access to this information would be via HTTP headers on the request.
@@ -63,7 +63,7 @@ For **_server-side applications_**, one way to get access to this information wo
 
 We propose to address the above use cases by using a group of [`Client Hints`](#client-hints) headers and a homologous [Javascript API](#javascript-api), both will be responsible for exposing and negotiating the exchange of user preferences from the OS to the required environment.
 
-We are proposing [BCP47 extension keys](https://www.rfc-editor.org/rfc/bcp/bcp47.txt) or compatible as the main reference for the base mechanism for delivering user locale preferences. This allows the handling of user preferences consistently across the industry.
+We are proposing [Unicode Extensions for BCP 47](https://cldr.unicode.org/index/bcp47-extension) or compatible as the main reference for the base mechanism for delivering user locale preferences. The goal is to allow the handling of user preferences consistently across the industry.
 
 So, we will define a new standard `Locale-Preferences` Client Hints and `navigator.localePreferences`, that would map the user locale preferences using the following steps:
 
@@ -111,7 +111,8 @@ Other user preferences that might be included based on user research about OS pr
 
 ### Client Hints
 
-A [HTTP Client Hint](https://datatracker.ietf.org/doc/html/rfc8942) is a request header field that is used by HTTP clients to indicate configuration data that can be used by the server to select an appropriate response. Each one conveys a list of user locale preferences that the server can use to adapt and optimize the response.
+A [HTTP Client Hint](https://datatracker.ietf.org/doc/html/rfc8942) is a request header field that is used by HTTP clients to indicate configuration data that can be used by the server to select an appropriate response. It defines an `Accept-CH` response header that servers can use to advertise their use of request headers for proactive content negotiation. Each new client hint conveys a list of user locale preferences that the server can use to adapt and optimize responses.
+
 
 #### Proposed Syntax
 
@@ -167,7 +168,7 @@ The following table represents the list of headers returning individual opted-in
    Sec-CH-Locale-Preferences-timeZone: "Africa/Lagos"
    ```
    
-   In case the user did not set any `Locale-Preferences`, request headers return empty
+   In case the user did not set any `Locale-Preferences` for accepted values, request headers return empty
    ```
    GET / HTTP/1.1
    Host: example.com
@@ -181,7 +182,7 @@ The following table represents the list of headers returning individual opted-in
 
 ### Javascript API
 
-These client hints should also be exposed as JavaScript APIs via `navigator.locales` as suggested in [#68](https://github.com/tc39/ecma402/issues/68) or by creating a new `navigator.localePreferences` that exposes `Locale-Preferences` information.
+These client hints should also be exposed as JavaScript APIs via `navigator.locales` as suggested in [#68](https://github.com/tc39/ecma402/issues/68) or by creating a new `navigator.localePreferences` that exposes `Locale-Preferences` information as bellow.
 
 
 #### Proposed Syntax
@@ -209,10 +210,13 @@ navigator.localePreferences.region(); // => 'GB'
 navigator.localePreferences.hourCycle(); // => 'h11';
 navigator.localePreferences.timeZone(); // =>  'Europe/London'
 
-new Intl.Locale('es' , navigator.localePreferences ).maximize();
+const localePreferences =  (...iterate over needed navigator.localePreferences )
+
+
+new Intl.Locale('es' ,  localePreferences ).maximize();
 // => Locale {..., calendar:"gregory" , region:"GB" , hourCycle:"h11" }
 
-new Intl.DateTimeFormat('es', navigator.localePreferences ).resolvedOptions();
+new Intl.DateTimeFormat('es', localePreferences).resolvedOptions();
 // =>  {locale: 'es', calendar: 'gregory', numberingSystem: 'latn', timeZone: 'Europe/London', ...}
 
 ```
@@ -220,13 +224,11 @@ new Intl.DateTimeFormat('es', navigator.localePreferences ).resolvedOptions();
 
 ## Privacy and Security Considerations
 
-##### Client Hints
-
 There are some concerns that exposing this information would give trackers, advertisers and malicious web services another fingerprinting vector. That said, this information may or may not already be available to a certain extent to such services, based on the host and the user’s settings. So the use of `Sec-CH-` prefix is to forbid access to these headers containing `Locale Preferences` information from JavaScript, and demarcate them as browser-controlled client hints so they can be documented and included in requests without triggering CORS preflights.
 
 Client Hints provides a powerful content negotiation mechanism that enables us to adapt content to users' needs without compromising their privacy. It does that by requiring server opt-in, which guarantees that access to the information requires active and tracable action on the server's side. As such, the mechanism does not increase the web's current active fingerprinting surface. The [Security Considerations](https://datatracker.ietf.org/doc/html/rfc8942#section-4) of HTTP Client Hints and the [Security Considerations](https://tools.ietf.org/html/draft-davidben-http-client-hint-reliability-02#section-5) of Client Hint Reliability likewise apply to this proposal.
 
-##### JavaScript API
+
 
 
 ---- 
@@ -241,8 +243,8 @@ Client Hints provides a powerful content negotiation mechanism that enables us t
 
 ## FAQ
 
-**Q:** Does this proposal support non BCP-47 compatible options ? 
-   - **A:** *At the moment we are inclined to use BCP-47, but scalability it's important and a mechanism that allows non-BCP47 data to be available as user preference it's desirable, so the table that converts user preferences to BCP-47 can be used to extend same values to use different sources and options*
+**Q:** Does this proposal support non Unicode Extension Key compatible options? 	
+   - **A:**  *The first approach used a `-u` compatible syntax that could match 1:1 [Unicode Extension Keys](https://www.unicode.org/reports/tr35/#Key_And_Type_Definitions_), which would ease the interoperability, but at the same time limit future extensibility and scalability when non-BCP47 data would be available as user preference, so the table maps user preferences to BCP-47 compatible keys and future other sources.*
 
 **Q:** Aren’t you adding a lot of new headers? Isn’t that going to bloat requests?
    - **A:** *It’s true this proposal adds multiple new headers per request. But we don’t expect every site to use or need all the hints for every request, and the `Sec-CH-Locale-Preferences` single header is able to provide most of the needed information.*
@@ -251,7 +253,7 @@ Client Hints provides a powerful content negotiation mechanism that enables us t
 - **A:** *At the moment there is no support to convert to or from the Unicode format*
 
 **Q:** How about a header that gives access to all user local preferences `Sec-CH-Locale-Preferences-all` `Sec-CH-Locale-Preferences-: calendar="gregory"; timeZone="Europe/London" ... `? 
-- **A:** *There are use cases to simplify how to access this data but at the same time this would increase vectors of fingerprinting*
+- **A:** *There are use cases to simplify how to access this data but at the same time this would add new fingerprinting vectors*
 
 ## References
 - [Design Doc - User Preferences on the Web](https://docs.google.com/document/d/1YWkivRAR8OcKQqIqbdfi4_fksBjAdfGqUumpdCQ_aGs/edit#heading=h.2efe18287cds)
