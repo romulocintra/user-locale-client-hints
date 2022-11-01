@@ -65,17 +65,16 @@ We propose to address the above use cases by using a group of [`Client Hints`](#
 
 We are proposing [Unicode Extensions for BCP 47](https://cldr.unicode.org/index/bcp47-extension) or compatible as the main reference for the base mechanism for delivering user locale preferences. The goal is to allow the handling of user preferences consistently across the industry.
 
+
+
 So, we will define a new standard `Locale-Preferences` Client Hints and `navigator.localePreferences`, that would map the user locale preferences using the following steps:
 
-  0.  Validate if there is any fingerprinting mechanism and if OS preferences are allowed to be exposed
-  1.  Read the available OS preferences
-  2.  For each value compare it against the default  value for the given locale from ICU/CLDR or a list of user preferences to compare against
-  3.  If the _user preference_ value differs, return the value
-  4.  If the  _user preference_ value is the same, return empty value
+  1.  Validate if there is any fingerprinting mechanism and if OS preferences are allowed to be exposed
+  2.  Read the available OS preferences
+  3.  For each value compare it against the default  value for the given locale from ICU/CLDR or a list of user preferences to compare against
+  4.  If the _user preference_ value differs, return the value
+  5.  If the  _user preference_ value is the same, or not set, return the default value for the given locale
 
-As an alternative instead of returning `undefined` or empty values, we could try to do an intent of resolving the missing information using [Add Likely Subtags ](https://www.unicode.org/reports/tr35/#Likely_Subtags) algorithm and merge values set by the user in their user locale preferences. 
-
-Conceptually both strategies would work but the second won't inform each preference set by the user.
 
 The following table suggests common user preferences [#416](https://github.com/tc39/ecma402/issues/416#issue-574957588) to be used, and does the correlation from  `Locale-Preferences` Client Hints and `navigator.localePreferences` to extension keys if they exist, or other values in case table is extended by user demand.
 
@@ -97,7 +96,6 @@ The following table suggests common user preferences [#416](https://github.com/t
 
 Other user preferences that might be included based on user research about OS preferences inputs and [#1308329](https://bugzilla.mozilla.org/show_bug.cgi?id=1308329), most of them don't have a 1:1 match with BCP47 extension keys, however, they are available in ICU/CLDR
  - number separator (grouping/decimal)
- - measurement units (Metric, US, UK)
  - date formats short/medium/long/full
  - time formats short/medium/long/full
  - dayperiod names
@@ -107,7 +105,7 @@ Other user preferences that might be included based on user research about OS pr
  - show the day of the week
  - show date
 
-> Note: The table and list are recommendations, they need to be validated and agreed by security teams and stakeholders, but from now on using them as a reference for the proposal.
+> Note: The table and list are recommendations, they need to be validated and agreed by security/privacy teams and other stakeholders, but from now on using them as a reference for the proposal.
 
 ### Client Hints
 
@@ -138,45 +136,45 @@ The following table represents the list of headers returning individual opted-in
 | Sec-CH-Locale-Preferences-measurementUnit   | `Sec-CH-Locale-Preferences-measurementUnit  : "kelvin"`       | 
 | Sec-CH-Locale-Preferences-numberingSystem   | `Sec-CH-Locale-Preferences-numberingSystem  : "latn";` | 
 | Sec-CH-Locale-Preferences-timeZone          | `Sec-CH-Locale-Preferences-timeZone         : "Atlantic/Azores";`  |
-| Sec-CH-Locale-Preferences-region            | `Sec-CH-Locale-Preferences-timeZone         : "PT"` |
+| Sec-CH-Locale-Preferences-region            | `Sec-CH-Locale-Preferences-region           : "PT"` |
+| Sec-CH-Locale-Preferences-dateFormat        | `Sec-CH-Locale-Preferences-dateFormat       : "EEE, d MMM yyyy HH:mm:ss Z"` |
 
 
 
 #### Example
-
-
 1. The client makes an initial request to the server:
-   ```
-   GET / HTTP/1.1
-   Host: example.com
-   ```
 
-2. The server responds, telling the client via an `Accept-CH` header (Section 2.2.1 of
-[[!RFC8942]]) along with the initial response with  `Sec-CH-Locale-Preferences-numberingSystem` and the `Sec-CH-Locale-Preferences-timeZone` Client Hints: 
-   ```
-   HTTP/1.1 200 OK
-   Content-Type: text/html
-   Accept-CH: Sec-CH-Locale-Preferences-numberingSystem, Sec-CH-Locale-Preferences-timeZone
-   ```
+```http
+GET / HTTP/1.1
+Host: example.com
+```
+
+2. The server responds, telling the client via an `Accept-CH` header (Section 2.2.1 of [[!RFC8942]]) along with the initial response with `Sec-CH-Locale-Preferences-numberingSystem` and the `Sec-CH-Locale-Preferences-timeZone` Client Hints: 
+
+```http
+HTTP/1.1 200 OK
+Content-Type: text/html
+Accept-CH: Sec-CH-Locale-Preferences-numberingSystem, Sec-CH-Locale-Preferences-timeZone
+```
 
 3. Then subsequent requests to https://example.com will include the following request headers in case the user sets `numberingSystem` and `timeZone` values:
-   ```
-   GET / HTTP/1.1
-   Host: example.com
-   Sec-CH-Locale-Preferences-calendar:"buddhist"
-   Sec-CH-Locale-Preferences-timeZone: "Africa/Lagos"
-   ```
-   
-   In case the user did not set any `Locale-Preferences` for accepted values, request headers return empty
-   ```
-   GET / HTTP/1.1
-   Host: example.com
-   Sec-CH-Locale-Preferences-calendar:""
-   Sec-CH-Locale-Preferences-timeZone: ""
-   ```
+
+```http
+GET / HTTP/1.1
+Host: example.com
+Sec-CH-Locale-Preferences-calendar:"buddhist"
+Sec-CH-Locale-Preferences-timeZone: "Africa/Lagos"
+```
+
+In case the user did not set any `Locale-Preferences` for accepted values, request headers return the default value for given locale
+```http
+GET / HTTP/1.1
+Host: example.com
+Sec-CH-Locale-Preferences-calendar:"gregory"
+Sec-CH-Locale-Preferences-timeZone: "Europe/London"
+```
 
 4. The server can then tailor the response to the client's preferences accordingly.
-
 
 
 ### Javascript API
@@ -192,10 +190,11 @@ This might be written like so:
 
 navigator.localePreferences.calendar(); // =>  "gregory"
 navigator.localePreferences.currencyFormat(); // => "EUR"
-navigator.localePreferences.firstDayOfTheWeek(); // =>  `undefined` user has not set this value in their OS
-navigator.localePreferences.timeZone(); // =>  'Europe/London'
-navigator.localePreferences.region(); // => 'GB'
+navigator.localePreferences.timeZone(); // =>  "Europe/London"
+navigator.localePreferences.region(); // => "GB"
  
+// user has not set `firstDayOfTheWeek` value in their OS, it returns the default value for given locale
+navigator.localePreferences.firstDayOfTheWeek(); // =>  "7"
 ```
 
 #### Examples

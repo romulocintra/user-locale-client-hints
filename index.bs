@@ -47,22 +47,62 @@ User preferences are often system-wide settings (such as in Android, macOS, or W
 
 However, there’s currently no reliable way to access this information from the Web Platform to help craft better user experiences. Allowing web developers to access this information would allow them to improve the accessibility and usability of their websites, and bring the user experience of web applications closer to that of native applications.
 
-## Use cases ## {#use-cases}
+We propose to address the above use cases by using a group of [`Client Hints`](#client-hints) headers and a homologous [Javascript API](#javascript-api), both will be responsible for exposing and negotiating the exchange of user preferences from the OS to the required environment.
 
-To allow web applications to get access to higher quality user preferences to assist Internationalization.
+We are proposing [Unicode Extensions for BCP 47](https://cldr.unicode.org/index/bcp47-extension) or compatible as the main reference for the base mechanism for delivering user locale preferences. The goal is to allow the handling of user preferences consistently across the industry.
 
-Client and server-side applications should access and share consistently locale user preferences that will help solve cases like:
+So, we will define a new standard `Locale-Preferences` Client Hints and `navigator.localePreferences`, that would map the user locale preferences using the following steps:
 
-1. *"Alice, an end user, reads en-US but prefers using a 24-hour clock. She has set that preference in her operating system settings. Native apps are able to respect her preference. However, web apps cannot access OS user preferences, so on the Web Platform, Alice sees a 12-hour clock, the default for en-US."*
-2. *"other use cases: NodeJS programs that want to respect the user's hourCycle preference by passing it in to Intl.DateTimeFormat, Other non browser environments."*
+  0.  Validate if there is any fingerprinting mechanism and if OS preferences are allowed to be exposed
+  1.  Read the available OS preferences
+  2.  For each value compare it against the default  value for the given locale from ICU/CLDR or a list of user preferences to compare against
+  3.  If the _user preference_ value differs, return the value
+  4.  If the  _user preference_ value is the same, return empty value
 
-For **client side applications**, the best way to get them would be through a browser API that fetches this information from the different platform-specific OS APIs.
+As an alternative instead of returning `undefined` or empty values, we could try to do an intent of resolving the missing information using [Add Likely Subtags ](https://www.unicode.org/reports/tr35/#Likely_Subtags) algorithm and merge values set by the user in their user locale preferences. 
 
-For **server-side applications**, one way to get access to this information would be via HTTP headers on the request.
+Conceptually both strategies would work but the second won't inform each preference set by the user.
 
-<img alt="user locale preferences flow" src="https://user-images.githubusercontent.com/1572026/182210112-69fb7769-eafa-43ab-bad0-21eb49489d50.png">
+The following table suggests common user preferences [#416](https://github.com/tc39/ecma402/issues/416#issue-574957588) to be used, and does the correlation from  `Locale-Preferences` Client Hints and `navigator.localePreferences` to extension keys if they exist, or other values in case table is extended by user demand.
 
-## Use cases ## {#use-cases}
+<pre class=simpledef>
+first row: some info
+second row: different info
+second row: merged with the previous row
+</pre>
+
+| Locale Preferences Name | Extension Key/Unicode Source | Example Values | Description |
+| ----------------------- | -------| ------ |-----|
+| "calendar"              |  `ca`  | buddhist, chinese...| [Calendar system / Calendar algorithm](https://github.com/unicode-org/cldr/blob/main/common/bcp47/calendar.xml) | 
+| "currencyFormat"        |  `cf`  | standard, account | Currency Format style, whether to use accounting currency format |
+| "collation"             |  `co`  | standard, search, phonetic... | Collation type, sort order |
+| "currencyCode"          |  `cu`  | 	ISO 4217 codes | Currency type |
+| "emojiStyle"            |  `em`  | emoji , text, default | Emoji presentation style |
+| "firstDayOfTheWeek"      |  `fw`  | "sun", "mon" ... "sat" | First day of week  |
+| "hourCycle"             |  `hc`  | h12 , h23, h11, h24 | Hour cycle, i.e., 12-hour or 24-hour clock |
+| "measurementSystem"     |  `ms`  | metric , ussystem , uksystem | Measurement system |
+| "measurementUnit"       |  `mu`  | celsius , kelvin , fahrenhe | [Measurement units currently only temperature](https://github.com/unicode-org/cldr/blob/7942fd82f7e673eb0b27f0bf2025a31572135d95/common/bcp47/measure.xml#L16) |
+| "numberingSystem"       |  `nu`  | Unicode script subtag(arabext...)    <br> | Numbering system |
+| "timeZone"              |  `tz`  | Unicode short time zone IDs | Time zone |
+| "region"                |  `rg`  | [Unicode Region Subtag](https://unicode.org/reports/tr35/tr35.html#unicode_region_subtag) | Region override |
+
+
+
+Other user preferences that might be included based on user research about OS preferences inputs and [#1308329](https://bugzilla.mozilla.org/show_bug.cgi?id=1308329), most of them don't have a 1:1 match with BCP47 extension keys, however, they are available in ICU/CLDR
+ - number separator (grouping/decimal)
+ - measurement units (Metric, US, UK)
+ - date formats short/medium/long/full
+ - time formats short/medium/long/full
+ - dayperiod names
+ - time display with/without seconds
+ - flash the time separators
+ - show dayPeriod
+ - show the day of the week
+ - show date
+
+> Note: The table and list are recommendations, they need to be validated and agreed by security teams and stakeholders, but from now on using them as a reference for the proposal.
+
+
 
 Examples {#examples}
 --------

@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version 63e66730b, updated Tue Oct 25 12:35:05 2022 -0700" name="generator">
   <link href="https://github.com/romulocintra/user-locale-client-hints" rel="canonical">
-  <meta content="0521a23565500b371d29ac9bf7c0a27541272b11" name="document-revision">
+  <meta content="d06ea5038f67acfd5a6214a28673f955cbbb1223" name="document-revision">
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -575,9 +575,7 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
     <li>
      <a href="#intro"><span class="secno">1</span> <span class="content">Introduction</span></a>
      <ol class="toc">
-      <li><a href="#use-cases"><span class="secno">1.1</span> <span class="content">Use cases</span></a>
-      <li><a href="#use-cases①"><span class="secno">1.2</span> <span class="content">Use cases</span></a>
-      <li><a href="#examples"><span class="secno">1.3</span> <span class="content">Examples</span></a>
+      <li><a href="#examples"><span class="secno">1.1</span> <span class="content">Examples</span></a>
      </ol>
     <li>
      <a href="#w3c-conformance"><span class="secno"></span> <span class="content">Conformance</span></a>
@@ -609,20 +607,75 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
      <p>Number separators (comma or period)</p>
    </ul>
    <p>However, there’s currently no reliable way to access this information from the Web Platform to help craft better user experiences. Allowing web developers to access this information would allow them to improve the accessibility and usability of their websites, and bring the user experience of web applications closer to that of native applications.</p>
-   <h3 class="heading settled" data-level="1.1" id="use-cases"><span class="secno">1.1. </span><span class="content">Use cases</span><a class="self-link" href="#use-cases"></a></h3>
-   <p>To allow web applications to get access to higher quality user preferences to assist Internationalization.</p>
-   <p>Client and server-side applications should access and share consistently locale user preferences that will help solve cases like:</p>
-   <ol>
+   <p>We propose to address the above use cases by using a group of [<code>Client Hints</code>](#client-hints) headers and a homologous <a href="#javascript-api">Javascript API</a>, both will be responsible for exposing and negotiating the exchange of user preferences from the OS to the required environment.</p>
+   <p>We are proposing <a href="https://cldr.unicode.org/index/bcp47-extension">Unicode Extensions for BCP 47</a> or compatible as the main reference for the base mechanism for delivering user locale preferences. The goal is to allow the handling of user preferences consistently across the industry.</p>
+   <p>So, we will define a new standard <code>Locale-Preferences</code> Client Hints and <code>navigator.localePreferences</code>, that would map the user locale preferences using the following steps:</p>
+   <ol start="0">
     <li data-md>
-     <p><em>"Alice, an end user, reads en-US but prefers using a 24-hour clock. She has set that preference in her operating system settings. Native apps are able to respect her preference. However, web apps cannot access OS user preferences, so on the Web Platform, Alice sees a 12-hour clock, the default for en-US."</em></p>
+     <p>Validate if there is any fingerprinting mechanism and if OS preferences are allowed to be exposed</p>
     <li data-md>
-     <p><em>"other use cases: NodeJS programs that want to respect the user’s hourCycle preference by passing it in to Intl.DateTimeFormat, Other non browser environments."</em></p>
+     <p>Read the available OS preferences</p>
+    <li data-md>
+     <p>For each value compare it against the default  value for the given locale from ICU/CLDR or a list of user preferences to compare against</p>
+    <li data-md>
+     <p>If the _user preference_ value differs, return the value</p>
+    <li data-md>
+     <p>If the  _user preference_ value is the same, return empty value</p>
    </ol>
-   <p>For <strong>client side applications</strong>, the best way to get them would be through a browser API that fetches this information from the different platform-specific OS APIs.</p>
-   <p>For <strong>server-side applications</strong>, one way to get access to this information would be via HTTP headers on the request.</p>
-   <p><img alt="user locale preferences flow" src="https://user-images.githubusercontent.com/1572026/182210112-69fb7769-eafa-43ab-bad0-21eb49489d50.png"></p>
-   <h3 class="heading settled" data-level="1.2" id="use-cases①"><span class="secno">1.2. </span><span class="content">Use cases</span><a class="self-link" href="#use-cases①"></a></h3>
-   <h3 class="heading settled" data-level="1.3" id="examples"><span class="secno">1.3. </span><span class="content">Examples</span><a class="self-link" href="#examples"></a></h3>
+   <p>As an alternative instead of returning <code>undefined</code> or empty values, we could try to do an intent of resolving the missing information using <a href="https://www.unicode.org/reports/tr35/#Likely_Subtags">Add Likely Subtags </a> algorithm and merge values set by the user in their user locale preferences.</p>
+   <p>Conceptually both strategies would work but the second won’t inform each preference set by the user.</p>
+   <p>The following table suggests common user preferences <a href="https://github.com/tc39/ecma402/issues/416#issue-574957588">#416</a> to be used, and does the correlation from <code>Locale-Preferences</code> Client Hints and <code>navigator.localePreferences</code> to extension keys if they exist, or other values in case table is extended by user demand.</p>
+   <table class="def">
+    <tbody>
+     <tr>
+      <th>First row
+      <td>some info
+     <tr>
+      <th>Second row
+      <td>different info
+merged with the previous row
+   </table>
+   <p>| Locale Preferences Name | Extension Key/Unicode Source | Example Values | Description |
+| ----------------------- | -------| ------ |-----|
+| "calendar"              | <code>ca</code> | buddhist, chinese...| <a href="https://github.com/unicode-org/cldr/blob/main/common/bcp47/calendar.xml">Calendar system / Calendar algorithm</a> | 
+| "currencyFormat"        | <code>cf</code> | standard, account | Currency Format style, whether to use accounting currency format |
+| "collation"             | <code>co</code> | standard, search, phonetic... | Collation type, sort order |
+| "currencyCode"          | <code>cu</code> | 	ISO 4217 codes | Currency type |
+| "emojiStyle"            | <code>em</code> | emoji , text, default | Emoji presentation style |
+| "firstDayOfTheWeek"      | <code>fw</code> | "sun", "mon" ... "sat" | First day of week  |
+| "hourCycle"             | <code>hc</code> | h12 , h23, h11, h24 | Hour cycle, i.e., 12-hour or 24-hour clock |
+| "measurementSystem"     | <code>ms</code> | metric , ussystem , uksystem | Measurement system |
+| "measurementUnit"       | <code>mu</code> | celsius , kelvin , fahrenhe | <a href="https://github.com/unicode-org/cldr/blob/7942fd82f7e673eb0b27f0bf2025a31572135d95/common/bcp47/measure.xml#L16">Measurement units currently only temperature</a> |
+| "numberingSystem"       | <code>nu</code> | Unicode script subtag(arabext...) <br> | Numbering system |
+| "timeZone"              | <code>tz</code> | Unicode short time zone IDs | Time zone |
+| "region"                | <code>rg</code> | <a href="https://unicode.org/reports/tr35/tr35.html#unicode_region_subtag">Unicode Region Subtag</a> | Region override |</p>
+   <p>Other user preferences that might be included based on user research about OS preferences inputs and <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1308329">#1308329</a>, most of them don’t have a 1:1 match with BCP47 extension keys, however, they are available in ICU/CLDR</p>
+   <ul>
+    <li data-md>
+     <p>number separator (grouping/decimal)</p>
+    <li data-md>
+     <p>measurement units (Metric, US, UK)</p>
+    <li data-md>
+     <p>date formats short/medium/long/full</p>
+    <li data-md>
+     <p>time formats short/medium/long/full</p>
+    <li data-md>
+     <p>dayperiod names</p>
+    <li data-md>
+     <p>time display with/without seconds</p>
+    <li data-md>
+     <p>flash the time separators</p>
+    <li data-md>
+     <p>show dayPeriod</p>
+    <li data-md>
+     <p>show the day of the week</p>
+    <li data-md>
+     <p>show date</p>
+   </ul>
+   <blockquote>
+    <p class="note" role="note"><span>Note:</span> The table and list are recommendations, they need to be validated and agreed by security teams and stakeholders, but from now on using them as a reference for the proposal.</p>
+   </blockquote>
+   <h3 class="heading settled" data-level="1.1" id="examples"><span class="secno">1.1. </span><span class="content">Examples</span><a class="self-link" href="#examples"></a></h3>
    <p><em>This section is non-normative</em>.</p>
    <ol>
     <li data-md>
