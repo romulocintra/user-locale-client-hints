@@ -1,12 +1,12 @@
 <!doctype html><html lang="en">
  <head>
   <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-  <title>User Locale Preferences</title>
+  <title>User Preference Locale Info Client Hints Headers</title>
   <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version 63e66730b, updated Tue Oct 25 12:35:05 2022 -0700" name="generator">
   <link href="https://github.com/romulocintra/user-locale-client-hints" rel="canonical">
-  <meta content="d06ea5038f67acfd5a6214a28673f955cbbb1223" name="document-revision">
+  <meta content="ac44ec212dc83b58cf364440931594d09b8dfe73" name="document-revision">
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -533,8 +533,8 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
  <body class="h-entry">
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72"> </a> </p>
-   <h1 class="p-name no-ref" id="title">User Locale Preferences</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2022-10-28">28 October 2022</time></p>
+   <h1 class="p-name no-ref" id="title">User Preference Locale Info Client Hints Headers</h1>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2022-12-20">20 December 2022</time></p>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -549,7 +549,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
     </dl>
    </div>
    <div data-fill-with="warning"></div>
-   <p class="copyright" data-fill-with="copyright"><a href="http://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> © 2022 the Contributors to the User Locale Preferences Specification, published by the <a href="https://www.w3.org/community/wicg/">Web Platform Incubator Community Group</a> under the <a href="https://www.w3.org/community/about/agreements/cla/">W3C Community Contributor License Agreement (CLA)</a>.
+   <p class="copyright" data-fill-with="copyright"><a href="http://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> © 2022 the Contributors to the User Preference Locale Info Client Hints Headers Specification, published by the <a href="https://www.w3.org/community/wicg/">Web Platform Incubator Community Group</a> under the <a href="https://www.w3.org/community/about/agreements/cla/">W3C Community Contributor License Agreement (CLA)</a>.
 A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/">summary</a> is available. </p>
    <hr title="Separator for header">
   </div>
@@ -576,7 +576,25 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
      <a href="#intro"><span class="secno">1</span> <span class="content">Introduction</span></a>
      <ol class="toc">
       <li><a href="#examples"><span class="secno">1.1</span> <span class="content">Examples</span></a>
+      <li><a href="#examples①"><span class="secno">1.2</span> <span class="content">Use Cases</span></a>
      </ol>
+    <li>
+     <a href="#user-preference-locale-info"><span class="secno">2</span> <span class="content">User Preference Locale Info</span></a>
+     <ol class="toc">
+      <li><a href="#sec-ch-prefers-locale-calendar"><span class="secno">2.1</span> <span class="content"><code>Sec-CH-Prefers-Locale-calendar</code></span></a>
+      <li><a href="#sec-ch-prefers-locale-currencyformat"><span class="secno">2.2</span> <span class="content"><code>Sec-CH-Prefers-Locale-currencyFormat</code></span></a>
+      <li><a href="#sec-ch-prefers-locale-collation"><span class="secno">2.3</span> <span class="content"><code>Sec-CH-Prefers-Locale-collation</code></span></a>
+      <li><a href="#sec-ch-prefers-locale-currencycode"><span class="secno">2.4</span> <span class="content"><code>Sec-CH-Prefers-Locale-currencyCode</code></span></a>
+      <li><a href="#sec-ch-prefers-locale-emojistyle"><span class="secno">2.5</span> <span class="content"><code>Sec-CH-Prefers-Locale-emojiStyle</code></span></a>
+      <li><a href="#sec-ch-prefers-locale-firstdayoftheweek"><span class="secno">2.6</span> <span class="content"><code>Sec-CH Prefers-Locale-firstDayOfTheWeek</code></span></a>
+      <li><a href="#sec-ch-prefers-locale-hourcycle"><span class="secno">2.7</span> <span class="content"><code>Sec-CH-Prefers-Locale-hourCycle</code></span></a>
+      <li><a href="#sec-ch-prefers-locale-measurementsystem"><span class="secno">2.8</span> <span class="content"><code>Sec-CH-Prefers-Locale-measurementSystem</code></span></a>
+      <li><a href="#sec-ch-prefers-locale-measurementunit"><span class="secno">2.9</span> <span class="content"><code>Sec-CH-Prefers-Locale-measurementUnit</code></span></a>
+      <li><a href="#sec-ch-prefers-locale-numberingsystem"><span class="secno">2.10</span> <span class="content"><code>Sec-CH-Prefers-Locale-numberingSystem</code></span></a>
+      <li><a href="#sec-ch-prefers-locale-timezone"><span class="secno">2.11</span> <span class="content"><code>Sec-CH-Prefers-Locale-timeZone</code></span></a>
+      <li><a href="#sec-ch-prefers-locale-region"><span class="secno">2.12</span> <span class="content"><code>Sec-CH-Prefers-Locale-region</code></span></a>
+     </ol>
+    <li><a href="#security-and-privacy-considerationd"><span class="secno">3</span> <span class="content">Security and Privacy Considerations</span></a>
     <li>
      <a href="#w3c-conformance"><span class="secno"></span> <span class="content">Conformance</span></a>
      <ol class="toc">
@@ -607,7 +625,7 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
      <p>Number separators (comma or period)</p>
    </ul>
    <p>However, there’s currently no reliable way to access this information from the Web Platform to help craft better user experiences. Allowing web developers to access this information would allow them to improve the accessibility and usability of their websites, and bring the user experience of web applications closer to that of native applications.</p>
-   <p>We propose to address the above use cases by using a group of [<code>Client Hints</code>](#client-hints) headers and a homologous <a href="#javascript-api">Javascript API</a>, both will be responsible for exposing and negotiating the exchange of user preferences from the OS to the required environment.</p>
+   <p>We propose to address the above use cases by using a group of [<code>Client Hints</code>](#client-hints) headers and a homologous <a href="#">Javascript API</a>, both will be responsible for exposing and negotiating the exchange of user preferences from the OS to the required environment.</p>
    <p>We are proposing <a href="https://cldr.unicode.org/index/bcp47-extension">Unicode Extensions for BCP 47</a> or compatible as the main reference for the base mechanism for delivering user locale preferences. The goal is to allow the handling of user preferences consistently across the industry.</p>
    <p>So, we will define a new standard <code>Locale-Preferences</code> Client Hints and <code>navigator.localePreferences</code>, that would map the user locale preferences using the following steps:</p>
    <ol start="0">
@@ -711,6 +729,22 @@ merged with the previous row
     <li data-md>
      <p>The server can then tailor the response to the client’s preferences accordingly.</p>
    </ol>
+   <h3 class="heading settled" data-level="1.2" id="examples①"><span class="secno">1.2. </span><span class="content">Use Cases</span><a class="self-link" href="#examples①"></a></h3>
+   <h2 class="heading settled" data-level="2" id="user-preference-locale-info"><span class="secno">2. </span><span class="content">User Preference Locale Info</span><a class="self-link" href="#user-preference-locale-info"></a></h2>
+   <h3 class="heading settled" data-level="2.1" id="sec-ch-prefers-locale-calendar"><span class="secno">2.1. </span><span class="content"><code>Sec-CH-Prefers-Locale-calendar</code></span><a class="self-link" href="#sec-ch-prefers-locale-calendar"></a></h3>
+   <h3 class="heading settled" data-level="2.2" id="sec-ch-prefers-locale-currencyformat"><span class="secno">2.2. </span><span class="content"><code>Sec-CH-Prefers-Locale-currencyFormat</code></span><a class="self-link" href="#sec-ch-prefers-locale-currencyformat"></a></h3>
+   <h3 class="heading settled" data-level="2.3" id="sec-ch-prefers-locale-collation"><span class="secno">2.3. </span><span class="content"><code>Sec-CH-Prefers-Locale-collation</code></span><a class="self-link" href="#sec-ch-prefers-locale-collation"></a></h3>
+   <h3 class="heading settled" data-level="2.4" id="sec-ch-prefers-locale-currencycode"><span class="secno">2.4. </span><span class="content"><code>Sec-CH-Prefers-Locale-currencyCode</code></span><a class="self-link" href="#sec-ch-prefers-locale-currencycode"></a></h3>
+   <h3 class="heading settled" data-level="2.5" id="sec-ch-prefers-locale-emojistyle"><span class="secno">2.5. </span><span class="content"><code>Sec-CH-Prefers-Locale-emojiStyle</code></span><a class="self-link" href="#sec-ch-prefers-locale-emojistyle"></a></h3>
+   <h3 class="heading settled" data-level="2.6" id="sec-ch-prefers-locale-firstdayoftheweek"><span class="secno">2.6. </span><span class="content"><code>Sec-CH Prefers-Locale-firstDayOfTheWeek</code></span><a class="self-link" href="#sec-ch-prefers-locale-firstdayoftheweek"></a></h3>
+   <h3 class="heading settled" data-level="2.7" id="sec-ch-prefers-locale-hourcycle"><span class="secno">2.7. </span><span class="content"><code>Sec-CH-Prefers-Locale-hourCycle</code></span><a class="self-link" href="#sec-ch-prefers-locale-hourcycle"></a></h3>
+   <h3 class="heading settled" data-level="2.8" id="sec-ch-prefers-locale-measurementsystem"><span class="secno">2.8. </span><span class="content"><code>Sec-CH-Prefers-Locale-measurementSystem</code></span><a class="self-link" href="#sec-ch-prefers-locale-measurementsystem"></a></h3>
+   <h3 class="heading settled" data-level="2.9" id="sec-ch-prefers-locale-measurementunit"><span class="secno">2.9. </span><span class="content"><code>Sec-CH-Prefers-Locale-measurementUnit</code></span><a class="self-link" href="#sec-ch-prefers-locale-measurementunit"></a></h3>
+   <h3 class="heading settled" data-level="2.10" id="sec-ch-prefers-locale-numberingsystem"><span class="secno">2.10. </span><span class="content"><code>Sec-CH-Prefers-Locale-numberingSystem</code></span><a class="self-link" href="#sec-ch-prefers-locale-numberingsystem"></a></h3>
+   <h3 class="heading settled" data-level="2.11" id="sec-ch-prefers-locale-timezone"><span class="secno">2.11. </span><span class="content"><code>Sec-CH-Prefers-Locale-timeZone</code></span><a class="self-link" href="#sec-ch-prefers-locale-timezone"></a></h3>
+   <h3 class="heading settled" data-level="2.12" id="sec-ch-prefers-locale-region"><span class="secno">2.12. </span><span class="content"><code>Sec-CH-Prefers-Locale-region</code></span><a class="self-link" href="#sec-ch-prefers-locale-region"></a></h3>
+    <code>Sec-CH-Prefers-Locale-dateFormat</code> 
+   <h2 class="heading settled" data-level="3" id="security-and-privacy-considerationd"><span class="secno">3. </span><span class="content">Security and Privacy Considerations</span><a class="self-link" href="#security-and-privacy-considerationd"></a></h2>
    <p>See https://github.com/tabatkins/bikeshed to get started.</p>
   </main>
   <div data-fill-with="conformance">

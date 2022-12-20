@@ -1,13 +1,13 @@
-# Explainer:  User Locale Preferences
+# Explainer:  User Preference Locale Info Client Hints Headers
 
 ## Table of Contents
 
-- [Explainer:  User Locale Preferences](#explainer--user-locale-preferences)
+- [Explainer:  User Preference Locale Info Client Hints Headers](#explainer--user-preference-locale-info-client-hints-headers)
   - [Table of Contents](#table-of-contents)
   - [Authors:](#authors)
   - [Participate](#participate)
   - [Introduction](#introduction)
-  - [Use Cases & Motivation](#use-cases--motivation)
+  - [Use Cases \& Motivation](#use-cases--motivation)
   - [Proposed Solution](#proposed-solution)
     - [Client Hints](#client-hints)
       - [Proposed Syntax](#proposed-syntax)
@@ -119,29 +119,26 @@ Servers will receive no information about the user's locale preferences. Servers
 
 To accomplish this, Browsers should introduce several new `Client Hint` header fields as part of a [Structured Header](https://datatracker.ietf.org/doc/html/draft-ietf-httpbis-header-structure) sent over request whose value is a list of defined user locale preferences.
 
-**`Sec-CH-Locale-Preferences-*`**
+**`Sec-CH-Prefers-*`**
 
 The following table represents the list of headers returning individual opted-in `Locale-Preferences`. For example:
 
 
 | Client Hint | Example output |
 | --- | --- |
-| Sec-CH-Locale-Preferences-calendar          | `Sec-CH-Locale-Preferences-calendar         : "buddhist"`  |  
-| Sec-CH-Locale-Preferences-currencyFormat    | `Sec-CH-Locale-Preferences-currencyFormat   : "account"`    | 
-| Sec-CH-Locale-Preferences-collation         | `Sec-CH-Locale-Preferences-collation        : "search"`     | 
-| Sec-CH-Locale-Preferences-currencyCode      | `Sec-CH-Locale-Preferences-currencyCode     : "EUR"`        | 
-| Sec-CH-Locale-Preferences-emojiStyle        | `Sec-CH-Locale-Preferences-emojiStyle       : "emoji"`      | 
-| Sec-CH-Locale-Preferences-firstDayOfTheWeek  | `Sec-CH-Locale-Preferences-firstDayOfTheWeek : "sun"`        | 
-| Sec-CH-Locale-Preferences-hourCycle         | `Sec-CH-Locale-Preferences-hourCycle        : "h12"`        | 
-| Sec-CH-Locale-Preferences-measurementSystem | `Sec-CH-Locale-Preferences-measurementSystem: "metric"`     | 
-| Sec-CH-Locale-Preferences-measurementUnit   | `Sec-CH-Locale-Preferences-measurementUnit  : "kelvin"`       | 
-| Sec-CH-Locale-Preferences-numberingSystem   | `Sec-CH-Locale-Preferences-numberingSystem  : "latn";` | 
-| Sec-CH-Locale-Preferences-timeZone          | `Sec-CH-Locale-Preferences-timeZone         : "Atlantic/Azores";`  |
-| Sec-CH-Locale-Preferences-region            | `Sec-CH-Locale-Preferences-region           : "PT"` |
-| Sec-CH-Locale-Preferences-dateFormat        | `Sec-CH-Locale-Preferences-dateFormat       : "EEE, d MMM yyyy HH:mm:ss Z"` |
-
-
-
+| Sec-CH-Prefers-Locale-calendar          | `Sec-CH-Prefers-Locale-calendar         : "buddhist"`  |  
+| Sec-CH-Prefers-Locale-currencyFormat    | `Sec-CH-Prefers-Locale-currencyFormat   : "account"`    | 
+| Sec-CH-Prefers-Locale-collation         | `Sec-CH-Prefers-Locale-collation        : "search"`     | 
+| Sec-CH-Prefers-Locale-currencyCode      | `Sec-CH-Prefers-Locale-currencyCode     : "EUR"`        | 
+| Sec-CH-Prefers-Locale-emojiStyle        | `Sec-CH-Prefers-Locale-emojiStyle       : "emoji"`      | 
+| Sec-CH-Prefers-Locale-firstDayOfTheWeek  | `Sec-CH Prefers-Locale-firstDayOfTheWeek : "sun"`        | 
+| Sec-CH-Prefers-Locale-hourCycle         | `Sec-CH-Prefers-Locale-hourCycle        : "h12"`        | 
+| Sec-CH-Prefers-Locale-measurementSystem | `Sec-CH-Prefers-Locale-measurementSystem: "metric"`     | 
+| Sec-CH-Prefers-Locale-measurementUnit   | `Sec-CH-Prefers-Locale-measurementUnit  : "kelvin"`       | 
+| Sec-CH-Prefers-Locale-numberingSystem   | `Sec-CH-Prefers-Locale-numberingSystem  : "latn";` | 
+| Sec-CH-Prefers-Locale-timeZone          | `Sec-CH-Prefers-Locale-timeZone         : "Atlantic/Azores";`  |
+| Sec-CH-Prefers-Locale-region            | `Sec-CH-Prefers-Locale-region           : "PT"` |
+| Sec-CH-Prefers-Locale-dateFormat        | `Sec-CH-Prefers-Locale-dateFormat       : "EEE, d MMM yyyy HH:mm:ss Z"` |
 #### Example
 1. The client makes an initial request to the server:
 

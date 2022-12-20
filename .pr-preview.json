@@ -1,6 +1,6 @@
 {
   "src_file": "index.html",
-  "type": "respec",
+  "type": "bikesheed",
   "params": {
     "force": 1
   }

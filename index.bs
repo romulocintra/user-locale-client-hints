@@ -1,5 +1,5 @@
 <pre class='metadata'>
-Title: User Locale Preferences
+Title: User Preference Locale Info Client Hints Headers
 Shortname: user-locale-client-hints
 Level: 1
 Status: CG-DRAFT
@@ -47,7 +47,7 @@ User preferences are often system-wide settings (such as in Android, macOS, or W
 
 However, there’s currently no reliable way to access this information from the Web Platform to help craft better user experiences. Allowing web developers to access this information would allow them to improve the accessibility and usability of their websites, and bring the user experience of web applications closer to that of native applications.
 
-We propose to address the above use cases by using a group of [`Client Hints`](#client-hints) headers and a homologous [Javascript API](#javascript-api), both will be responsible for exposing and negotiating the exchange of user preferences from the OS to the required environment.
+We propose to address the above use cases by using a group of [`Client Hints`](#client-hints) headers and a homologous [Javascript API](#), both will be responsible for exposing and negotiating the exchange of user preferences from the OS to the required environment.
 
 We are proposing [Unicode Extensions for BCP 47](https://cldr.unicode.org/index/bcp47-extension) or compatible as the main reference for the base mechanism for delivering user locale preferences. The goal is to allow the handling of user preferences consistently across the industry.
 
@@ -70,6 +70,7 @@ first row: some info
 second row: different info
 second row: merged with the previous row
 </pre>
+
 
 | Locale Preferences Name | Extension Key/Unicode Source | Example Values | Description |
 | ----------------------- | -------| ------ |-----|
@@ -143,7 +144,42 @@ Sec-CH-Locale-Preferences-timeZone: ""
 
 4. The server can then tailor the response to the client's preferences accordingly.
 
+Use Cases {#examples}
+--------
 
+User Preference Locale Info {#user-preference-locale-info}
+=====================
+
+`Sec-CH-Prefers-Locale-calendar`     
+--------------------------------
+
+`Sec-CH-Prefers-Locale-currencyFormat`   
+--------------------------------
+`Sec-CH-Prefers-Locale-collation`
+--------------------------------        
+`Sec-CH-Prefers-Locale-currencyCode`
+--------------------------------     
+`Sec-CH-Prefers-Locale-emojiStyle`
+--------------------------------       
+`Sec-CH Prefers-Locale-firstDayOfTheWeek`
+--------------------------------
+`Sec-CH-Prefers-Locale-hourCycle`
+--------------------------------        
+`Sec-CH-Prefers-Locale-measurementSystem`
+--------------------------------
+`Sec-CH-Prefers-Locale-measurementUnit`
+--------------------------------  
+`Sec-CH-Prefers-Locale-numberingSystem`
+--------------------------------  
+`Sec-CH-Prefers-Locale-timeZone`
+--------------------------------        
+`Sec-CH-Prefers-Locale-region`
+--------------------------------        
+`Sec-CH-Prefers-Locale-dateFormat`       
+
+
+Security and Privacy Considerations {#security-and-privacy-considerationd}
+=====================
 
 
 
