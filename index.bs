@@ -206,7 +206,8 @@ Sec-CH-Locale-Preferences-timeZone: "Europe/London"
 
 ## JavaScript API ## {#javascript-api}
 
-These client hints should also be exposed as JavaScript APIs via `navigator.locales` as suggested in [#68](https://github.com/tc39/ecma402/issues/68) or by creating a new <dfn export>`navigator.localePreferences`</dfn> that exposes `Locale-Preferences` information as below. 
+These client hints should also be exposed as JavaScript APIs via `navigator.locales` as suggested in
+[#68](https://github.com/tc39/ecma402/issues/68) or by creating a new `navigator.localePreferences` that exposes `Locale-Preferences` information as below. 
 
 ### Usage examples ### {#user-local-preferences-javascript-api-examples}
 <div class=example>
