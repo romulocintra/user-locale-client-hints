@@ -249,7 +249,3 @@ There are some concerns that exposing this information would give trackers, adve
 Client Hints provides a powerful content negotiation mechanism that enables us to adapt content to users' needs without compromising their privacy. It does that by requiring server opt-in, which guarantees that access to the information requires active and tracable action on the server's side. As such, the mechanism does not increase the web's current active fingerprinting surface. 
 
 The Security Considerations of [[!CLIENT-HINTS]] and [[!draft-davidben-http-client-hint-reliability-02]] likewise apply to this proposal.
-
-
-
-
