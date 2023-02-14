@@ -4,9 +4,9 @@
   <title>User Locale Preferences</title>
   <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
-  <meta content="Bikeshed version 63e66730b, updated Tue Oct 25 12:35:05 2022 -0700" name="generator">
+  <meta content="Bikeshed version d6f2d6445, updated Tue Jan 17 11:25:25 2023 -0800" name="generator">
   <link href="https://github.com/romulocintra/user-locale-client-hints" rel="canonical">
-  <meta content="d06ea5038f67acfd5a6214a28673f955cbbb1223" name="document-revision">
+  <meta content="e11d9855387ad19b30e3826adb2a42757a99a88a" name="document-revision">
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -207,6 +207,47 @@ figcaption {
 figcaption:not(.no-marker)::before {
     content: "Figure " counter(figure) " ";
 }</style>
+<style>/* style-dfn-panel */
+
+:root {
+    --dfnpanel-bg: #ddd;
+    --dfnpanel-text: var(--text);
+}
+.dfn-panel {
+    position: absolute;
+    z-index: 35;
+    height: auto;
+    width: -webkit-fit-content;
+    width: fit-content;
+    max-width: 300px;
+    max-height: 500px;
+    overflow: auto;
+    padding: 0.5em 0.75em;
+    font: small Helvetica Neue, sans-serif, Droid Sans Fallback;
+    background: var(--dfnpanel-bg);
+    color: var(--dfnpanel-text);
+    border: outset 0.2em;
+}
+.dfn-panel:not(.on) { display: none; }
+.dfn-panel * { margin: 0; padding: 0; text-indent: 0; }
+.dfn-panel > b { display: block; }
+.dfn-panel a { color: var(--dfnpanel-text); }
+.dfn-panel a:not(:hover) { text-decoration: none !important; border-bottom: none !important; }
+.dfn-panel > b + b { margin-top: 0.25em; }
+.dfn-panel ul { padding: 0; }
+.dfn-panel li { list-style: inside; }
+.dfn-panel.activated {
+    display: inline-block;
+    position: fixed;
+    left: .5em;
+    bottom: 2em;
+    margin: 0 auto;
+    max-width: calc(100vw - 1.5em - .4em - .5em);
+    max-height: 30vh;
+}
+
+.dfn-paneled { cursor: pointer; }
+</style>
 <style>/* style-issues */
 
 a[href].issue-return {
@@ -468,6 +509,12 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
 }
 
 @media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
     .highlight:not(.idl) { background: rgba(255, 255, 255, .05); }
 
     c-[a] { color: #d33682 } /* Keyword.Declaration */
@@ -534,7 +581,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">User Locale Preferences</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2022-10-28">28 October 2022</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2023-01-23">23 January 2023</time></p>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -544,18 +591,19 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
      <dt class="editor">Editors:
      <dd class="editor p-author h-card vcard"><a class="p-name fn u-email email" href="mailto:rcintra@igalia.com">Romulo Cintra</a> (<a class="p-org org" href="https://igalia.com">Igalia</a>)
      <dd class="editor p-author h-card vcard"><a class="p-name fn u-email email" href="mailto:usharma@igalia.com">Ujjwal Sharma</a> (<a class="p-org org" href="https://igalia.com">Igalia</a>)
+     <dd class="editor p-author h-card vcard"><a class="p-name fn u-email email" href="mailto:benallen@igalia.com">Ben Allen</a> (<a class="p-org org" href="https://igalia.com">Igalia</a>)
      <dt>Tests:
      <dd><a href="https://github.com/w3c/web-platform-tests/tree/master/user-locale-client-hints">web-platform-tests user-locale-client-hints/</a> (<a href="https://github.com/w3c/web-platform-tests/labels/user-locale-client-hints">ongoing work</a>)
     </dl>
    </div>
    <div data-fill-with="warning"></div>
-   <p class="copyright" data-fill-with="copyright"><a href="http://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> © 2022 the Contributors to the User Locale Preferences Specification, published by the <a href="https://www.w3.org/community/wicg/">Web Platform Incubator Community Group</a> under the <a href="https://www.w3.org/community/about/agreements/cla/">W3C Community Contributor License Agreement (CLA)</a>.
+   <p class="copyright" data-fill-with="copyright"><a href="http://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> © 2023 the Contributors to the User Locale Preferences Specification, published by the <a href="https://www.w3.org/community/wicg/">Web Platform Incubator Community Group</a> under the <a href="https://www.w3.org/community/about/agreements/cla/">W3C Community Contributor License Agreement (CLA)</a>.
 A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/">summary</a> is available. </p>
    <hr title="Separator for header">
   </div>
   <div class="p-summary" data-fill-with="abstract">
    <h2 class="no-num no-toc no-ref heading settled" id="abstract"><span class="content">Abstract</span></h2>
-   <p>This specification defines a group of <code>Client Hints</code> headers and a homologous <code>Javascript API</code>, that will allow a reliable way to access User Locale Preferences information from the Web Platform to help craft better user experiences. Allowing web developers to access this information would allow them to improve the accessibility and usability of their websites, and bring the user experience of web applications closer to that of native applications.</p>
+   <p>This specification introduces a set of <code>Client Hints</code> headers and a homologous <code>Javascript API</code> that will allow a reliable way to access User Locale Preferences information from the Web Platform to help craft better user experiences. Allowing web developers to access this information will allow them to improve the accessibility and usability of their websites, and bring the user experience of web applications closer to that of native applications.</p>
   </div>
   <div data-fill-with="at-risk"></div>
   <h2 class="no-num no-toc no-ref heading settled" id="status"><span class="content">Status of this document</span></h2>
@@ -572,16 +620,36 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
   <nav data-fill-with="table-of-contents" id="toc">
    <h2 class="no-num no-toc no-ref" id="contents">Table of Contents</h2>
    <ol class="toc" role="directory">
+    <li><a href="#introduction"><span class="secno">1</span> <span class="content">Introduction</span></a>
     <li>
-     <a href="#intro"><span class="secno">1</span> <span class="content">Introduction</span></a>
+     <a href="#user-locale-preferences-features"><span class="secno">2</span> <span class="content">User Locale Preferences Features</span></a>
      <ol class="toc">
-      <li><a href="#examples"><span class="secno">1.1</span> <span class="content">Examples</span></a>
+      <li>
+       <a href="#user-locale-preferences-client-hints"><span class="secno">2.1</span> <span class="content">Client Hints</span></a>
+       <ol class="toc">
+        <li><a href="#common-user-preferences"><span class="secno">2.1.1</span> <span class="content">Common User Preferences</span></a>
+        <li><a href="#other-user-preferences"><span class="secno">2.1.2</span> <span class="content">Other user preferences</span></a>
+        <li><a href="#client-hint-header-fields"><span class="secno">2.1.3</span> <span class="content"><code>Client Hint</code> Header fields</span></a>
+        <li><a href="#user-locale-client-hints-example"><span class="secno">2.1.4</span> <span class="content">Usage example</span></a>
+       </ol>
+      <li>
+       <a href="#javascript-api"><span class="secno">2.2</span> <span class="content">JavaScript API</span></a>
+       <ol class="toc">
+        <li><a href="#user-local-preferences-javascript-api-examples"><span class="secno">2.2.1</span> <span class="content">Usage examples</span></a>
+       </ol>
      </ol>
+    <li><a href="#privacy-and-security-considerations"><span class="secno">3</span> <span class="content">Privacy and Security Considerations</span></a>
     <li>
      <a href="#w3c-conformance"><span class="secno"></span> <span class="content">Conformance</span></a>
      <ol class="toc">
       <li><a href="#w3c-conventions"><span class="secno"></span> <span class="content">Document conventions</span></a>
       <li><a href="#w3c-conformant-algorithms"><span class="secno"></span> <span class="content">Conformant Algorithms</span></a>
+     </ol>
+    <li>
+     <a href="#index"><span class="secno"></span> <span class="content">Index</span></a>
+     <ol class="toc">
+      <li><a href="#index-defined-here"><span class="secno"></span> <span class="content">Terms defined by this specification</span></a>
+      <li><a href="#index-defined-elsewhere"><span class="secno"></span> <span class="content">Terms defined by reference</span></a>
      </ol>
     <li>
      <a href="#references"><span class="secno"></span> <span class="content">References</span></a>
@@ -591,8 +659,7 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
    </ol>
   </nav>
   <main>
-   <h2 class="heading settled" data-level="1" id="intro"><span class="secno">1. </span><span class="content">Introduction</span><a class="self-link" href="#intro"></a></h2>
-   <p><em>This section is non-normative</em>.</p>
+   <h2 class="heading settled" data-level="1" id="introduction"><span class="secno">1. </span><span class="content">Introduction</span><a class="self-link" href="#introduction"></a></h2>
    <p>User preferences are often system-wide settings (such as in Android, macOS, or Windows). Operating systems allow the user to specify custom overrides for settings such as:</p>
    <ul>
     <li data-md>
@@ -606,11 +673,23 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
     <li data-md>
      <p>Number separators (comma or period)</p>
    </ul>
-   <p>However, there’s currently no reliable way to access this information from the Web Platform to help craft better user experiences. Allowing web developers to access this information would allow them to improve the accessibility and usability of their websites, and bring the user experience of web applications closer to that of native applications.</p>
-   <p>We propose to address the above use cases by using a group of [<code>Client Hints</code>](#client-hints) headers and a homologous <a href="#javascript-api">Javascript API</a>, both will be responsible for exposing and negotiating the exchange of user preferences from the OS to the required environment.</p>
-   <p>We are proposing <a href="https://cldr.unicode.org/index/bcp47-extension">Unicode Extensions for BCP 47</a> or compatible as the main reference for the base mechanism for delivering user locale preferences. The goal is to allow the handling of user preferences consistently across the industry.</p>
-   <p>So, we will define a new standard <code>Locale-Preferences</code> Client Hints and <code>navigator.localePreferences</code>, that would map the user locale preferences using the following steps:</p>
-   <ol start="0">
+   <p>Using this information will let developers improve the accessibility and usability of their websites, and bring the user experience of web applications closer to that of native applications.  Client- and server-side applications should consistently share and access locale user preferences that will help solve cases like:</p>
+   <blockquote>
+    <p>Alice, an end user, reads en-US but prefers using a 24-hour clock. She has set that preference in her operating system settings. Native apps are able to respect her preference. However, web apps cannot access OS user preferences, so on the Web Platform, Alice sees a 12-hour clock, the default for en-US.</p>
+   </blockquote>
+   <blockquote>
+    <p>Other use cases: NodeJS programs that want to respect the user’s hourCycle preference by passing it in to Intl.DateTimeFormat, other non browser environments.</p>
+   </blockquote>
+   <p>For <strong>client-side applications</strong>, the best way to get them is through a browser API that fetches this information from the different platform-specific OS APIs.</p>
+   <p>For <strong>server-side applications</strong>, one way to get access to this information is via <a data-link-type="biblio" href="#biblio-client-hints" title="HTTP Client Hints">[CLIENT-HINTS]</a> headers on the request.</p>
+   <figure>
+    <img alt="TODO" height="300" src="https://user-images.githubusercontent.com/1572026/182210112-69fb7769-eafa-43ab-bad0-21eb49489d50.png" width="500"> 
+    <figcaption>TODO BETTER CAPTION: Server does not directly receive data about user preferences</figcaption>
+   </figure>
+   <h2 class="heading settled" data-level="2" id="user-locale-preferences-features"><span class="secno">2. </span><span class="content">User Locale Preferences Features</span><a class="self-link" href="#user-locale-preferences-features"></a></h2>
+   <p>We address the above use cases by using a group of <a data-link-type="biblio" href="#biblio-client-hints" title="HTTP Client Hints">[CLIENT-HINTS]</a> headers and a homologous <a href="#javascript-api">§ 2.2 JavaScript API</a>. Both will be responsible for exposing and negotiating the exchange of user preferences from the OS to the required environment.</p>
+   <p>We use <a data-link-type="dfn" href="https://cldr.unicode.org/index/bcp47-extension#unicode-extensions-for-bcp-47" id="ref-for-unicode-extensions-for-bcp-47">Unicode Extensions for BCP 47</a> or compatible as the main reference for the base mechanism for delivering user locale preferences. We define a new standard <dfn data-dfn-type="dfn" data-export id="locale-preferences"><code>Locale-Preferences</code><a class="self-link" href="#locale-preferences"></a></dfn> Client Hints and <dfn data-dfn-type="dfn" data-export id="navigatorlocalepreferences"><code>navigator.localePreferences</code><a class="self-link" href="#navigatorlocalepreferences"></a></dfn>, that would map the user locale preferences using the following steps:</p>
+   <ol>
     <li data-md>
      <p>Validate if there is any fingerprinting mechanism and if OS preferences are allowed to be exposed</p>
     <li data-md>
@@ -618,49 +697,94 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
     <li data-md>
      <p>For each value compare it against the default  value for the given locale from ICU/CLDR or a list of user preferences to compare against</p>
     <li data-md>
-     <p>If the _user preference_ value differs, return the value</p>
+     <p>If the user preference value differs, return the value</p>
     <li data-md>
-     <p>If the  _user preference_ value is the same, return empty value</p>
+     <p>If the  user preference value is the same, or not set, return the default value for the given locale</p>
    </ol>
-   <p>As an alternative instead of returning <code>undefined</code> or empty values, we could try to do an intent of resolving the missing information using <a href="https://www.unicode.org/reports/tr35/#Likely_Subtags">Add Likely Subtags </a> algorithm and merge values set by the user in their user locale preferences.</p>
-   <p>Conceptually both strategies would work but the second won’t inform each preference set by the user.</p>
-   <p>The following table suggests common user preferences <a href="https://github.com/tc39/ecma402/issues/416#issue-574957588">#416</a> to be used, and does the correlation from <code>Locale-Preferences</code> Client Hints and <code>navigator.localePreferences</code> to extension keys if they exist, or other values in case table is extended by user demand.</p>
-   <table class="def">
+   <h3 class="heading settled" data-level="2.1" id="user-locale-preferences-client-hints"><span class="secno">2.1. </span><span class="content">Client Hints</span><a class="self-link" href="#user-locale-preferences-client-hints"></a></h3>
+   <p>An <a data-link-type="dfn" href="https://cldr.unicode.org/index/bcp47-extension#http-client-hint" id="ref-for-http-client-hint">HTTP Client Hint</a> is a request header field that is used by HTTP clients to indicate configuration data that can be used by the server to select an appropriate response. It defines an <code>Accept-CH</code> response header that servers can use to advertise their use of request headers for proactive content negotiation. Each new client hint conveys a list of user locale preferences that the server can use to adapt and optimize responses.</p>
+   <p>The following table suggests <a data-link-type="dfn" href="https://github.com/tc39/ecma402/issues/416#issue-574957588common-user-preferences" id="ref-for-issue-574957588common-user-preferences">common user preferences</a> to be used, and does the correlation from <code>Locale-Preferences</code> Client Hints and <code>navigator.localePreferences</code> to extension keys if they exist, or other values in case table is extended by user demand.</p>
+   <h4 class="heading settled" data-level="2.1.1" id="common-user-preferences"><span class="secno">2.1.1. </span><span class="content">Common User Preferences</span><a class="self-link" href="#common-user-preferences"></a></h4>
+   <table>
     <tbody>
      <tr>
-      <th>First row
-      <td>some info
+      <td>"calendar"
+      <td><code>ca</code>
+      <td>buddhist, chinese...
+      <td>[Calendar system / Calendar algorithm] 
      <tr>
-      <th>Second row
-      <td>different info
-merged with the previous row
+      <td>"currencyFormat"
+      <td><code>cf</code>
+      <td>standard, account
+      <td>Currency Format style, whether to use accounting currency format 
+     <tr>
+      <td> "collation" 
+      <td> <code>co</code> 
+      <td> standard, search, phonetic... 
+      <td> Collation type, sort order 
+     <tr>
+      <td> "currencyCode" 
+      <td> <code>cu</code> 
+      <td> ISO 4217 codes 
+      <td> Currency type 
+     <tr>
+      <td> "emojiStyle" 
+      <td> <code>em</code> 
+      <td> emoji , text, default 
+      <td> Emoji presentation style 
+     <tr>
+      <td> "firstDayOfTheWeek" 
+      <td> <code>fw</code> 
+      <td> "sun", "mon" ... "sat" 
+      <td> First day of week 
+     <tr>
+      <td> "hourCycle" 
+      <td> <code>hc</code> 
+      <td> h12 , h23, h11, h24 
+      <td> Hour cycle, i.e., 12-hour or 24-hour clock 
+     <tr>
+      <td> "measurementSystem" 
+      <td> <code>ms</code> 
+      <td> metric , ussystem , uksystem 
+      <td> Measurement system 
+     <tr>
+      <td> "measurementUnit" 
+      <td> <code>mu</code> 
+      <td> celsius , kelvin , fahrenhe 
+      <td> <a href="https://github.com/unicode-org/cldr/blob/7942fd82f7e673eb0b27f0bf2025a31572135d95/common/bcp47/measure.xml#L16">Measurement units currently only temperature</a> 
+     <tr>
+      <td> "numberingSystem" 
+      <td> <code>nu</code> 
+      <td> Unicode script subtag(arabext...) <br> 
+      <td> Numbering system 
+     <tr>
+      <td> "timeZone" 
+      <td> <code>tz</code> 
+      <td> Unicode short time zone IDs 
+      <td> Time zone 
+     <tr>
+      <td> "region" 
+      <td> <code>rg</code> 
+      <td> <a href="https://unicode.org/reports/tr35/tr35.html#unicode_region_subtag">Unicode Region Subtag</a> 
+      <td> Region override 
+    <thead>
+     <tr>
+      <th>Locale Preferences Name
+      <th>Extension Key/Unicode Source
+      <th>Example Values
+      <th>Description 
    </table>
-   <p>| Locale Preferences Name | Extension Key/Unicode Source | Example Values | Description |
-| ----------------------- | -------| ------ |-----|
-| "calendar"              | <code>ca</code> | buddhist, chinese...| <a href="https://github.com/unicode-org/cldr/blob/main/common/bcp47/calendar.xml">Calendar system / Calendar algorithm</a> | 
-| "currencyFormat"        | <code>cf</code> | standard, account | Currency Format style, whether to use accounting currency format |
-| "collation"             | <code>co</code> | standard, search, phonetic... | Collation type, sort order |
-| "currencyCode"          | <code>cu</code> | 	ISO 4217 codes | Currency type |
-| "emojiStyle"            | <code>em</code> | emoji , text, default | Emoji presentation style |
-| "firstDayOfTheWeek"      | <code>fw</code> | "sun", "mon" ... "sat" | First day of week  |
-| "hourCycle"             | <code>hc</code> | h12 , h23, h11, h24 | Hour cycle, i.e., 12-hour or 24-hour clock |
-| "measurementSystem"     | <code>ms</code> | metric , ussystem , uksystem | Measurement system |
-| "measurementUnit"       | <code>mu</code> | celsius , kelvin , fahrenhe | <a href="https://github.com/unicode-org/cldr/blob/7942fd82f7e673eb0b27f0bf2025a31572135d95/common/bcp47/measure.xml#L16">Measurement units currently only temperature</a> |
-| "numberingSystem"       | <code>nu</code> | Unicode script subtag(arabext...) <br> | Numbering system |
-| "timeZone"              | <code>tz</code> | Unicode short time zone IDs | Time zone |
-| "region"                | <code>rg</code> | <a href="https://unicode.org/reports/tr35/tr35.html#unicode_region_subtag">Unicode Region Subtag</a> | Region override |</p>
-   <p>Other user preferences that might be included based on user research about OS preferences inputs and <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1308329">#1308329</a>, most of them don’t have a 1:1 match with BCP47 extension keys, however, they are available in ICU/CLDR</p>
+   <h4 class="heading settled" data-level="2.1.2" id="other-user-preferences"><span class="secno">2.1.2. </span><span class="content">Other user preferences</span><a class="self-link" href="#other-user-preferences"></a></h4>
+    Other user preferences that might be included based on user research about OS preferences inputs and <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1308329">#1308329</a>. Although most of the preferences below do not have a 1:1 match with BCP47 extension keys, they are available in ICU/CLDR. 
    <ul>
     <li data-md>
      <p>number separator (grouping/decimal)</p>
-    <li data-md>
-     <p>measurement units (Metric, US, UK)</p>
     <li data-md>
      <p>date formats short/medium/long/full</p>
     <li data-md>
      <p>time formats short/medium/long/full</p>
     <li data-md>
-     <p>dayperiod names</p>
+     <p>dayPeriod names</p>
     <li data-md>
      <p>time display with/without seconds</p>
     <li data-md>
@@ -673,45 +797,132 @@ merged with the previous row
      <p>show date</p>
    </ul>
    <blockquote>
-    <p class="note" role="note"><span>Note:</span> The table and list are recommendations, they need to be validated and agreed by security teams and stakeholders, but from now on using them as a reference for the proposal.</p>
+    <p class="note" role="note"><span class="marker">Note:</span> The table and list are recommendations, they need to be validated and agreed by security teams and stakeholders, but from now on using them as a reference for the proposal.</p>
    </blockquote>
-   <h3 class="heading settled" data-level="1.1" id="examples"><span class="secno">1.1. </span><span class="content">Examples</span><a class="self-link" href="#examples"></a></h3>
-   <p><em>This section is non-normative</em>.</p>
-   <ol>
-    <li data-md>
-     <p>The client makes an initial request to the server:</p>
-   </ol>
+   <h4 class="heading settled" data-level="2.1.3" id="client-hint-header-fields"><span class="secno">2.1.3. </span><span class="content"><code>Client Hint</code> Header fields</span><a class="self-link" href="#client-hint-header-fields"></a></h4>
+   <p>Servers will receive no information about the user’s locale preferences. Servers can instead opt-into receiving such information via a new <code>Locale-Preferences</code> Client Hints.</p>
+   <p>To accomplish this, browsers should introduce several new <code>Client Hint</code> header fields as part of a <a data-link-type="dfn" href="https://datatracker.ietf.org/doc/html/draft-ietf-httpbis-header-structure#structured-header" id="ref-for-structured-header">structured header</a> as defined in <a data-link-type="biblio" href="#biblio-draft-ietf-httpbis-header-structure-19" title="Structured Field Values for HTTP">[draft-ietf-httpbis-header-structure-19]</a>, sent over request whose value is a list of defined user locale preferences.</p>
+   <p>**<code>Sec-CH-Locale-Preferences-*</code>**</p>
+   <p>The following table represents the list of headers returning individual opted-in <code>Locale-Preferences</code>:</p>
+   <table>
+    <tbody>
+     <tr>
+      <td> <dfn data-dfn-type="dfn" data-export id="sec-ch-locale-preferences-calendar">Sec-CH-Locale-Preferences-calendar<a class="self-link" href="#sec-ch-locale-preferences-calendar"></a></dfn> 
+      <td> <code>Sec-CH-Locale-Preferences-calendar : "buddhist"</code> 
+     <tr>
+      <td> <dfn data-dfn-type="dfn" data-export id="sec-ch-locale-preferences-currencyformat">Sec-CH-Locale-Preferences-currencyFormat<a class="self-link" href="#sec-ch-locale-preferences-currencyformat"></a></dfn> 
+      <td> <code>Sec-CH-Locale-Preferences-currencyFormat : "account"</code> 
+     <tr>
+      <td> <dfn data-dfn-type="dfn" data-export id="sec-ch-locale-preferences-collation">Sec-CH-Locale-Preferences-collation<a class="self-link" href="#sec-ch-locale-preferences-collation"></a></dfn> 
+      <td> <code>Sec-CH-Locale-Preferences-collation : "search"</code> 
+     <tr>
+      <td> <dfn data-dfn-type="dfn" data-export id="sec-ch-locale-preferences-currencycode">Sec-CH-Locale-Preferences-currencyCode<a class="self-link" href="#sec-ch-locale-preferences-currencycode"></a></dfn> 
+      <td> <code>Sec-CH-Locale-Preferences-currencyCode : "EUR"</code> 
+     <tr>
+      <td> <dfn data-dfn-type="dfn" data-export id="sec-ch-locale-preferences-emojistyle">Sec-CH-Locale-Preferences-emojiStyle<a class="self-link" href="#sec-ch-locale-preferences-emojistyle"></a></dfn> 
+      <td> <code>Sec-CH-Locale-Preferences-emojiStyle : "emoji"</code> 
+     <tr>
+      <td> <dfn data-dfn-type="dfn" data-export id="sec-ch-locale-preferences-firstdayoftheweek">Sec-CH-Locale-Preferences-firstDayOfTheWeek<a class="self-link" href="#sec-ch-locale-preferences-firstdayoftheweek"></a></dfn> 
+      <td> <code>Sec-CH-Locale-Preferences-firstDayOfTheWeek : "sun"</code> 
+     <tr>
+      <td> <dfn data-dfn-type="dfn" data-export id="sec-ch-locale-preferences-hourcycle">Sec-CH-Locale-Preferences-hourCycle<a class="self-link" href="#sec-ch-locale-preferences-hourcycle"></a></dfn> 
+      <td> <code>Sec-CH-Locale-Preferences-hourCycle : "h12"</code> 
+     <tr>
+      <td> <dfn data-dfn-type="dfn" data-export id="sec-ch-locale-preferences-measurementsystem">Sec-CH-Locale-Preferences-measurementSystem<a class="self-link" href="#sec-ch-locale-preferences-measurementsystem"></a></dfn> 
+      <td> <code>Sec-CH-Locale-Preferences-measurementSystem: "metric"</code> 
+     <tr>
+      <td> <dfn data-dfn-type="dfn" data-export id="sec-ch-locale-preferences-measurementunit">Sec-CH-Locale-Preferences-measurementUnit<a class="self-link" href="#sec-ch-locale-preferences-measurementunit"></a></dfn> 
+      <td> <code>Sec-CH-Locale-Preferences-measurementUnit : "kelvin"</code> 
+     <tr>
+      <td> <dfn data-dfn-type="dfn" data-export id="sec-ch-locale-preferences-numberingsystem">Sec-CH-Locale-Preferences-numberingSystem<a class="self-link" href="#sec-ch-locale-preferences-numberingsystem"></a></dfn> 
+      <td> <code>Sec-CH-Locale-Preferences-numberingSystem : "latn";</code> 
+     <tr>
+      <td> <dfn data-dfn-type="dfn" data-export id="sec-ch-locale-preferences-timezone">Sec-CH-Locale-Preferences-timeZone<a class="self-link" href="#sec-ch-locale-preferences-timezone"></a></dfn> 
+      <td> <code>Sec-CH-Locale-Preferences-timeZone : "Atlantic/Azores";</code> 
+     <tr>
+      <td> <dfn data-dfn-type="dfn" data-export id="sec-ch-locale-preferences-region">Sec-CH-Locale-Preferences-region<a class="self-link" href="#sec-ch-locale-preferences-region"></a></dfn> 
+      <td> <code>Sec-CH-Locale-Preferences-region : "PT"</code> 
+     <tr>
+      <td> <dfn data-dfn-type="dfn" data-export id="sec-ch-locale-preferences-dateformat">Sec-CH-Locale-Preferences-dateFormat<a class="self-link" href="#sec-ch-locale-preferences-dateformat"></a></dfn> 
+      <td> <code>Sec-CH-Locale-Preferences-dateFormat : "EEE, d MMM yyyy HH:mm:ss Z"</code> 
+    <thead>
+     <tr>
+      <th left style="text-align:"> Client Hint 
+      <th left style="text-align:"> Example output 
+   </table>
+   <h4 class="heading settled" data-level="2.1.4" id="user-locale-client-hints-example"><span class="secno">2.1.4. </span><span class="content">Usage example</span><a class="self-link" href="#user-locale-client-hints-example"></a></h4>
+   <div class="example" id="example-8f2d1ff1">
+    <a class="self-link" href="#example-8f2d1ff1"></a> 
+    <ol>
+     <li data-md>
+      <p>The client makes an initial request to the server:</p>
+    </ol>
 <pre class="language-http highlight"><c- nf>GET</c-> <c- nn>/</c-> <c- kr>HTTP</c-><c- o>/</c-><c- m>1.1</c->
 <c- e>Host</c-><c- o>:</c-> <c- l>example.com</c->
 </pre>
-   <ol start="2">
-    <li data-md>
-     <p>The server responds, telling the client via an <code>Accept-CH</code> header (Section 2.2.1 of <a data-link-type="biblio" href="#biblio-rfc8942">[RFC8942]</a>) along with the initial response with <code>Sec-CH-Locale-Preferences-numberingSystem</code> and the <code>Sec-CH-Locale-Preferences-timeZone</code> Client Hints:</p>
-   </ol>
+    <ol start="2">
+     <li data-md>
+      <p>The server responds, telling the client via an <code>Accept-CH</code> header (Section 2.2.1 of <a data-link-type="biblio" href="#biblio-rfc8942" title="HTTP Client Hints">[RFC8942]</a>) along with the initial response with <code>Sec-CH-Locale-Preferences-numberingSystem</code> and the <code>Sec-CH-Locale-Preferences-timeZone</code> Client Hints:</p>
+    </ol>
 <pre class="language-http highlight"><c- kr>HTTP</c-><c- o>/</c-><c- m>1.1</c-> <c- m>200</c-> <c- ne>OK</c->
 <c- e>Content-Type</c-><c- o>:</c-> <c- l>text/html</c->
 <c- e>Accept-CH</c-><c- o>:</c-> <c- l>Sec-CH-Locale-Preferences-numberingSystem, Sec-CH-Locale-Preferences-timeZone</c->
 </pre>
-   <ol start="3">
-    <li data-md>
-     <p>Then subsequent requests to https://example.com will include the following request headers in case the user sets <code>numberingSystem</code> and <code>timeZone</code> values:</p>
-   </ol>
+    <ol start="3">
+     <li data-md>
+      <p>Then subsequent requests to https://example.com will include the following request headers in case the user sets <code>numberingSystem</code> and <code>timeZone</code> values:</p>
+    </ol>
 <pre class="language-http highlight"><c- nf>GET</c-> <c- nn>/</c-> <c- kr>HTTP</c-><c- o>/</c-><c- m>1.1</c->
 <c- e>Host</c-><c- o>:</c-> <c- l>example.com</c->
 <c- e>Sec-CH-Locale-Preferences-calendar</c-><c- o>:</c-><c- l>"buddhist"</c->
 <c- e>Sec-CH-Locale-Preferences-timeZone</c-><c- o>:</c-> <c- l>"Africa/Lagos"</c->
 </pre>
-   <p>In case the user did not set any <code>Locale-Preferences</code> for accepted values, request headers return empty</p>
+    <p>In case the user did not set any <code>Locale-Preferences</code> for accepted values, request headers return the default value for given locale</p>
 <pre class="language-http highlight"><c- nf>GET</c-> <c- nn>/</c-> <c- kr>HTTP</c-><c- o>/</c-><c- m>1.1</c->
 <c- e>Host</c-><c- o>:</c-> <c- l>example.com</c->
-<c- e>Sec-CH-Locale-Preferences-calendar</c-><c- o>:</c-><c- l>""</c->
-<c- e>Sec-CH-Locale-Preferences-timeZone</c-><c- o>:</c-> <c- l>""</c->
+<c- e>Sec-CH-Locale-Preferences-calendar</c-><c- o>:</c-><c- l>"gregory"</c->
+<c- e>Sec-CH-Locale-Preferences-timeZone</c-><c- o>:</c-> <c- l>"Europe/London"</c->
 </pre>
-   <ol start="4">
-    <li data-md>
-     <p>The server can then tailor the response to the client’s preferences accordingly.</p>
-   </ol>
-   <p>See https://github.com/tabatkins/bikeshed to get started.</p>
+    <ol start="4">
+     <li data-md>
+      <p>The server can then tailor the response to the client’s preferences accordingly.</p>
+    </ol>
+   </div>
+   <h3 class="heading settled" data-level="2.2" id="javascript-api"><span class="secno">2.2. </span><span class="content">JavaScript API</span><a class="self-link" href="#javascript-api"></a></h3>
+   <p>These client hints should also be exposed as JavaScript APIs via <code>navigator.locales</code> as suggested in <a href="https://github.com/tc39/ecma402/issues/68">#68</a> or by creating a new <code>navigator.localePreferences</code> that exposes <code>Locale-Preferences</code> information as below.</p>
+   <h4 class="heading settled" data-level="2.2.1" id="user-local-preferences-javascript-api-examples"><span class="secno">2.2.1. </span><span class="content">Usage examples</span><a class="self-link" href="#user-local-preferences-javascript-api-examples"></a></h4>
+   <div class="example" id="example-8e5b408b">
+    <a class="self-link" href="#example-8e5b408b"></a> 
+<pre class="language-js highlight">navigator<c- p>.</c->localePreferences<c- p>.</c->calendar<c- p>();</c-> <c- c1>// =>  "gregory"</c->
+navigator<c- p>.</c->localePreferences<c- p>.</c->currencyFormat<c- p>();</c-> <c- c1>// => "EUR"</c->
+navigator<c- p>.</c->localePreferences<c- p>.</c->timeZone<c- p>();</c-> <c- c1>// =>  "Europe/London"</c->
+navigator<c- p>.</c->localePreferences<c- p>.</c->region<c- p>();</c-> <c- c1>// => "GB"</c->
+ 
+<c- c1>// user has not set &lt;code data-opaque bs-autolink-syntax='`firstDayOfTheWeek`'>firstDayOfTheWeek&lt;/code> value in their OS, it returns the default value for given locale</c->
+navigator<c- p>.</c->localePreferences<c- p>.</c->firstDayOfTheWeek<c- p>();</c-> <c- c1>// =>  "7"</c->
+</pre>
+   </div>
+   <div class="example" id="example-f10305fb">
+    <a class="self-link" href="#example-f10305fb"></a> 
+<pre class="language-js highlight"><c- c1>// User set locale preferences for calendar , region and hourCycle</c->
+navigator<c- p>.</c->localePreferences<c- p>.</c->calendar<c- p>();</c-> <c- c1>// =>  "gregory"</c->
+navigator<c- p>.</c->localePreferences<c- p>.</c->region<c- p>();</c-> <c- c1>// => 'GB'</c->
+navigator<c- p>.</c->localePreferences<c- p>.</c->hourCycle<c- p>();</c-> <c- c1>// => 'h11';</c->
+navigator<c- p>.</c->localePreferences<c- p>.</c->timeZone<c- p>();</c-> <c- c1>// =>  'Europe/London'</c->
+
+<c- a>const</c-> localePreferences <c- o>=</c->  <c- p>(...</c->iterate over needed navigator<c- p>.</c->localePreferences <c- p>)</c->
+
+<c- ow>new</c-> Intl<c- p>.</c->Locale<c- p>(</c-><c- t>'es'</c-> <c- p>,</c->  localePreferences <c- p>).</c->maximize<c- p>();</c->
+<c- c1>// => Locale {..., calendar:"gregory" , region:"GB" , hourCycle:"h11" }</c->
+
+<c- ow>new</c-> Intl<c- p>.</c->DateTimeFormat<c- p>(</c-><c- t>'es'</c-><c- p>,</c-> localePreferences<c- p>).</c->resolvedOptions<c- p>();</c->
+<c- c1>// =>  {locale: 'es', calendar: 'gregory', numberingSystem: 'latn', timeZone: 'Europe/London', ...}</c->
+</pre>
+   </div>
+   <h2 class="heading settled" data-level="3" id="privacy-and-security-considerations"><span class="secno">3. </span><span class="content">Privacy and Security Considerations</span><a class="self-link" href="#privacy-and-security-considerations"></a></h2>
+   <p>There are some concerns that exposing this information would give trackers, advertisers and malicious web services another fingerprinting vector. That said, this information may or may not already be available to a certain extent to such services, based on the host and the user’s settings. The use of <code>Sec-CH-</code> prefix is to forbid access to headers containing <code>Locale Preferences</code> information from JavaScript, and to demarcate them as browser-controlled client hints so that they can be documented and included in requests without triggering CORS preflights.</p>
+   <p>Client Hints provides a powerful content negotiation mechanism that enables us to adapt content to users' needs without compromising their privacy. It does that by requiring server opt-in, which guarantees that access to the information requires active and tracable action on the server’s side. As such, the mechanism does not increase the web’s current active fingerprinting surface.</p>
+   <p>The Security Considerations of <a data-link-type="biblio" href="#biblio-client-hints" title="HTTP Client Hints">[CLIENT-HINTS]</a> and <a data-link-type="biblio" href="#biblio-draft-davidben-http-client-hint-reliability-02" title="Client Hint Reliability">[draft-davidben-http-client-hint-reliability-02]</a> likewise apply to this proposal.</p>
   </main>
   <div data-fill-with="conformance">
    <h2 class="no-ref no-num heading settled" id="w3c-conformance"><span class="content">Conformance</span><a class="self-link" href="#w3c-conformance"></a></h2>
@@ -725,7 +936,7 @@ merged with the previous row
     However, for readability,
     these words do not appear in all uppercase letters in this specification. </p>
    <p>All of the text of this specification is normative
-    except sections explicitly marked as non-normative, examples, and notes. <a data-link-type="biblio" href="#biblio-rfc2119">[RFC2119]</a> </p>
+    except sections explicitly marked as non-normative, examples, and notes. <a data-link-type="biblio" href="#biblio-rfc2119" title="Key words for use in RFCs to Indicate Requirement Levels">[RFC2119]</a> </p>
    <p>Examples in this specification are introduced with the words “for example”
     or are set apart from the normative text
     with <code>class="example"</code>,
@@ -755,11 +966,135 @@ merged with the previous row
     Implementers are encouraged to optimize. </p>
   </div>
 <script src="https://www.w3.org/scripts/TR/2021/fixup.js"></script>
+  <h2 class="no-num no-ref heading settled" id="index"><span class="content">Index</span><a class="self-link" href="#index"></a></h2>
+  <h3 class="no-num no-ref heading settled" id="index-defined-here"><span class="content">Terms defined by this specification</span><a class="self-link" href="#index-defined-here"></a></h3>
+  <ul class="index">
+   <li><a href="#locale-preferences">Locale-Preferences</a><span>, in § 2</span>
+   <li><a href="#navigatorlocalepreferences">navigator.localePreferences</a><span>, in § 2</span>
+   <li><a href="#sec-ch-locale-preferences-calendar">Sec-CH-Locale-Preferences-calendar</a><span>, in § 2.1.3</span>
+   <li><a href="#sec-ch-locale-preferences-collation">Sec-CH-Locale-Preferences-collation</a><span>, in § 2.1.3</span>
+   <li><a href="#sec-ch-locale-preferences-currencycode">Sec-CH-Locale-Preferences-currencyCode</a><span>, in § 2.1.3</span>
+   <li><a href="#sec-ch-locale-preferences-currencyformat">Sec-CH-Locale-Preferences-currencyFormat</a><span>, in § 2.1.3</span>
+   <li><a href="#sec-ch-locale-preferences-dateformat">Sec-CH-Locale-Preferences-dateFormat</a><span>, in § 2.1.3</span>
+   <li><a href="#sec-ch-locale-preferences-emojistyle">Sec-CH-Locale-Preferences-emojiStyle</a><span>, in § 2.1.3</span>
+   <li><a href="#sec-ch-locale-preferences-firstdayoftheweek">Sec-CH-Locale-Preferences-firstDayOfTheWeek</a><span>, in § 2.1.3</span>
+   <li><a href="#sec-ch-locale-preferences-hourcycle">Sec-CH-Locale-Preferences-hourCycle</a><span>, in § 2.1.3</span>
+   <li><a href="#sec-ch-locale-preferences-measurementsystem">Sec-CH-Locale-Preferences-measurementSystem</a><span>, in § 2.1.3</span>
+   <li><a href="#sec-ch-locale-preferences-measurementunit">Sec-CH-Locale-Preferences-measurementUnit</a><span>, in § 2.1.3</span>
+   <li><a href="#sec-ch-locale-preferences-numberingsystem">Sec-CH-Locale-Preferences-numberingSystem</a><span>, in § 2.1.3</span>
+   <li><a href="#sec-ch-locale-preferences-region">Sec-CH-Locale-Preferences-region</a><span>, in § 2.1.3</span>
+   <li><a href="#sec-ch-locale-preferences-timezone">Sec-CH-Locale-Preferences-timeZone</a><span>, in § 2.1.3</span>
+  </ul>
+  <aside class="dfn-panel" data-for="term-for-issue-574957588common-user-preferences">
+   <a href="https://github.com/tc39/ecma402/issues/416#issue-574957588common-user-preferences">https://github.com/tc39/ecma402/issues/416#issue-574957588common-user-preferences</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-issue-574957588common-user-preferences">2.1. Client Hints</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-http-client-hint">
+   <a href="https://cldr.unicode.org/index/bcp47-extension#http-client-hint">https://cldr.unicode.org/index/bcp47-extension#http-client-hint</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-http-client-hint">2.1. Client Hints</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-unicode-extensions-for-bcp-47">
+   <a href="https://cldr.unicode.org/index/bcp47-extension#unicode-extensions-for-bcp-47">https://cldr.unicode.org/index/bcp47-extension#unicode-extensions-for-bcp-47</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-unicode-extensions-for-bcp-47">2. User Locale Preferences Features</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-structured-header">
+   <a href="https://datatracker.ietf.org/doc/html/draft-ietf-httpbis-header-structure#structured-header">https://datatracker.ietf.org/doc/html/draft-ietf-httpbis-header-structure#structured-header</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-structured-header">2.1.3. Client Hint Header fields</a>
+   </ul>
+  </aside>
+  <h3 class="no-num no-ref heading settled" id="index-defined-elsewhere"><span class="content">Terms defined by reference</span><a class="self-link" href="#index-defined-elsewhere"></a></h3>
+  <ul class="index">
+   <li>
+    <a data-link-type="biblio">[]</a> defines the following terms:
+    <ul>
+     <li><span class="dfn-paneled" id="term-for-issue-574957588common-user-preferences">common user preferences</span>
+    </ul>
+   <li>
+    <a data-link-type="biblio">[BCP47-EXTENSION]</a> defines the following terms:
+    <ul>
+     <li><span class="dfn-paneled" id="term-for-http-client-hint">http client hint</span>
+     <li><span class="dfn-paneled" id="term-for-unicode-extensions-for-bcp-47">unicode extensions for bcp 47</span>
+    </ul>
+   <li>
+    <a data-link-type="biblio">[DRAFT-IETF-HTTPBIS-HEADER-STRUCTURE]</a> defines the following terms:
+    <ul>
+     <li><span class="dfn-paneled" id="term-for-structured-header">structured header</span>
+    </ul>
+  </ul>
   <h2 class="no-num no-ref heading settled" id="references"><span class="content">References</span><a class="self-link" href="#references"></a></h2>
   <h3 class="no-num no-ref heading settled" id="normative"><span class="content">Normative References</span><a class="self-link" href="#normative"></a></h3>
   <dl>
+   <dt id="biblio-client-hints">[CLIENT-HINTS]
+   <dd>Ilya Grigorik; Yoav Weiss. <a href="https://datatracker.ietf.org/doc/rfc8942/"><cite>HTTP Client Hints</cite></a>. RFC - Experimental (February 2021; No errata). URL: <a href="https://datatracker.ietf.org/doc/rfc8942/">https://datatracker.ietf.org/doc/rfc8942/</a>
+   <dt id="biblio-draft-davidben-http-client-hint-reliability-02">[DRAFT-DAVIDBEN-HTTP-CLIENT-HINT-RELIABILITY-02]
+   <dd>David Benjamin. <a href="https://tools.ietf.org/html/draft-davidben-http-client-hint-reliability-02"><cite>Client Hint Reliability</cite></a>. ID. URL: <a href="https://tools.ietf.org/html/draft-davidben-http-client-hint-reliability-02">https://tools.ietf.org/html/draft-davidben-http-client-hint-reliability-02</a>
+   <dt id="biblio-draft-ietf-httpbis-header-structure-19">[DRAFT-IETF-HTTPBIS-HEADER-STRUCTURE-19]
+   <dd>Mark Nottingham; Poul-Henning Kamp. <a href="https://tools.ietf.org/html/draft-ietf-httpbis-header-structure-19"><cite>Structured Field Values for HTTP</cite></a>. ID. URL: <a href="https://tools.ietf.org/html/draft-ietf-httpbis-header-structure-19">https://tools.ietf.org/html/draft-ietf-httpbis-header-structure-19</a>
    <dt id="biblio-rfc2119">[RFC2119]
    <dd>S. Bradner. <a href="https://datatracker.ietf.org/doc/html/rfc2119"><cite>Key words for use in RFCs to Indicate Requirement Levels</cite></a>. March 1997. Best Current Practice. URL: <a href="https://datatracker.ietf.org/doc/html/rfc2119">https://datatracker.ietf.org/doc/html/rfc2119</a>
    <dt id="biblio-rfc8942">[RFC8942]
    <dd>I. Grigorik; Y. Weiss. <a href="https://www.rfc-editor.org/rfc/rfc8942"><cite>HTTP Client Hints</cite></a>. February 2021. Experimental. URL: <a href="https://www.rfc-editor.org/rfc/rfc8942">https://www.rfc-editor.org/rfc/rfc8942</a>
   </dl>
+<script>/* script-dfn-panel */
+
+document.body.addEventListener("click", function(e) {
+    var queryAll = function(sel) { return [].slice.call(document.querySelectorAll(sel)); }
+    // Find the dfn element or panel, if any, that was clicked on.
+    var el = e.target;
+    var target;
+    var hitALink = false;
+    while(el.parentElement) {
+        if(el.tagName == "A") {
+            // Clicking on a link in a <dfn> shouldn't summon the panel
+            hitALink = true;
+        }
+        if(el.classList.contains("dfn-paneled")) {
+            target = "dfn";
+            break;
+        }
+        if(el.classList.contains("dfn-panel")) {
+            target = "dfn-panel";
+            break;
+        }
+        el = el.parentElement;
+    }
+    if(target != "dfn-panel") {
+        // Turn off any currently "on" or "activated" panels.
+        queryAll(".dfn-panel.on, .dfn-panel.activated").forEach(function(el){
+            el.classList.remove("on");
+            el.classList.remove("activated");
+        });
+    }
+    if(target == "dfn" && !hitALink) {
+        // open the panel
+        var dfnPanel = document.querySelector(".dfn-panel[data-for='" + el.id + "']");
+        if(dfnPanel) {
+            dfnPanel.classList.add("on");
+            var rect = el.getBoundingClientRect();
+            dfnPanel.style.left = window.scrollX + rect.right + 5 + "px";
+            dfnPanel.style.top = window.scrollY + rect.top + "px";
+            var panelRect = dfnPanel.getBoundingClientRect();
+            var panelWidth = panelRect.right - panelRect.left;
+            if(panelRect.right > document.body.scrollWidth && (rect.left - (panelWidth + 5)) > 0) {
+                // Reposition, because the panel is overflowing
+                dfnPanel.style.left = window.scrollX + rect.left - (panelWidth + 5) + "px";
+            }
+        } else {
+            console.log("Couldn't find .dfn-panel[data-for='" + el.id + "']");
+        }
+    } else if(target == "dfn-panel") {
+        // Switch it to "activated" state, which pins it.
+        el.classList.add("activated");
+        el.style.left = null;
+        el.style.top = null;
+    }
+
+});
+</script>
