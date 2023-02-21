@@ -5,12 +5,12 @@ Shortname: user-locale-client-hints
 Level: 1
 Status: CG-DRAFT
 Group: WICG
-Repository: WICG/user-locale-client-hints
+Repository: romulocintra/user-locale-client-hints
 URL: https://github.com/romulocintra/user-locale-client-hints
 Editor: Romulo Cintra, Igalia https://igalia.com, rcintra@igalia.com
 Editor: Ujjwal Sharma, Igalia https://igalia.com, usharma@igalia.com
 Editor: Ben Allen, Igalia https://igalia.com, benallen@igalia.com
-!Tests: <a href=https://github.com/w3c/web-platform-tests/tree/master/user-locale-client-hints>web-platform-tests user-locale-client-hints/</a> (<a href=https://github.com/w3c/web-platform-tests/labels/user-locale-client-hints>ongoing work</a>)
+!Tests: <a href=https://github.com/w3c/web-platform-tests/labels/user-locale-client-hints>(ongoing work)</a>
 Abstract: This specification introduces a set of <code>Client Hints</code> headers and a homologous <code>Javascript API</code> that will allow a reliable way to access User Locale Preferences information from the Web Platform to help craft better user experiences. Allowing web developers to access this information will allow them to improve the accessibility and usability of their websites, and bring the user experience of web applications closer to that of native applications.
 Markup Shorthands: markdown yes 
 
@@ -42,7 +42,7 @@ Markup Shorthands: markdown yes
 </pre>
 
 
-<pre class="anchors">j
+<pre class="anchors">
 urlPrefix: https://datatracker.ietf.org/doc/html/draft-ietf-httpbis-header-structure; spec: draft-ietf-httpbis-header-structure
     type: dfn
         text: structured header
@@ -82,8 +82,8 @@ For **client-side applications**, the best way to get them is through a browser 
 
 For **server-side applications**, one way to get access to this information is via [[!CLIENT-HINTS]] headers on the request.
 
-<figure><img alt="TODO" src="https://user-images.githubusercontent.com/1572026/182210112-69fb7769-eafa-43ab-bad0-21eb49489d50.png" width="500" height="300" />
-<figcaption>TODO BETTER CAPTION: Server does not directly receive data about user preferences</figcaption>
+<figure><img alt="Browser conveys permitted OS preference information to server" src="https://user-images.githubusercontent.com/1572026/182210112-69fb7769-eafa-43ab-bad0-21eb49489d50.png" width="500" height="300" />
+<figcaption>Browser conveys permitted OS preference information to server</figcaption>
 </figure>
 
 User Locale Preferences Features {#user-locale-preferences-features}
