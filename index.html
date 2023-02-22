@@ -4,11 +4,10 @@
   <title>User Locale Preferences</title>
   <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
-  <meta content="Bikeshed version d6f2d6445, updated Tue Jan 17 11:25:25 2023 -0800" name="generator">
+  <meta content="Bikeshed version f043d3484, updated Fri Feb 17 10:53:48 2023 -0800" name="generator">
   <link href="https://github.com/romulocintra/user-locale-client-hints" rel="canonical">
-  <meta content="e11d9855387ad19b30e3826adb2a42757a99a88a" name="document-revision">
+  <meta content="923b01583f73ba73325198c0842c4026ebc0dfd8" name="document-revision">
 <style>/* style-autolinks */
-
 .css.css, .property.property, .descriptor.descriptor {
     color: var(--a-normal-text);
     font-size: inherit;
@@ -68,7 +67,8 @@ pre .property::before, pre .property::after {
 
 [data-link-type=biblio] {
     white-space: pre;
-}</style>
+}
+</style>
 <style>/* style-colors */
 
 /* Any --*-text not paired with a --*-bg is assumed to have a transparent bg */
@@ -177,9 +177,9 @@ pre .property::before, pre .property::after {
     --outdated-shadow: red;
 
     --editedrec-bg: darkorange;
-}</style>
+}
+</style>
 <style>/* style-counters */
-
 body {
     counter-reset: example figure issue;
 }
@@ -206,9 +206,9 @@ figcaption {
 }
 figcaption:not(.no-marker)::before {
     content: "Figure " counter(figure) " ";
-}</style>
+}
+</style>
 <style>/* style-dfn-panel */
-
 :root {
     --dfnpanel-bg: #ddd;
     --dfnpanel-text: var(--text);
@@ -216,10 +216,10 @@ figcaption:not(.no-marker)::before {
 .dfn-panel {
     position: absolute;
     z-index: 35;
-    height: auto;
-    width: -webkit-fit-content;
-    width: fit-content;
+    width: 20em;
+    min-width: min-content;
     max-width: 300px;
+    height: auto;
     max-height: 500px;
     overflow: auto;
     padding: 0.5em 0.75em;
@@ -227,6 +227,7 @@ figcaption:not(.no-marker)::before {
     background: var(--dfnpanel-bg);
     color: var(--dfnpanel-text);
     border: outset 0.2em;
+    white-space: normal; /* in case it's moved into a pre */
 }
 .dfn-panel:not(.on) { display: none; }
 .dfn-panel * { margin: 0; padding: 0; text-indent: 0; }
@@ -249,7 +250,6 @@ figcaption:not(.no-marker)::before {
 .dfn-paneled { cursor: pointer; }
 </style>
 <style>/* style-issues */
-
 a[href].issue-return {
     float: right;
     float: inline-end;
@@ -259,7 +259,6 @@ a[href].issue-return {
 }
 </style>
 <style>/* style-md-lists */
-
 /* This is a weird hack for me not yet following the commonmark spec
    regarding paragraph and lists. */
 [data-md] > :first-child {
@@ -267,7 +266,8 @@ a[href].issue-return {
 }
 [data-md] > :last-child {
     margin-bottom: 0;
-}</style>
+}
+</style>
 <style>/* style-selflinks */
 
 :root {
@@ -500,6 +500,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
        which is quite common in practice... */
     img { background: white; }
 }
+
 @media (prefers-color-scheme: dark) {
     :root {
         --selflink-text: black;
@@ -514,6 +515,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
         --dfnpanel-text: var(--text);
     }
 }
+
 @media (prefers-color-scheme: dark) {
     .highlight:not(.idl) { background: rgba(255, 255, 255, .05); }
 
@@ -581,19 +583,19 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">User Locale Preferences</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2023-01-23">23 January 2023</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2023-02-21">21 February 2023</time></p>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
      <dd><a class="u-url" href="https://github.com/romulocintra/user-locale-client-hints">https://github.com/romulocintra/user-locale-client-hints</a>
      <dt>Issue Tracking:
-     <dd><a href="https://github.com/WICG/user-locale-client-hints/issues/">GitHub</a>
+     <dd><a href="https://github.com/romulocintra/user-locale-client-hints/issues/">GitHub</a>
      <dt class="editor">Editors:
      <dd class="editor p-author h-card vcard"><a class="p-name fn u-email email" href="mailto:rcintra@igalia.com">Romulo Cintra</a> (<a class="p-org org" href="https://igalia.com">Igalia</a>)
      <dd class="editor p-author h-card vcard"><a class="p-name fn u-email email" href="mailto:usharma@igalia.com">Ujjwal Sharma</a> (<a class="p-org org" href="https://igalia.com">Igalia</a>)
      <dd class="editor p-author h-card vcard"><a class="p-name fn u-email email" href="mailto:benallen@igalia.com">Ben Allen</a> (<a class="p-org org" href="https://igalia.com">Igalia</a>)
      <dt>Tests:
-     <dd><a href="https://github.com/w3c/web-platform-tests/tree/master/user-locale-client-hints">web-platform-tests user-locale-client-hints/</a> (<a href="https://github.com/w3c/web-platform-tests/labels/user-locale-client-hints">ongoing work</a>)
+     <dd>(<a href="https://github.com/w3c/web-platform-tests/labels/user-locale-client-hints">ongoing work</a>)
     </dl>
    </div>
    <div data-fill-with="warning"></div>
@@ -683,8 +685,8 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
    <p>For <strong>client-side applications</strong>, the best way to get them is through a browser API that fetches this information from the different platform-specific OS APIs.</p>
    <p>For <strong>server-side applications</strong>, one way to get access to this information is via <a data-link-type="biblio" href="#biblio-client-hints" title="HTTP Client Hints">[CLIENT-HINTS]</a> headers on the request.</p>
    <figure>
-    <img alt="TODO" height="300" src="https://user-images.githubusercontent.com/1572026/182210112-69fb7769-eafa-43ab-bad0-21eb49489d50.png" width="500"> 
-    <figcaption>TODO BETTER CAPTION: Server does not directly receive data about user preferences</figcaption>
+    <img alt="Browser conveys permitted OS preference information to server" height="300" src="https://user-images.githubusercontent.com/1572026/182210112-69fb7769-eafa-43ab-bad0-21eb49489d50.png" width="500"> 
+    <figcaption>Browser conveys select OS preference information to server</figcaption>
    </figure>
    <h2 class="heading settled" data-level="2" id="user-locale-preferences-features"><span class="secno">2. </span><span class="content">User Locale Preferences Features</span><a class="self-link" href="#user-locale-preferences-features"></a></h2>
    <p>We address the above use cases by using a group of <a data-link-type="biblio" href="#biblio-client-hints" title="HTTP Client Hints">[CLIENT-HINTS]</a> headers and a homologous <a href="#javascript-api">§ 2.2 JavaScript API</a>. Both will be responsible for exposing and negotiating the exchange of user preferences from the OS to the required environment.</p>
@@ -985,26 +987,26 @@ navigator<c- p>.</c->localePreferences<c- p>.</c->timeZone<c- p>();</c-> <c- c1>
    <li><a href="#sec-ch-locale-preferences-region">Sec-CH-Locale-Preferences-region</a><span>, in § 2.1.3</span>
    <li><a href="#sec-ch-locale-preferences-timezone">Sec-CH-Locale-Preferences-timeZone</a><span>, in § 2.1.3</span>
   </ul>
-  <aside class="dfn-panel" data-for="term-for-issue-574957588common-user-preferences">
-   <a href="https://github.com/tc39/ecma402/issues/416#issue-574957588common-user-preferences">https://github.com/tc39/ecma402/issues/416#issue-574957588common-user-preferences</a><b>Referenced in:</b>
+  <aside aria-labelledby="infopaneltitle-for-91398583c7c0837c47e21fa34a7adf01" class="dfn-panel" data-for="91398583c7c0837c47e21fa34a7adf01" id="infopanel-for-91398583c7c0837c47e21fa34a7adf01">
+   <span id="infopaneltitle-for-91398583c7c0837c47e21fa34a7adf01" style="display:none">Info about the 'common user preferences' external reference.</span><a href="https://github.com/tc39/ecma402/issues/416#issue-574957588common-user-preferences">https://github.com/tc39/ecma402/issues/416#issue-574957588common-user-preferences</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-issue-574957588common-user-preferences">2.1. Client Hints</a>
    </ul>
   </aside>
-  <aside class="dfn-panel" data-for="term-for-http-client-hint">
-   <a href="https://cldr.unicode.org/index/bcp47-extension#http-client-hint">https://cldr.unicode.org/index/bcp47-extension#http-client-hint</a><b>Referenced in:</b>
+  <aside aria-labelledby="infopaneltitle-for-466b849b56e5fc83dcb91547150719ab" class="dfn-panel" data-for="466b849b56e5fc83dcb91547150719ab" id="infopanel-for-466b849b56e5fc83dcb91547150719ab">
+   <span id="infopaneltitle-for-466b849b56e5fc83dcb91547150719ab" style="display:none">Info about the 'http client hint' external reference.</span><a href="https://cldr.unicode.org/index/bcp47-extension#http-client-hint">https://cldr.unicode.org/index/bcp47-extension#http-client-hint</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-http-client-hint">2.1. Client Hints</a>
    </ul>
   </aside>
-  <aside class="dfn-panel" data-for="term-for-unicode-extensions-for-bcp-47">
-   <a href="https://cldr.unicode.org/index/bcp47-extension#unicode-extensions-for-bcp-47">https://cldr.unicode.org/index/bcp47-extension#unicode-extensions-for-bcp-47</a><b>Referenced in:</b>
+  <aside aria-labelledby="infopaneltitle-for-06d6b1a362e60b0e9ade380778b870af" class="dfn-panel" data-for="06d6b1a362e60b0e9ade380778b870af" id="infopanel-for-06d6b1a362e60b0e9ade380778b870af">
+   <span id="infopaneltitle-for-06d6b1a362e60b0e9ade380778b870af" style="display:none">Info about the 'unicode extensions for bcp 47' external reference.</span><a href="https://cldr.unicode.org/index/bcp47-extension#unicode-extensions-for-bcp-47">https://cldr.unicode.org/index/bcp47-extension#unicode-extensions-for-bcp-47</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-unicode-extensions-for-bcp-47">2. User Locale Preferences Features</a>
    </ul>
   </aside>
-  <aside class="dfn-panel" data-for="term-for-structured-header">
-   <a href="https://datatracker.ietf.org/doc/html/draft-ietf-httpbis-header-structure#structured-header">https://datatracker.ietf.org/doc/html/draft-ietf-httpbis-header-structure#structured-header</a><b>Referenced in:</b>
+  <aside aria-labelledby="infopaneltitle-for-497784cf705cd522038d3dd5e3db4d65" class="dfn-panel" data-for="497784cf705cd522038d3dd5e3db4d65" id="infopanel-for-497784cf705cd522038d3dd5e3db4d65">
+   <span id="infopaneltitle-for-497784cf705cd522038d3dd5e3db4d65" style="display:none">Info about the 'structured header' external reference.</span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-httpbis-header-structure#structured-header">https://datatracker.ietf.org/doc/html/draft-ietf-httpbis-header-structure#structured-header</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-structured-header">2.1.3. Client Hint Header fields</a>
    </ul>
@@ -1014,18 +1016,18 @@ navigator<c- p>.</c->localePreferences<c- p>.</c->timeZone<c- p>();</c-> <c- c1>
    <li>
     <a data-link-type="biblio">[]</a> defines the following terms:
     <ul>
-     <li><span class="dfn-paneled" id="term-for-issue-574957588common-user-preferences">common user preferences</span>
+     <li><span class="dfn-paneled" id="91398583c7c0837c47e21fa34a7adf01">common user preferences</span>
     </ul>
    <li>
     <a data-link-type="biblio">[BCP47-EXTENSION]</a> defines the following terms:
     <ul>
-     <li><span class="dfn-paneled" id="term-for-http-client-hint">http client hint</span>
-     <li><span class="dfn-paneled" id="term-for-unicode-extensions-for-bcp-47">unicode extensions for bcp 47</span>
+     <li><span class="dfn-paneled" id="466b849b56e5fc83dcb91547150719ab">http client hint</span>
+     <li><span class="dfn-paneled" id="06d6b1a362e60b0e9ade380778b870af">unicode extensions for bcp 47</span>
     </ul>
    <li>
     <a data-link-type="biblio">[DRAFT-IETF-HTTPBIS-HEADER-STRUCTURE]</a> defines the following terms:
     <ul>
-     <li><span class="dfn-paneled" id="term-for-structured-header">structured header</span>
+     <li><span class="dfn-paneled" id="497784cf705cd522038d3dd5e3db4d65">structured header</span>
     </ul>
   </ul>
   <h2 class="no-num no-ref heading settled" id="references"><span class="content">References</span><a class="self-link" href="#references"></a></h2>
@@ -1043,58 +1045,112 @@ navigator<c- p>.</c->localePreferences<c- p>.</c->timeZone<c- p>();</c-> <c- c1>
    <dd>I. Grigorik; Y. Weiss. <a href="https://www.rfc-editor.org/rfc/rfc8942"><cite>HTTP Client Hints</cite></a>. February 2021. Experimental. URL: <a href="https://www.rfc-editor.org/rfc/rfc8942">https://www.rfc-editor.org/rfc/rfc8942</a>
   </dl>
 <script>/* script-dfn-panel */
-
-document.body.addEventListener("click", function(e) {
-    var queryAll = function(sel) { return [].slice.call(document.querySelectorAll(sel)); }
-    // Find the dfn element or panel, if any, that was clicked on.
-    var el = e.target;
-    var target;
-    var hitALink = false;
-    while(el.parentElement) {
-        if(el.tagName == "A") {
-            // Clicking on a link in a <dfn> shouldn't summon the panel
-            hitALink = true;
-        }
-        if(el.classList.contains("dfn-paneled")) {
-            target = "dfn";
-            break;
-        }
-        if(el.classList.contains("dfn-panel")) {
-            target = "dfn-panel";
-            break;
-        }
-        el = el.parentElement;
+"use strict";
+{
+    function queryAll(sel) {
+        return [].slice.call(document.querySelectorAll(sel));
     }
-    if(target != "dfn-panel") {
+
+    // Add popup behavior to all dfns to show the corresponding dfn-panel.
+    var dfns = document.querySelectorAll('.dfn-paneled');
+    for (let dfn of dfns) { insertDfnPopupAction(dfn); }
+
+    document.body.addEventListener("click", (e) => {
+        // If not handled already, just hide all dfn panels.
+        hideAllDfnPanels();
+    });
+
+    function hideAllDfnPanels() {
         // Turn off any currently "on" or "activated" panels.
-        queryAll(".dfn-panel.on, .dfn-panel.activated").forEach(function(el){
-            el.classList.remove("on");
-            el.classList.remove("activated");
-        });
-    }
-    if(target == "dfn" && !hitALink) {
-        // open the panel
-        var dfnPanel = document.querySelector(".dfn-panel[data-for='" + el.id + "']");
-        if(dfnPanel) {
-            dfnPanel.classList.add("on");
-            var rect = el.getBoundingClientRect();
-            dfnPanel.style.left = window.scrollX + rect.right + 5 + "px";
-            dfnPanel.style.top = window.scrollY + rect.top + "px";
-            var panelRect = dfnPanel.getBoundingClientRect();
-            var panelWidth = panelRect.right - panelRect.left;
-            if(panelRect.right > document.body.scrollWidth && (rect.left - (panelWidth + 5)) > 0) {
-                // Reposition, because the panel is overflowing
-                dfnPanel.style.left = window.scrollX + rect.left - (panelWidth + 5) + "px";
-            }
-        } else {
-            console.log("Couldn't find .dfn-panel[data-for='" + el.id + "']");
-        }
-    } else if(target == "dfn-panel") {
-        // Switch it to "activated" state, which pins it.
-        el.classList.add("activated");
-        el.style.left = null;
-        el.style.top = null;
+        queryAll(".dfn-panel.on, .dfn-panel.activated").forEach(el=>hideDfnPanel(el));
     }
 
-});
+    function showDfnPanel(dfnPanel, dfn) {
+        hideAllDfnPanels(); // Only display one at this time.
+        dfn.setAttribute("aria-expanded", "true");
+        dfnPanel.classList.add("on");
+        dfnPanel.style.left = "5px";
+        dfnPanel.style.top = "0px";
+        const panelRect = dfnPanel.getBoundingClientRect();
+        const panelWidth = panelRect.right - panelRect.left;
+        if (panelRect.right > document.body.scrollWidth) {
+            // Panel's overflowing the screen.
+            // Just drop it below the dfn and flip it rightward instead.
+            // This still wont' fix things if the screen is *really* wide,
+            // but fixing that's a lot harder without 'anchor()'.
+            dfnPanel.style.top = "1.5em";
+            dfnPanel.style.left = "auto";
+            dfnPanel.style.right = "0px";
+        }
+    }
+
+    function pinDfnPanel(dfnPanel) {
+        // Switch it to "activated" state, which pins it.
+        dfnPanel.classList.add("activated");
+        dfnPanel.style.left = null;
+        dfnPanel.style.top = null;
+    }
+
+    function hideDfnPanel(dfnPanel, dfn) {
+        if(!dfn) {
+            dfn = document.getElementById(dfnPanel.getAttribute("data-for"));
+        }
+        dfn.setAttribute("aria-expanded", "false")
+        dfnPanel.classList.remove("on");
+        dfnPanel.classList.remove("activated");
+    }
+
+    function toggleDfnPanel(dfnPanel, dfn) {
+        if(dfnPanel.classList.contains("on")) {
+            hideDfnPanel(dfnPanel, dfn);
+        } else {
+            showDfnPanel(dfnPanel, dfn);
+        }
+    }
+
+    function insertDfnPopupAction(dfn) {
+        // Find dfn panel
+        const dfnPanel = document.querySelector(`.dfn-panel[data-for='${dfn.id}']`);
+        if (dfnPanel) {
+            const panelWrapper = document.createElement('span');
+            panelWrapper.appendChild(dfnPanel);
+            panelWrapper.style.position = "relative";
+            panelWrapper.style.height = "0px";
+            dfn.insertAdjacentElement("afterend", panelWrapper);
+            dfn.setAttribute('role', 'button');
+            dfn.setAttribute('aria-expanded', 'false')
+            dfn.tabIndex = 0;
+            dfn.classList.add('has-dfn-panel');
+            dfn.addEventListener('click', (event) => {
+                showDfnPanel(dfnPanel, dfn);
+                event.stopPropagation();
+            });
+            dfn.addEventListener('keypress', (event) => {
+                const kc = event.keyCode;
+                // 32->Space, 13->Enter
+                if(kc == 32 || kc == 13) {
+                    toggleDfnPanel(dfnPanel, dfn);
+                    event.stopPropagation();
+                    event.preventDefault();
+                }
+            });
+
+            dfnPanel.addEventListener('click', (event) => {
+                pinDfnPanel(dfnPanel);
+                event.stopPropagation();
+            });
+
+            dfnPanel.addEventListener('keydown', (event) => {
+                if(event.keyCode == 27) { // Escape key
+                    hideDfnPanel(dfnPanel, dfn);
+                    event.stopPropagation();
+                    event.preventDefault();
+                }
+            })
+
+        } else {
+            console.log("Couldn't find .dfn-panel[data-for='" + dfn.id + "']");
+        }
+    }
+}
 </script>
