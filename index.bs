@@ -66,7 +66,7 @@ Introduction {#introduction}
 
 User preferences are often system-wide settings (such as in Android, macOS, or Windows). Operating systems allow the user to specify custom overrides for settings such as:
 
-* Hour cycle (23-hour or 12-hour time)
+* Hour cycle (24-hour or 12-hour time)
 * Calendar system
 * Measurement unit preferences (metric or imperial)
 * Date/time patterns
@@ -132,7 +132,7 @@ Other user preferences that might be included based on user research about OS pr
 - show the day of the week
 - show date
 
-> Note: The preferences actually included need to be validated and agreed to by security teams and stakeholders. For this proposal, we consider a subset of possible preferences that can be sorted into two categories: DateTime and LanguageRegion. 
+> Note: The preferences ultimately included need to be validated and agreed to by security teams and stakeholders. For this proposal, we consider a subset of possible preferences that can be sorted into two categories: DateTime and LanguageRegion. 
 
 ### `Client Hint` Header fields ### {#client-hint-header-fields}
 
@@ -145,10 +145,9 @@ To accomplish this, browsers should introduce a pair of new `Client Hint` header
 
 The following table represents the list of headers returning individual opted-in `Locale-Preferences`:
 
-TODO ASK UJJWAL
 <table>
-<td><dfn export>Sec-CH-Locale-Preferences-DateTime</dfn>	<td> `Sec-CH-Locale-Preferences-DateTime`	: { hourCycle: "h24", timeZone: "CET", ... } </td>
-<td><dfn export>Sec-CH-Locale-Preferences-LanguageRegion</dfn>	<td> `Sec-CH-Locale-Preferences-LanguageRegion`	: { calendar: "buddhist", measurementSystem: "metric", ... }</td>
+<td><dfn export>Sec-CH-Locale-Preferences-DateTime</dfn>	<td> `Sec-CH-Locale-Preferences-DateTime`	:  hourCycle="h24";timeZone="CET";... </td>
+<td><dfn export>Sec-CH-Locale-Preferences-LanguageRegion</dfn>	<td> `Sec-CH-Locale-Preferences-LanguageRegion`	: calendar="buddhist"; measurementSystem="metric", ... </td>
 <thead><tr><th style=text-align: left>Client hint<th style=text-align: left> Example output
 </table>
 
@@ -177,8 +176,8 @@ Accept-CH: Sec-CH-Locale-Preferences-DateTime, Sec-CH-Locale-Preferences-Languag
 ```http
 GET / HTTP/1.1
 Host: example.com
-Sec-CH-Locale-Preferences-DateTime: TODO
-Sec-CH-Locale-Preferences-LanguageRegion: TODO
+Sec-CH-Locale-Preferences-DateTime: timeZone=CET
+Sec-CH-Locale-Preferences-LanguageRegion: numberingSystem=jpan 
 ```
 
 3. The server can then tailor the response to the client's preferences accordingly.
