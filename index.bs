@@ -83,7 +83,7 @@ For **client-side applications**, the best way to get them is through a browser 
 For **server-side applications**, one way to get access to this information is via [[!CLIENT-HINTS]] headers on the request.
 
 <figure><img alt="Browser conveys permitted OS preference information to server" src="https://user-images.githubusercontent.com/1572026/182210112-69fb7769-eafa-43ab-bad0-21eb49489d50.png" width="500" height="300" />
-<figcaption>Browser conveys permitted OS preference information to server</figcaption>
+<figcaption>Browser conveys select OS preference information to server</figcaption>
 </figure>
 
 User Locale Preferences Features {#user-locale-preferences-features}
