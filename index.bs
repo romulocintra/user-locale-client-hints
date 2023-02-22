@@ -1,0 +1,253 @@
+
+<pre class='metadata'>
+Title: User Locale Preferences
+Shortname: user-locale-client-hints
+Level: 1
+Status: CG-DRAFT
+Group: WICG
+Repository: romulocintra/user-locale-client-hints
+URL: https://github.com/romulocintra/user-locale-client-hints
+Editor: Romulo Cintra, Igalia https://igalia.com, rcintra@igalia.com
+Editor: Ujjwal Sharma, Igalia https://igalia.com, usharma@igalia.com
+Editor: Ben Allen, Igalia https://igalia.com, benallen@igalia.com
+!Tests: (<a href=https://github.com/w3c/web-platform-tests/labels/user-locale-client-hints>ongoing work</a>)
+Abstract: This specification introduces a set of <code>Client Hints</code> headers and a homologous <code>Javascript API</code> that will allow a reliable way to access User Locale Preferences information from the Web Platform to help craft better user experiences. Allowing web developers to access this information will allow them to improve the accessibility and usability of their websites, and bring the user experience of web applications closer to that of native applications.
+Markup Shorthands: markdown yes 
+
+</pre>
+<pre class=biblio>
+{
+  "CLIENT-HINTS": {
+    "authors": ["Ilya Grigorik", "Yoav Weiss"],
+    "href": "https://datatracker.ietf.org/doc/rfc8942/",
+    "title": "HTTP Client Hints",
+    "status": "RFC - Experimental (February 2021; No errata)",
+    "publisher": "IETF httpbis-WG"
+  },
+  "draft-ietf-httpbis-header-structure-19": {
+    "authors": ["Mark Nottingham", "Poul-Henning Kamp"],
+    "href": "https://tools.ietf.org/html/draft-ietf-httpbis-header-structure-19",
+    "title": "Structured Field Values for HTTP",
+    "status": "ID",
+    "publisher": "IETF httpbis-WG"
+  },
+  "draft-davidben-http-client-hint-reliability-02": {
+    "authors": ["David Benjamin"],
+    "href": "https://tools.ietf.org/html/draft-davidben-http-client-hint-reliability-02",
+    "title": "Client Hint Reliability",
+    "status": "ID",
+    "publisher": "IETF httpbis-WG"
+  }
+}
+</pre>
+
+
+<pre class="anchors">
+urlPrefix: https://datatracker.ietf.org/doc/html/draft-ietf-httpbis-header-structure; spec: draft-ietf-httpbis-header-structure
+    type: dfn
+        text: structured header
+urlPrefix: https://cldr.unicode.org/index/bcp47-extension; spec: bcp47-extension
+    type: dfn
+        text: Unicode Extensions for BCP 47
+        text: HTTP Client Hint
+urlPrefix: https://github.com/tc39/ecma402/issues/416#issue-574957588
+    type: dfn
+        text: common user preferences 
+urlPrefix: https://tools.ietf.org/html/draft-davidben-http-client-hint-reliability-02
+    type: dfn
+        text:Security Considerations of Client Hint Reliability; url: #section-5
+
+
+</pre>
+
+
+Introduction {#introduction}
+=====================
+
+User preferences are often system-wide settings (such as in Android, macOS, or Windows). Operating systems allow the user to specify custom overrides for settings such as:
+
+* Hour cycle (24-hour or 12-hour time)
+* Calendar system
+* Measurement unit preferences (metric or imperial)
+* Date/time patterns
+* Number separators (comma or period)
+
+Using this information will let developers improve the accessibility and usability of their websites, and bring the user experience of web applications closer to that of native applications.  Client- and server-side applications should consistently share and access locale user preferences that will help solve cases like:
+
+>Alice, an end user, reads en-US but prefers using a 24-hour clock. She has set that preference in her operating system settings. Native apps are able to respect her preference. However, web apps cannot access OS user preferences, so on the Web Platform, Alice sees a 12-hour clock, the default for en-US. 
+
+>Other use cases: NodeJS programs that want to respect the user's hourCycle preference by passing it in to Intl.DateTimeFormat, other non browser environments. 
+
+For **client-side applications**, the best way to get them is through a browser API that fetches this information from the different platform-specific OS APIs.
+
+For **server-side applications**, one way to get access to this information is via [[!CLIENT-HINTS]] headers on the request.
+
+<figure><img alt="Browser conveys permitted OS preference information to server" src="https://user-images.githubusercontent.com/1572026/182210112-69fb7769-eafa-43ab-bad0-21eb49489d50.png" width="500" height="300" />
+<figcaption>Browser conveys select OS preference information to server</figcaption>
+</figure>
+
+User Locale Preferences Features {#user-locale-preferences-features}
+=====================
+
+We address the above use cases by using a group of [[!CLIENT-HINTS]] headers and a homologous [[#javascript-api]]. Both will be responsible for exposing and negotiating the exchange of user preferences from the OS to the required environment.
+
+We use [=Unicode Extensions for BCP 47=] or compatible as the main reference for the base mechanism for delivering user locale preferences. We define a new standard <dfn export>`Locale-Preferences`</dfn> Client Hints and <dfn export>`navigator.localePreferences`</dfn>, that would map the user locale preferences using the following steps:
+
+1.  Validate if there is any fingerprinting mechanism and if OS preferences are allowed to be exposed
+2.  Read the available OS preferences
+3.  For each value compare it against the default  value for the given locale from ICU/CLDR or a list of user preferences to compare against
+4.  If the user preference value differs, return the value
+5.  If the  user preference value is the same, or not set, return the default value for the given locale
+
+## Client Hints ## {#user-locale-preferences-client-hints}
+
+An [=HTTP Client Hint=] is a request header field that is used by HTTP clients to indicate configuration data that can be used by the server to select an appropriate response. It defines an `Accept-CH` response header that servers can use to advertise their use of request headers for proactive content negotiation. Each new client hint conveys a list of user locale preferences that the server can use to adapt and optimize responses.
+
+The following table suggests [=common user preferences=] to be used, and does the correlation from  `Locale-Preferences` Client Hints and `navigator.localePreferences` to extension keys if they exist, or other values in case table is extended by user demand.
+
+### Common User Preferences ### {#common-user-preferences}
+<table>
+<tr><td>"calendar"<td>`ca`<td>buddhist, chinese...<td>[Calendar system / Calendar algorithm]
+<tr><td>"currencyFormat"<td>`cf`<td>standard, account<td>Currency Format style, whether to use accounting currency format </tr>
+<tr><td> "collation"             <td>  `co`  <td> standard, search, phonetic... <td> Collation type, sort order </tr>
+<tr><td> "currencyCode"          <td>  `cu`  <td> 	ISO 4217 codes <td> Currency type </tr>
+<tr><td> "emojiStyle"            <td>  `em`  <td> emoji , text, default <td> Emoji presentation style </tr>
+<tr><td> "firstDayOfTheWeek"      <td>  `fw`  <td> "sun", "mon" ... "sat" <td> First day of week  </tr>
+<tr><td> "hourCycle"             <td>  `hc`  <td> h12 , h23, h11, h24 <td> Hour cycle, i.e., 12-hour or 24-hour clock </tr>
+<tr><td> "measurementSystem"     <td>  `ms`  <td> metric , ussystem , uksystem <td> Measurement system </tr>
+<tr><td> "measurementUnit"       <td>  `mu`  <td> celsius , kelvin , fahrenhe <td> [Measurement units currently only temperature](https://github.com/unicode-org/cldr/blob/7942fd82f7e673eb0b27f0bf2025a31572135d95/common/bcp47/measure.xml#L16) </tr>
+<tr><td> "numberingSystem"       <td>  `nu`  <td> Unicode script subtag(arabext...)    <br> <td> Numbering system </tr>
+<tr><td> "timeZone"              <td>  `tz`  <td> Unicode short time zone IDs <td> Time zone </tr>
+<tr><td> "region"                <td>  `rg`  <td> [Unicode Region Subtag](https://unicode.org/reports/tr35/tr35.html#unicode_region_subtag) <td> Region override </tr>
+
+<thead><tr><th>Locale Preferences Name<th>Extension Key/Unicode Source<th>Example Values<th>Description
+</table>
+### Other user preferences ### {#other-user-preferences}
+Other user preferences that might be included based on user research about OS preferences inputs and [#1308329](https://bugzilla.mozilla.org/show_bug.cgi?id=1308329). Although most of the preferences below do not have a 1:1 match with BCP47 extension keys, they are available in ICU/CLDR.
+- number separator (grouping/decimal)
+- date formats short/medium/long/full
+- time formats short/medium/long/full
+- dayPeriod names
+- time display with/without seconds
+- flash the time separators
+- show dayPeriod
+- show the day of the week
+- show date
+
+> Note: The table and list are recommendations, they need to be validated and agreed by security teams and stakeholders, but from now on using them as a reference for the proposal.
+
+### `Client Hint` Header fields ### {#client-hint-header-fields}
+
+Servers will receive no information about the user's locale preferences. Servers can instead opt-into receiving such information via a new `Locale-Preferences` Client Hints.
+
+To accomplish this, browsers should introduce several new `Client Hint` header fields as part of a [=structured header=] as defined in [[!draft-ietf-httpbis-header-structure-19]], sent over request whose value is a list of defined user locale preferences.
+
+
+**`Sec-CH-Locale-Preferences-*`**
+
+The following table represents the list of headers returning individual opted-in `Locale-Preferences`:
+
+<table>
+<td> <dfn export>Sec-CH-Locale-Preferences-calendar</dfn>          <td> `Sec-CH-Locale-Preferences-calendar         : "buddhist"`  </tr>
+<td> <dfn export>Sec-CH-Locale-Preferences-currencyFormat</dfn>    <td> `Sec-CH-Locale-Preferences-currencyFormat   : "account"`    </tr> 
+<td> <dfn export>Sec-CH-Locale-Preferences-collation</dfn>         <td> `Sec-CH-Locale-Preferences-collation        : "search"`     </tr> 
+<td> <dfn export>Sec-CH-Locale-Preferences-currencyCode</dfn>      <td> `Sec-CH-Locale-Preferences-currencyCode     : "EUR"`        </tr> 
+<td> <dfn export>Sec-CH-Locale-Preferences-emojiStyle</dfn>       <td> `Sec-CH-Locale-Preferences-emojiStyle       : "emoji"`      </tr> 
+<td> <dfn export>Sec-CH-Locale-Preferences-firstDayOfTheWeek</dfn>  <td> `Sec-CH-Locale-Preferences-firstDayOfTheWeek : "sun"`        </tr> 
+<td> <dfn export>Sec-CH-Locale-Preferences-hourCycle</dfn>         <td> `Sec-CH-Locale-Preferences-hourCycle        : "h12"`        </tr> 
+<td> <dfn export>Sec-CH-Locale-Preferences-measurementSystem</dfn> <td> `Sec-CH-Locale-Preferences-measurementSystem: "metric"`     </tr> 
+<td> <dfn export>Sec-CH-Locale-Preferences-measurementUnit</dfn>   <td> `Sec-CH-Locale-Preferences-measurementUnit  : "kelvin"`       </tr> 
+<td> <dfn export>Sec-CH-Locale-Preferences-numberingSystem</dfn>   <td> `Sec-CH-Locale-Preferences-numberingSystem  : "latn";` </tr> 
+<td> <dfn export>Sec-CH-Locale-Preferences-timeZone</dfn>          <td> `Sec-CH-Locale-Preferences-timeZone         : "Atlantic/Azores";`  </tr>
+<td> <dfn export>Sec-CH-Locale-Preferences-region</dfn>            <td> `Sec-CH-Locale-Preferences-region           : "PT"` </tr>
+<td> <dfn export>Sec-CH-Locale-Preferences-dateFormat</dfn>       <td> `Sec-CH-Locale-Preferences-dateFormat       : "EEE, d MMM yyyy HH:mm:ss Z"` </tr>
+
+<thead> <tr><th style=text-align: left> Client Hint <th style=text-align: left> Example output
+</table>
+
+### Usage example ### {#user-locale-client-hints-example}
+
+<div class=example>
+1. The client makes an initial request to the server:
+
+```http
+GET / HTTP/1.1
+Host: example.com
+```
+
+2. The server responds, telling the client via an `Accept-CH` header (Section 2.2.1 of [[!RFC8942]]) along with the initial response with `Sec-CH-Locale-Preferences-numberingSystem` and the `Sec-CH-Locale-Preferences-timeZone` Client Hints: 
+
+
+```http
+HTTP/1.1 200 OK
+Content-Type: text/html
+Accept-CH: Sec-CH-Locale-Preferences-numberingSystem, Sec-CH-Locale-Preferences-timeZone
+```
+
+3. Then subsequent requests to https://example.com will include the following request headers in case the user sets `numberingSystem` and `timeZone` values:
+
+```http
+GET / HTTP/1.1
+Host: example.com
+Sec-CH-Locale-Preferences-calendar:"buddhist"
+Sec-CH-Locale-Preferences-timeZone: "Africa/Lagos"
+```
+
+In case the user did not set any `Locale-Preferences` for accepted values, request headers return the default value for given locale
+```http
+GET / HTTP/1.1
+Host: example.com
+Sec-CH-Locale-Preferences-calendar:"gregory"
+Sec-CH-Locale-Preferences-timeZone: "Europe/London"
+```
+
+4. The server can then tailor the response to the client's preferences accordingly.
+
+</div>
+
+## JavaScript API ## {#javascript-api}
+
+These client hints should also be exposed as JavaScript APIs via `navigator.locales` as suggested in
+[#68](https://github.com/tc39/ecma402/issues/68) or by creating a new `navigator.localePreferences` that exposes `Locale-Preferences` information as below. 
+
+### Usage examples ### {#user-local-preferences-javascript-api-examples}
+<div class=example>
+```js
+
+navigator.localePreferences.calendar(); // =>  "gregory"
+navigator.localePreferences.currencyFormat(); // => "EUR"
+navigator.localePreferences.timeZone(); // =>  "Europe/London"
+navigator.localePreferences.region(); // => "GB"
+ 
+// user has not set `firstDayOfTheWeek` value in their OS, it returns the default value for given locale
+navigator.localePreferences.firstDayOfTheWeek(); // =>  "7"
+```
+</div>
+
+<div class=example>
+```js
+// User set locale preferences for calendar , region and hourCycle
+navigator.localePreferences.calendar(); // =>  "gregory"
+navigator.localePreferences.region(); // => 'GB'
+navigator.localePreferences.hourCycle(); // => 'h11';
+navigator.localePreferences.timeZone(); // =>  'Europe/London'
+
+const localePreferences =  (...iterate over needed navigator.localePreferences )
+
+new Intl.Locale('es' ,  localePreferences ).maximize();
+// => Locale {..., calendar:"gregory" , region:"GB" , hourCycle:"h11" }
+
+new Intl.DateTimeFormat('es', localePreferences).resolvedOptions();
+// =>  {locale: 'es', calendar: 'gregory', numberingSystem: 'latn', timeZone: 'Europe/London', ...}
+
+```
+</div>
+
+ Privacy and Security Considerations {#privacy-and-security-considerations} 
+=====================
+
+There are some concerns that exposing this information would give trackers, advertisers and malicious web services another fingerprinting vector. That said, this information may or may not already be available to a certain extent to such services, based on the host and the user’s settings. The use of `Sec-CH-` prefix is to forbid access to headers containing `Locale Preferences` information from JavaScript, and to demarcate them as browser-controlled client hints so that they can be documented and included in requests without triggering CORS preflights.
+
+Client Hints provides a powerful content negotiation mechanism that enables us to adapt content to users' needs without compromising their privacy. It does that by requiring server opt-in, which guarantees that access to the information requires active and tracable action on the server's side. As such, the mechanism does not increase the web's current active fingerprinting surface. 
+
+The Security Considerations of [[!CLIENT-HINTS]] and [[!draft-davidben-http-client-hint-reliability-02]] likewise apply to this proposal.
