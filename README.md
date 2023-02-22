@@ -7,12 +7,13 @@
   - [Authors:](#authors)
   - [Participate](#participate)
   - [Introduction](#introduction)
-  - [Use Cases & Motivation](#use-cases--motivation)
+  - [Use Cases \& Motivation](#use-cases--motivation)
   - [Proposed Solution](#proposed-solution)
     - [Client Hints](#client-hints)
       - [Proposed Syntax](#proposed-syntax)
       - [Example](#example)
     - [Javascript API](#javascript-api)
+      - [IDL](#idl)
       - [Proposed Syntax](#proposed-syntax-1)
       - [Examples](#examples)
   - [Privacy and Security Considerations](#privacy-and-security-considerations)
@@ -183,19 +184,67 @@ Sec-CH-Locale-Preferences-timeZone: "Europe/London"
 These client hints should also be exposed as JavaScript APIs via `navigator.locales` as suggested in [#68](https://github.com/tc39/ecma402/issues/68) or by creating a new `navigator.localePreferences` that exposes `Locale-Preferences` information as bellow.
 
 
+#### IDL 
+
+```
+dictionary LocalePreferencesLocaleRegion {
+  DOMString calendar;
+  DOMString measurementSystem;
+  DOMString measurementUnit;
+  DOMString numberingSystem;
+  DOMString region;
+};
+
+dictionary LocalePreferencesDateTime {
+  DOMString dateFormat;
+  DOMString timeFormats;
+  DOMString timeZone;
+  DOMString hourCycle;
+  DOMString firstDayOfTheWeek;
+};
+
+
+interface mixin NavigatorLocalePreferences {
+  readonly attribute LocalePreferencesLocaleRegion localeRegion;
+  readonly attribute LocalePreferencesDateTime dateTime;
+};
+
+Navigator includes NavigatorLocalePreferences;
+WorkerNavigator includes NavigatorLocalePreferences;
+```
+
+
 #### Proposed Syntax
 
-This might be written like so:
+This might be written like so by web developers:
 
 ```js
 
-navigator.localePreferences.calendar(); // =>  "gregory"
-navigator.localePreferences.currencyFormat(); // => "EUR"
-navigator.localePreferences.timeZone(); // =>  "Europe/London"
-navigator.localePreferences.region(); // => "GB"
- 
-// user has not set `firstDayOfTheWeek` value in their OS, it returns the default value for given locale
-navigator.localePreferences.firstDayOfTheWeek(); // =>  "7"
+// languageAndRegion
+navigator.localePreferences['languageRegion'];
+navigator.localePreferences.languageRegion;
+self.navigator.localePreferences.languageRegion;
+// Output =>  => {calendar: "buddhist", measurementSystem: "metric", ... }
+
+// languageAndRegion
+navigator.localePreferences['dateTime'];
+navigator.localePreferences.dateTime;
+self.navigator.localePreferences.dateTime;
+// Output => { dateFormat: "EEE, d MMM yyyy HH:mm:ss Z", ... }
+
+
+// Window or WorkerGlobalScope event 
+
+window.onlocalepreferences = (event) => {
+  console.log('localepreferences event detected!');
+};
+
+// Or 
+
+window.addEventListener('localepreferences', () => {
+  console.log('localepreferences event detected!');
+});
+
 ```
 
 #### Examples
@@ -204,18 +253,16 @@ Use the `navigator.localePreferences` to populate data with user preferences
 
 ```js
 // User set locale preferences for calendar , region and hourCycle
-navigator.localePreferences.calendar(); // =>  "gregory"
-navigator.localePreferences.region(); // => 'GB'
-navigator.localePreferences.hourCycle(); // => 'h11';
-navigator.localePreferences.timeZone(); // =>  'Europe/London'
+navigator.localePreferences['languageRegion'];
+navigator.localePreferences['dateTime'];
 
-const localePreferences =  (...iterate over needed navigator.localePreferences )
+const preferences =  (...iterate over needed navigator.localePreferences )
 
 
-new Intl.Locale('es' ,  localePreferences ).maximize();
+new Intl.Locale('es' ,  preferences ).maximize();
 // => Locale {..., calendar:"gregory" , region:"GB" , hourCycle:"h11" }
 
-new Intl.DateTimeFormat('es', localePreferences).resolvedOptions();
+new Intl.DateTimeFormat('es', preferences ).resolvedOptions();
 // =>  {locale: 'es', calendar: 'gregory', numberingSystem: 'latn', timeZone: 'Europe/London', ...}
 
 ```
