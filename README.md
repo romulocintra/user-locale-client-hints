@@ -67,7 +67,7 @@ We propose to address the above use cases by using a pair of [`Client Hints`](#c
 
 We use [Unicode Extensions for BCP 47](https://cldr.unicode.org/index/bcp47-extension) or compatible as the main reference for the base mechanism for delivering user locale preferences. The goal is to allow the handling of user preferences consistently across the industry.
 
-We define a new standard `Locale-Preferences` Client Hints and `navigator.localePreferences`, that would map the user locale preferences using the following steps:
+We define new standard `Locale-Preferences` Client Hints and `navigator.localePreferences`, that map the user locale preferences using the following steps:
 
   1.  Validate if there is any fingerprinting mechanism and if OS preferences are allowed to be exposed
   2.  Read the available OS preferences
@@ -104,7 +104,7 @@ Other user preferences that might be included based on user research about OS pr
  - show date
 
 
-> Note: The preferences ultimately included need to be validated and agreed to by security teams and stakeholders. For this proposal, we consider a subset of possible preferences that can be sorted into two categories: DateTime and LanguageRegion. 
+> Note: The preferences ultimately included need to be validated and agreed to by security teams and stakeholders. For this proposal, we consider a subset of possible preferences, sorted into two categories: DateTime and LanguageRegion. 
 
 ### Client Hints
 
@@ -150,8 +150,8 @@ Accept-CH: Sec-CH-Locale-Preferences-DateTime, Sec-CH-Locale-Preferences-Languag
 ```http
 GET / HTTP/1.1
 Host: example.com
-Sec-CH-Locale-Preferences-calendar:"buddhist"
-Sec-CH-Locale-Preferences-timeZone: "Africa/Lagos"
+Sec-CH-Locale-Preferences-DateTime: timeZone="CET"
+Sec-CH-Locale-Preferences-LanguageRegion: numberingSystem="jpan"
 ```
 
 

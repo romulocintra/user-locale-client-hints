@@ -91,7 +91,7 @@ User Locale Preferences Features {#user-locale-preferences-features}
 
 We propose to address the above use cases by using a pair of [[!CLIENT-HINTS]] headers and a homologous [[#javascript-api]]. Both will be responsible for exposing and negotiating the exchange of user preferences from the OS to the required environment.
 
-We use [=Unicode Extensions for BCP 47=] or compatible as the main reference for the base mechanism for delivering user locale preferences. We define new standard <dfn export>`Locale-Preferences`</dfn> Client Hints and <dfn for='NavigatorLocalePreferences' export>`navigator.localePreferences`</dfn>, that would map the user locale preferences using the following steps:
+We use [=Unicode Extensions for BCP 47=] or compatible as the main reference for the base mechanism for delivering user locale preferences. We define new standard <dfn export>`Locale-Preferences`</dfn> Client Hints and <dfn for='NavigatorLocalePreferences' export>`navigator.localePreferences`</dfn>, that map the user locale preferences using the following steps:
 
 1.  Validate if there is any fingerprinting mechanism and if OS preferences are allowed to be exposed
 2.  Read the available OS preferences
@@ -132,7 +132,7 @@ Other user preferences that might be included based on user research about OS pr
 - show the day of the week
 - show date
 
-> Note: The specific preferences ultimately included need to be validated and agreed to by security teams and stakeholders. For this proposal, we consider a subset of possible preferences that can be sorted into two categories: DateTime and LanguageRegion. 
+> Note: The specific preferences ultimately included need to be validated and agreed to by security teams and stakeholders. For this proposal, we consider a subset of possible preferences, sorted into two categories: DateTime and LanguageRegion. 
 
 ### `Client Hint` Header fields ### {#client-hint-header-fields}
 
@@ -146,8 +146,8 @@ To accomplish this, browsers should introduce a pair of new `Client Hint` header
 The following table represents the two headers returning individual opted-in `Locale-Preferences`. These headers group together related sets of preferences in two buckets:
 
 <table>
-<td><dfn export>Sec-CH-Locale-Preferences-DateTime</dfn>	<td> `Sec-CH-Locale-Preferences-DateTime`	:  hourCycle="h24";timeZone="CET";... </td>
-<td><dfn export>Sec-CH-Locale-Preferences-LanguageRegion</dfn>	<td> `Sec-CH-Locale-Preferences-LanguageRegion`	: calendar="buddhist"; measurementSystem="metric"; ... </td>
+<tr><td><dfn export>Sec-CH-Locale-Preferences-DateTime</dfn>	<td> `Sec-CH-Locale-Preferences-DateTime`	:  hourCycle="h24";timeZone="CET";... </td></tr>
+<tr><td><dfn export>Sec-CH-Locale-Preferences-LanguageRegion</dfn>	<td> `Sec-CH-Locale-Preferences-LanguageRegion`	: calendar="buddhist"; measurementSystem="metric"; ... </td> </tr>
 <thead><tr><th style=text-align: left>Client hint<th style=text-align: left> Example output
 </table>
 
@@ -173,7 +173,7 @@ Accept-CH: Sec-CH-Locale-Preferences-DateTime, Sec-CH-Locale-Preferences-Languag
 
 3. Subsequent requests to https://example.com will include the following request headers in case the user sets `numberingSystem` and `timeZone` values:
 
-```http`
+```http
 GET / HTTP/1.1
 Host: example.com
 Sec-CH-Locale-Preferences-DateTime: timeZone="CET"
@@ -194,7 +194,7 @@ These client hints should also be exposed as JavaScript APIs via `navigator.loca
 <pre class="idl">
 
 ```
-dictionary LocalePreferencesLocaleRegion {
+dictionary LocalePreferencesLanguageRegion {
   DOMString calendar;
   DOMString measurementSystem;
   DOMString measurementUnit;
@@ -212,7 +212,7 @@ dictionary LocalePreferencesDateTime {
 
 
 interface mixin NavigatorLocalePreferences {
-  readonly attribute LocalePreferencesLocaleRegion localeRegion;
+  readonly attribute LocalePreferencesLanguageRegion localeRegion;
   readonly attribute LocalePreferencesDateTime dateTime;
 };
 
@@ -224,7 +224,7 @@ WorkerNavigator includes NavigatorLocalePreferences;
 
 
 ### Proposed Syntax ### {#user-locale-preferences-javascript-api-proposed-syntax}
-<div class="example">
+<div class=example>
 ```js
 
 // languageAndRegion

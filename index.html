@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version f043d3484, updated Fri Feb 17 10:53:48 2023 -0800" name="generator">
   <link href="https://github.com/romulocintra/user-locale-client-hints" rel="canonical">
-  <meta content="e076f43dce1e04a3fbae45c88b31104db43b9b5d" name="document-revision">
+  <meta content="bc89a6b0b2f7a5654cbdb96a3050c47d8f397a24" name="document-revision">
 <style>/* style-autolinks */
 .css.css, .property.property, .descriptor.descriptor {
     color: var(--a-normal-text);
@@ -697,7 +697,7 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
    </figure>
    <h2 class="heading settled" data-level="2" id="user-locale-preferences-features"><span class="secno">2. </span><span class="content">User Locale Preferences Features</span><a class="self-link" href="#user-locale-preferences-features"></a></h2>
    <p>We propose to address the above use cases by using a pair of <a data-link-type="biblio" href="#biblio-client-hints" title="HTTP Client Hints">[CLIENT-HINTS]</a> headers and a homologous <a href="#javascript-api">§ 2.2 JavaScript API</a>. Both will be responsible for exposing and negotiating the exchange of user preferences from the OS to the required environment.</p>
-   <p>We use <a data-link-type="dfn" href="https://cldr.unicode.org/index/bcp47-extension#unicode-extensions-for-bcp-47" id="ref-for-unicode-extensions-for-bcp-47">Unicode Extensions for BCP 47</a> or compatible as the main reference for the base mechanism for delivering user locale preferences. We define new standard <dfn data-dfn-type="dfn" data-export id="locale-preferences"><code>Locale-Preferences</code><a class="self-link" href="#locale-preferences"></a></dfn> Client Hints and <dfn data-dfn-for="NavigatorLocalePreferences" data-dfn-type="dfn" data-export id="navigatorlocalepreferences-navigatorlocalepreferences"><code>navigator.localePreferences</code><a class="self-link" href="#navigatorlocalepreferences-navigatorlocalepreferences"></a></dfn>, that would map the user locale preferences using the following steps:</p>
+   <p>We use <a data-link-type="dfn" href="https://cldr.unicode.org/index/bcp47-extension#unicode-extensions-for-bcp-47" id="ref-for-unicode-extensions-for-bcp-47">Unicode Extensions for BCP 47</a> or compatible as the main reference for the base mechanism for delivering user locale preferences. We define new standard <dfn data-dfn-type="dfn" data-export id="locale-preferences"><code>Locale-Preferences</code><a class="self-link" href="#locale-preferences"></a></dfn> Client Hints and <dfn data-dfn-for="NavigatorLocalePreferences" data-dfn-type="dfn" data-export id="navigatorlocalepreferences-navigatorlocalepreferences"><code>navigator.localePreferences</code><a class="self-link" href="#navigatorlocalepreferences-navigatorlocalepreferences"></a></dfn>, that map the user locale preferences using the following steps:</p>
    <ol>
     <li data-md>
      <p>Validate if there is any fingerprinting mechanism and if OS preferences are allowed to be exposed</p>
@@ -802,28 +802,29 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
      <p>show date</p>
    </ul>
    <blockquote>
-    <p class="note" role="note"><span class="marker">Note:</span> The preferences ultimately included need to be validated and agreed to by security teams and stakeholders. For this proposal, we consider a subset of possible preferences that can be sorted into two categories: DateTime and LanguageRegion.</p>
+    <p class="note" role="note"><span class="marker">Note:</span> The specific preferences ultimately included need to be validated and agreed to by security teams and stakeholders. For this proposal, we consider a subset of possible preferences, sorted into two categories: DateTime and LanguageRegion.</p>
    </blockquote>
    <h4 class="heading settled" data-level="2.1.3" id="client-hint-header-fields"><span class="secno">2.1.3. </span><span class="content"><code>Client Hint</code> Header fields</span><a class="self-link" href="#client-hint-header-fields"></a></h4>
-   <p>Servers will receive no information about the user’s locale preferences. Servers can instead opt-into receiving such information via  new <code>Locale-Preferences</code> Client Hints.</p>
+   <p>Servers will receive no information about the user’s locale preferences. Servers can instead opt into receiving such information via new <code>Locale-Preferences</code> Client Hints.</p>
    <p>To accomplish this, browsers should introduce a pair of new <code>Client Hint</code> header fields as part of a <a data-link-type="dfn" href="https://datatracker.ietf.org/doc/html/draft-ietf-httpbis-header-structure#structured-header" id="ref-for-structured-header">structured header</a> as defined in <a data-link-type="biblio" href="#biblio-draft-ietf-httpbis-header-structure-19" title="Structured Field Values for HTTP">[draft-ietf-httpbis-header-structure-19]</a>, sent over request whose value is a list of defined user locale preferences.</p>
    <p>**<code>Sec-CH-Locale-Preferences-*</code>**</p>
-   <p>The following table represents the list of headers returning individual opted-in <code>Locale-Preferences</code>:</p>
+   <p>The following table represents the two headers returning individual opted-in <code>Locale-Preferences</code>. These headers group together related sets of preferences in two buckets:</p>
    <table>
     <tbody>
      <tr>
       <td><dfn data-dfn-type="dfn" data-export id="sec-ch-locale-preferences-datetime">Sec-CH-Locale-Preferences-DateTime<a class="self-link" href="#sec-ch-locale-preferences-datetime"></a></dfn> 
       <td> <code>Sec-CH-Locale-Preferences-DateTime</code> :  hourCycle="h24";timeZone="CET";... 
+     <tr>
       <td><dfn data-dfn-type="dfn" data-export id="sec-ch-locale-preferences-languageregion">Sec-CH-Locale-Preferences-LanguageRegion<a class="self-link" href="#sec-ch-locale-preferences-languageregion"></a></dfn> 
-      <td> <code>Sec-CH-Locale-Preferences-LanguageRegion</code> : calendar="buddhist"; measurementSystem="metric", ... 
+      <td> <code>Sec-CH-Locale-Preferences-LanguageRegion</code> : calendar="buddhist"; measurementSystem="metric"; ... 
     <thead>
      <tr>
       <th left style="text-align:">Client hint
       <th left style="text-align:"> Example output 
    </table>
    <h4 class="heading settled" data-level="2.1.4" id="user-locale-client-hints-example"><span class="secno">2.1.4. </span><span class="content">Usage example</span><a class="self-link" href="#user-locale-client-hints-example"></a></h4>
-   <div class="example" id="example-512b0263">
-    <a class="self-link" href="#example-512b0263"></a> 
+   <div class="example" id="example-370e5b09">
+    <a class="self-link" href="#example-370e5b09"></a> 
     <ol>
      <li data-md>
       <p>The client makes an initial request to the server:</p>
@@ -841,14 +842,14 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
 </pre>
     <ol start="3">
      <li data-md>
-      <p>Then subsequent requests to https://example.com will include the following request headers in case the user sets <code>numberingSystem</code> and <code>timeZone</code> values:</p>
+      <p>Subsequent requests to https://example.com will include the following request headers in case the user sets <code>numberingSystem</code> and <code>timeZone</code> values:</p>
     </ol>
 <pre class="language-http highlight"><c- nf>GET</c-> <c- nn>/</c-> <c- kr>HTTP</c-><c- o>/</c-><c- m>1.1</c->
 <c- e>Host</c-><c- o>:</c-> <c- l>example.com</c->
 <c- e>Sec-CH-Locale-Preferences-DateTime</c-><c- o>:</c-> <c- l>timeZone="CET"</c->
-<c- e>Sec-CH-Locale-Preferences-LanguageRegion</c-><c- o>:</c-> <c- l>numberingSystem=jpan </c->
+<c- e>Sec-CH-Locale-Preferences-LanguageRegion</c-><c- o>:</c-> <c- l>numberingSystem="jpan"</c->
 </pre>
-    <ol start="3">
+    <ol start="4">
      <li data-md>
       <p>The server can then tailor the response to the client’s preferences accordingly.</p>
     </ol>
@@ -856,12 +857,12 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
    <h3 class="heading settled" data-level="2.2" id="javascript-api"><span class="secno">2.2. </span><span class="content">JavaScript API</span><a class="self-link" href="#javascript-api"></a></h3>
    <p>These client hints should also be exposed as JavaScript APIs via <code>navigator.locales</code> as suggested in <a href="https://github.com/tc39/ecma402/issues/68">#68</a> or by creating a new <code>navigator.localePreferences</code> that exposes <code>Locale-Preferences</code> information as below.</p>
    <h4 class="heading settled" data-level="2.2.1" id="user-local-preferences-javascript-idl"><span class="secno">2.2.1. </span><span class="content">IDL</span><a class="self-link" href="#user-local-preferences-javascript-idl"></a></h4>
-<pre class="idl highlight def"><c- b>dictionary</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="dictionary" data-export id="dictdef-localepreferenceslocaleregion"><code><c- g>LocalePreferencesLocaleRegion</c-></code></dfn> {
-  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString"><c- b>DOMString</c-></a> <dfn class="idl-code" data-dfn-for="LocalePreferencesLocaleRegion" data-dfn-type="dict-member" data-export data-type="DOMString " id="dom-localepreferenceslocaleregion-calendar"><code><c- g>calendar</c-></code><a class="self-link" href="#dom-localepreferenceslocaleregion-calendar"></a></dfn>;
-  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString①"><c- b>DOMString</c-></a> <dfn class="idl-code" data-dfn-for="LocalePreferencesLocaleRegion" data-dfn-type="dict-member" data-export data-type="DOMString " id="dom-localepreferenceslocaleregion-measurementsystem"><code><c- g>measurementSystem</c-></code><a class="self-link" href="#dom-localepreferenceslocaleregion-measurementsystem"></a></dfn>;
-  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString②"><c- b>DOMString</c-></a> <dfn class="idl-code" data-dfn-for="LocalePreferencesLocaleRegion" data-dfn-type="dict-member" data-export data-type="DOMString " id="dom-localepreferenceslocaleregion-measurementunit"><code><c- g>measurementUnit</c-></code><a class="self-link" href="#dom-localepreferenceslocaleregion-measurementunit"></a></dfn>;
-  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString③"><c- b>DOMString</c-></a> <dfn class="idl-code" data-dfn-for="LocalePreferencesLocaleRegion" data-dfn-type="dict-member" data-export data-type="DOMString " id="dom-localepreferenceslocaleregion-numberingsystem"><code><c- g>numberingSystem</c-></code><a class="self-link" href="#dom-localepreferenceslocaleregion-numberingsystem"></a></dfn>;
-  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString④"><c- b>DOMString</c-></a> <dfn class="idl-code" data-dfn-for="LocalePreferencesLocaleRegion" data-dfn-type="dict-member" data-export data-type="DOMString " id="dom-localepreferenceslocaleregion-region"><code><c- g>region</c-></code><a class="self-link" href="#dom-localepreferenceslocaleregion-region"></a></dfn>;
+<pre class="idl highlight def"><c- b>dictionary</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="dictionary" data-export id="dictdef-localepreferenceslanguageregion"><code><c- g>LocalePreferencesLanguageRegion</c-></code></dfn> {
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString"><c- b>DOMString</c-></a> <dfn class="idl-code" data-dfn-for="LocalePreferencesLanguageRegion" data-dfn-type="dict-member" data-export data-type="DOMString " id="dom-localepreferenceslanguageregion-calendar"><code><c- g>calendar</c-></code><a class="self-link" href="#dom-localepreferenceslanguageregion-calendar"></a></dfn>;
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString①"><c- b>DOMString</c-></a> <dfn class="idl-code" data-dfn-for="LocalePreferencesLanguageRegion" data-dfn-type="dict-member" data-export data-type="DOMString " id="dom-localepreferenceslanguageregion-measurementsystem"><code><c- g>measurementSystem</c-></code><a class="self-link" href="#dom-localepreferenceslanguageregion-measurementsystem"></a></dfn>;
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString②"><c- b>DOMString</c-></a> <dfn class="idl-code" data-dfn-for="LocalePreferencesLanguageRegion" data-dfn-type="dict-member" data-export data-type="DOMString " id="dom-localepreferenceslanguageregion-measurementunit"><code><c- g>measurementUnit</c-></code><a class="self-link" href="#dom-localepreferenceslanguageregion-measurementunit"></a></dfn>;
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString③"><c- b>DOMString</c-></a> <dfn class="idl-code" data-dfn-for="LocalePreferencesLanguageRegion" data-dfn-type="dict-member" data-export data-type="DOMString " id="dom-localepreferenceslanguageregion-numberingsystem"><code><c- g>numberingSystem</c-></code><a class="self-link" href="#dom-localepreferenceslanguageregion-numberingsystem"></a></dfn>;
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString④"><c- b>DOMString</c-></a> <dfn class="idl-code" data-dfn-for="LocalePreferencesLanguageRegion" data-dfn-type="dict-member" data-export data-type="DOMString " id="dom-localepreferenceslanguageregion-region"><code><c- g>region</c-></code><a class="self-link" href="#dom-localepreferenceslanguageregion-region"></a></dfn>;
 };
 
 <c- b>dictionary</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="dictionary" data-export id="dictdef-localepreferencesdatetime"><code><c- g>LocalePreferencesDateTime</c-></code></dfn> {
@@ -874,7 +875,7 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
 
 
 <c- b>interface</c-> <c- b>mixin</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="interface" data-export id="navigatorlocalepreferences"><code><c- g>NavigatorLocalePreferences</c-></code></dfn> {
-  <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#dictdef-localepreferenceslocaleregion" id="ref-for-dictdef-localepreferenceslocaleregion"><c- n>LocalePreferencesLocaleRegion</c-></a> <dfn class="idl-code" data-dfn-for="NavigatorLocalePreferences" data-dfn-type="attribute" data-export data-readonly data-type="LocalePreferencesLocaleRegion" id="dom-navigatorlocalepreferences-localeregion"><code><c- g>localeRegion</c-></code><a class="self-link" href="#dom-navigatorlocalepreferences-localeregion"></a></dfn>;
+  <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#dictdef-localepreferenceslanguageregion" id="ref-for-dictdef-localepreferenceslanguageregion"><c- n>LocalePreferencesLanguageRegion</c-></a> <dfn class="idl-code" data-dfn-for="NavigatorLocalePreferences" data-dfn-type="attribute" data-export data-readonly data-type="LocalePreferencesLanguageRegion" id="dom-navigatorlocalepreferences-localeregion"><code><c- g>localeRegion</c-></code><a class="self-link" href="#dom-navigatorlocalepreferences-localeregion"></a></dfn>;
   <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#dictdef-localepreferencesdatetime" id="ref-for-dictdef-localepreferencesdatetime"><c- n>LocalePreferencesDateTime</c-></a> <dfn class="idl-code" data-dfn-for="NavigatorLocalePreferences" data-dfn-type="attribute" data-export data-readonly data-type="LocalePreferencesDateTime" id="dom-navigatorlocalepreferences-datetime"><code><c- g>dateTime</c-></code><a class="self-link" href="#dom-navigatorlocalepreferences-datetime"></a></dfn>;
 };
 
@@ -979,21 +980,21 @@ navigator<c- p>.</c->localePreferences<c- p>[</c-><c- t>'dateTime'</c-><c- p>];<
   <h2 class="no-num no-ref heading settled" id="index"><span class="content">Index</span><a class="self-link" href="#index"></a></h2>
   <h3 class="no-num no-ref heading settled" id="index-defined-here"><span class="content">Terms defined by this specification</span><a class="self-link" href="#index-defined-here"></a></h3>
   <ul class="index">
-   <li><a href="#dom-localepreferenceslocaleregion-calendar">calendar</a><span>, in § 2.2.1</span>
+   <li><a href="#dom-localepreferenceslanguageregion-calendar">calendar</a><span>, in § 2.2.1</span>
    <li><a href="#dom-localepreferencesdatetime-dateformat">dateFormat</a><span>, in § 2.2.1</span>
    <li><a href="#dom-navigatorlocalepreferences-datetime">dateTime</a><span>, in § 2.2.1</span>
    <li><a href="#dom-localepreferencesdatetime-firstdayoftheweek">firstDayOfTheWeek</a><span>, in § 2.2.1</span>
    <li><a href="#dom-localepreferencesdatetime-hourcycle">hourCycle</a><span>, in § 2.2.1</span>
    <li><a href="#locale-preferences">Locale-Preferences</a><span>, in § 2</span>
    <li><a href="#dictdef-localepreferencesdatetime">LocalePreferencesDateTime</a><span>, in § 2.2.1</span>
-   <li><a href="#dictdef-localepreferenceslocaleregion">LocalePreferencesLocaleRegion</a><span>, in § 2.2.1</span>
+   <li><a href="#dictdef-localepreferenceslanguageregion">LocalePreferencesLanguageRegion</a><span>, in § 2.2.1</span>
    <li><a href="#dom-navigatorlocalepreferences-localeregion">localeRegion</a><span>, in § 2.2.1</span>
-   <li><a href="#dom-localepreferenceslocaleregion-measurementsystem">measurementSystem</a><span>, in § 2.2.1</span>
-   <li><a href="#dom-localepreferenceslocaleregion-measurementunit">measurementUnit</a><span>, in § 2.2.1</span>
+   <li><a href="#dom-localepreferenceslanguageregion-measurementsystem">measurementSystem</a><span>, in § 2.2.1</span>
+   <li><a href="#dom-localepreferenceslanguageregion-measurementunit">measurementUnit</a><span>, in § 2.2.1</span>
    <li><a href="#navigatorlocalepreferences-navigatorlocalepreferences">navigator.localePreferences</a><span>, in § 2</span>
    <li><a href="#navigatorlocalepreferences">NavigatorLocalePreferences</a><span>, in § 2.2.1</span>
-   <li><a href="#dom-localepreferenceslocaleregion-numberingsystem">numberingSystem</a><span>, in § 2.2.1</span>
-   <li><a href="#dom-localepreferenceslocaleregion-region">region</a><span>, in § 2.2.1</span>
+   <li><a href="#dom-localepreferenceslanguageregion-numberingsystem">numberingSystem</a><span>, in § 2.2.1</span>
+   <li><a href="#dom-localepreferenceslanguageregion-region">region</a><span>, in § 2.2.1</span>
    <li><a href="#sec-ch-locale-preferences-datetime">Sec-CH-Locale-Preferences-DateTime</a><span>, in § 2.1.3</span>
    <li><a href="#sec-ch-locale-preferences-languageregion">Sec-CH-Locale-Preferences-LanguageRegion</a><span>, in § 2.1.3</span>
    <li><a href="#dom-localepreferencesdatetime-timeformats">timeFormats</a><span>, in § 2.2.1</span>
@@ -1090,12 +1091,12 @@ navigator<c- p>.</c->localePreferences<c- p>[</c-><c- t>'dateTime'</c-><c- p>];<
    <dd>Edgar Chen; Timothy Gu. <a href="https://webidl.spec.whatwg.org/"><cite>Web IDL Standard</cite></a>. Living Standard. URL: <a href="https://webidl.spec.whatwg.org/">https://webidl.spec.whatwg.org/</a>
   </dl>
   <h2 class="no-num no-ref heading settled" id="idl-index"><span class="content">IDL Index</span><a class="self-link" href="#idl-index"></a></h2>
-<pre class="idl highlight def"><c- b>dictionary</c-> <a href="#dictdef-localepreferenceslocaleregion"><code><c- g>LocalePreferencesLocaleRegion</c-></code></a> {
-  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a> <a data-type="DOMString " href="#dom-localepreferenceslocaleregion-calendar"><code><c- g>calendar</c-></code></a>;
-  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a> <a data-type="DOMString " href="#dom-localepreferenceslocaleregion-measurementsystem"><code><c- g>measurementSystem</c-></code></a>;
-  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a> <a data-type="DOMString " href="#dom-localepreferenceslocaleregion-measurementunit"><code><c- g>measurementUnit</c-></code></a>;
-  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a> <a data-type="DOMString " href="#dom-localepreferenceslocaleregion-numberingsystem"><code><c- g>numberingSystem</c-></code></a>;
-  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a> <a data-type="DOMString " href="#dom-localepreferenceslocaleregion-region"><code><c- g>region</c-></code></a>;
+<pre class="idl highlight def"><c- b>dictionary</c-> <a href="#dictdef-localepreferenceslanguageregion"><code><c- g>LocalePreferencesLanguageRegion</c-></code></a> {
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a> <a data-type="DOMString " href="#dom-localepreferenceslanguageregion-calendar"><code><c- g>calendar</c-></code></a>;
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a> <a data-type="DOMString " href="#dom-localepreferenceslanguageregion-measurementsystem"><code><c- g>measurementSystem</c-></code></a>;
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a> <a data-type="DOMString " href="#dom-localepreferenceslanguageregion-measurementunit"><code><c- g>measurementUnit</c-></code></a>;
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a> <a data-type="DOMString " href="#dom-localepreferenceslanguageregion-numberingsystem"><code><c- g>numberingSystem</c-></code></a>;
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a> <a data-type="DOMString " href="#dom-localepreferenceslanguageregion-region"><code><c- g>region</c-></code></a>;
 };
 
 <c- b>dictionary</c-> <a href="#dictdef-localepreferencesdatetime"><code><c- g>LocalePreferencesDateTime</c-></code></a> {
@@ -1108,7 +1109,7 @@ navigator<c- p>.</c->localePreferences<c- p>[</c-><c- t>'dateTime'</c-><c- p>];<
 
 
 <c- b>interface</c-> <c- b>mixin</c-> <a href="#navigatorlocalepreferences"><code><c- g>NavigatorLocalePreferences</c-></code></a> {
-  <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#dictdef-localepreferenceslocaleregion"><c- n>LocalePreferencesLocaleRegion</c-></a> <a data-readonly data-type="LocalePreferencesLocaleRegion" href="#dom-navigatorlocalepreferences-localeregion"><code><c- g>localeRegion</c-></code></a>;
+  <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#dictdef-localepreferenceslanguageregion"><c- n>LocalePreferencesLanguageRegion</c-></a> <a data-readonly data-type="LocalePreferencesLanguageRegion" href="#dom-navigatorlocalepreferences-localeregion"><code><c- g>localeRegion</c-></code></a>;
   <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#dictdef-localepreferencesdatetime"><c- n>LocalePreferencesDateTime</c-></a> <a data-readonly data-type="LocalePreferencesDateTime" href="#dom-navigatorlocalepreferences-datetime"><code><c- g>dateTime</c-></code></a>;
 };
 
@@ -1117,10 +1118,10 @@ navigator<c- p>.</c->localePreferences<c- p>[</c-><c- t>'dateTime'</c-><c- p>];<
 
 
 </pre>
-  <aside aria-labelledby="infopaneltitle-for-dictdef-localepreferenceslocaleregion" class="dfn-panel" data-for="dictdef-localepreferenceslocaleregion" id="infopanel-for-dictdef-localepreferenceslocaleregion">
-   <span id="infopaneltitle-for-dictdef-localepreferenceslocaleregion" style="display:none">Info about the 'LocalePreferencesLocaleRegion' definition.</span><b><a href="#dictdef-localepreferenceslocaleregion">#dictdef-localepreferenceslocaleregion</a></b><b>Referenced in:</b>
+  <aside aria-labelledby="infopaneltitle-for-dictdef-localepreferenceslanguageregion" class="dfn-panel" data-for="dictdef-localepreferenceslanguageregion" id="infopanel-for-dictdef-localepreferenceslanguageregion">
+   <span id="infopaneltitle-for-dictdef-localepreferenceslanguageregion" style="display:none">Info about the 'LocalePreferencesLanguageRegion' definition.</span><b><a href="#dictdef-localepreferenceslanguageregion">#dictdef-localepreferenceslanguageregion</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dictdef-localepreferenceslocaleregion">2.2.1. IDL</a>
+    <li><a href="#ref-for-dictdef-localepreferenceslanguageregion">2.2.1. IDL</a>
    </ul>
   </aside>
   <aside aria-labelledby="infopaneltitle-for-dictdef-localepreferencesdatetime" class="dfn-panel" data-for="dictdef-localepreferencesdatetime" id="infopanel-for-dictdef-localepreferencesdatetime">
