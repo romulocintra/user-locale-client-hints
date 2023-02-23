@@ -82,22 +82,20 @@ For **client-side applications**, the best way to get them is through a browser 
 
 For **server-side applications**, one way to get access to this information is via [[!CLIENT-HINTS]] headers on the request.
 
-<figure><img alt="Browser conveys permitted OS preference information to server" src="https://user-images.githubusercontent.com/1572026/182210112-69fb7769-eafa-43ab-bad0-21eb49489d50.png" width="500" height="300" />
-<figcaption>Browser conveys select OS preference information to server</figcaption>
+<figure><img alt="Browser conveys permitted OS preferences to server" src="https://user-images.githubusercontent.com/1572026/182210112-69fb7769-eafa-43ab-bad0-21eb49489d50.png" width="500" height="300" />
+<figcaption>Browser conveys permitted OS preference information to server</figcaption>
 </figure>
 
 User Locale Preferences Features {#user-locale-preferences-features}
 =====================
 
-We address the above use cases by using a group of [[!CLIENT-HINTS]] headers and a homologous [[#javascript-api]]. Both will be responsible for exposing and negotiating the exchange of user preferences from the OS to the required environment.
+We propose to address the above use cases by using a pair of [[!CLIENT-HINTS]] headers and a homologous [[#javascript-api]]. Both will be responsible for exposing and negotiating the exchange of user preferences from the OS to the required environment.
 
-We use [=Unicode Extensions for BCP 47=] or compatible as the main reference for the base mechanism for delivering user locale preferences. We define a new standard <dfn export>`Locale-Preferences`</dfn> Client Hints and <dfn export>`navigator.localePreferences`</dfn>, that would map the user locale preferences using the following steps:
+We use [=Unicode Extensions for BCP 47=] or compatible as the main reference for the base mechanism for delivering user locale preferences. We define new standard <dfn export>`Locale-Preferences`</dfn> Client Hints and <dfn for='NavigatorLocalePreferences' export>`navigator.localePreferences`</dfn>, that map the user locale preferences using the following steps:
 
 1.  Validate if there is any fingerprinting mechanism and if OS preferences are allowed to be exposed
 2.  Read the available OS preferences
-3.  For each value compare it against the default  value for the given locale from ICU/CLDR or a list of user preferences to compare against
-4.  If the user preference value differs, return the value
-5.  If the  user preference value is the same, or not set, return the default value for the given locale
+3.  Return values
 
 ## Client Hints ## {#user-locale-preferences-client-hints}
 
@@ -134,36 +132,25 @@ Other user preferences that might be included based on user research about OS pr
 - show the day of the week
 - show date
 
-> Note: The table and list are recommendations, they need to be validated and agreed by security teams and stakeholders, but from now on using them as a reference for the proposal.
+> Note: The specific preferences ultimately included need to be validated and agreed to by security teams and stakeholders. For this proposal, we consider a subset of possible preferences, sorted into two categories: DateTime and LanguageRegion. 
 
 ### `Client Hint` Header fields ### {#client-hint-header-fields}
 
-Servers will receive no information about the user's locale preferences. Servers can instead opt-into receiving such information via a new `Locale-Preferences` Client Hints.
+Servers will receive no information about the user's locale preferences. Servers can instead opt into receiving such information via new `Locale-Preferences` Client Hints.
 
-To accomplish this, browsers should introduce several new `Client Hint` header fields as part of a [=structured header=] as defined in [[!draft-ietf-httpbis-header-structure-19]], sent over request whose value is a list of defined user locale preferences.
+To accomplish this, browsers should introduce a pair of new `Client Hint` header fields as part of a [=structured header=] as defined in [[!draft-ietf-httpbis-header-structure-19]], sent over request whose value is a list of defined user locale preferences.
 
 
 **`Sec-CH-Locale-Preferences-*`**
 
-The following table represents the list of headers returning individual opted-in `Locale-Preferences`:
+The following table represents the two headers returning individual opted-in `Locale-Preferences`. These headers group together related sets of preferences in two buckets:
 
 <table>
-<td> <dfn export>Sec-CH-Locale-Preferences-calendar</dfn>          <td> `Sec-CH-Locale-Preferences-calendar         : "buddhist"`  </tr>
-<td> <dfn export>Sec-CH-Locale-Preferences-currencyFormat</dfn>    <td> `Sec-CH-Locale-Preferences-currencyFormat   : "account"`    </tr> 
-<td> <dfn export>Sec-CH-Locale-Preferences-collation</dfn>         <td> `Sec-CH-Locale-Preferences-collation        : "search"`     </tr> 
-<td> <dfn export>Sec-CH-Locale-Preferences-currencyCode</dfn>      <td> `Sec-CH-Locale-Preferences-currencyCode     : "EUR"`        </tr> 
-<td> <dfn export>Sec-CH-Locale-Preferences-emojiStyle</dfn>       <td> `Sec-CH-Locale-Preferences-emojiStyle       : "emoji"`      </tr> 
-<td> <dfn export>Sec-CH-Locale-Preferences-firstDayOfTheWeek</dfn>  <td> `Sec-CH-Locale-Preferences-firstDayOfTheWeek : "sun"`        </tr> 
-<td> <dfn export>Sec-CH-Locale-Preferences-hourCycle</dfn>         <td> `Sec-CH-Locale-Preferences-hourCycle        : "h12"`        </tr> 
-<td> <dfn export>Sec-CH-Locale-Preferences-measurementSystem</dfn> <td> `Sec-CH-Locale-Preferences-measurementSystem: "metric"`     </tr> 
-<td> <dfn export>Sec-CH-Locale-Preferences-measurementUnit</dfn>   <td> `Sec-CH-Locale-Preferences-measurementUnit  : "kelvin"`       </tr> 
-<td> <dfn export>Sec-CH-Locale-Preferences-numberingSystem</dfn>   <td> `Sec-CH-Locale-Preferences-numberingSystem  : "latn";` </tr> 
-<td> <dfn export>Sec-CH-Locale-Preferences-timeZone</dfn>          <td> `Sec-CH-Locale-Preferences-timeZone         : "Atlantic/Azores";`  </tr>
-<td> <dfn export>Sec-CH-Locale-Preferences-region</dfn>            <td> `Sec-CH-Locale-Preferences-region           : "PT"` </tr>
-<td> <dfn export>Sec-CH-Locale-Preferences-dateFormat</dfn>       <td> `Sec-CH-Locale-Preferences-dateFormat       : "EEE, d MMM yyyy HH:mm:ss Z"` </tr>
-
-<thead> <tr><th style=text-align: left> Client Hint <th style=text-align: left> Example output
+<tr><td><dfn export>Sec-CH-Locale-Preferences-DateTime</dfn>	<td> `Sec-CH-Locale-Preferences-DateTime`	:  hourCycle="h24";timeZone="CET";... </td></tr>
+<tr><td><dfn export>Sec-CH-Locale-Preferences-LanguageRegion</dfn>	<td> `Sec-CH-Locale-Preferences-LanguageRegion`	: calendar="buddhist"; measurementSystem="metric"; ... </td> </tr>
+<thead><tr><th style=text-align: left>Client hint<th style=text-align: left> Example output
 </table>
+
 
 ### Usage example ### {#user-locale-client-hints-example}
 
@@ -175,30 +162,22 @@ GET / HTTP/1.1
 Host: example.com
 ```
 
-2. The server responds, telling the client via an `Accept-CH` header (Section 2.2.1 of [[!RFC8942]]) along with the initial response with `Sec-CH-Locale-Preferences-numberingSystem` and the `Sec-CH-Locale-Preferences-timeZone` Client Hints: 
+2. The server responds, telling the client via an `Accept-CH` header (Section 2.2.1 of [[!RFC8942]]) along with the initial response with `Sec-CH-Locale-Preferences-DateTime` and the `Sec-CH-Locale-Preferences-LanguageRegion` Client Hints: 
 
 
 ```http
 HTTP/1.1 200 OK
 Content-Type: text/html
-Accept-CH: Sec-CH-Locale-Preferences-numberingSystem, Sec-CH-Locale-Preferences-timeZone
+Accept-CH: Sec-CH-Locale-Preferences-DateTime, Sec-CH-Locale-Preferences-LanguageRegion
 ```
 
-3. Then subsequent requests to https://example.com will include the following request headers in case the user sets `numberingSystem` and `timeZone` values:
+3. Subsequent requests to https://example.com will include the following request headers in case the user sets `numberingSystem` and `timeZone` values:
 
 ```http
 GET / HTTP/1.1
 Host: example.com
-Sec-CH-Locale-Preferences-calendar:"buddhist"
-Sec-CH-Locale-Preferences-timeZone: "Africa/Lagos"
-```
-
-In case the user did not set any `Locale-Preferences` for accepted values, request headers return the default value for given locale
-```http
-GET / HTTP/1.1
-Host: example.com
-Sec-CH-Locale-Preferences-calendar:"gregory"
-Sec-CH-Locale-Preferences-timeZone: "Europe/London"
+Sec-CH-Locale-Preferences-DateTime: timeZone="CET"
+Sec-CH-Locale-Preferences-LanguageRegion: numberingSystem="jpan"
 ```
 
 4. The server can then tailor the response to the client's preferences accordingly.
@@ -210,37 +189,95 @@ Sec-CH-Locale-Preferences-timeZone: "Europe/London"
 These client hints should also be exposed as JavaScript APIs via `navigator.locales` as suggested in
 [#68](https://github.com/tc39/ecma402/issues/68) or by creating a new `navigator.localePreferences` that exposes `Locale-Preferences` information as below. 
 
-### Usage examples ### {#user-local-preferences-javascript-api-examples}
+### IDL ### {#user-local-preferences-javascript-idl}
+
+<pre class="idl">
+
+```
+dictionary LocalePreferencesLanguageRegion {
+  DOMString calendar;
+  DOMString measurementSystem;
+  DOMString measurementUnit;
+  DOMString numberingSystem;
+  DOMString region;
+};
+
+dictionary LocalePreferencesDateTime {
+  DOMString dateFormat;
+  DOMString timeFormats;
+  DOMString timeZone;
+  DOMString hourCycle;
+  DOMString firstDayOfTheWeek;
+};
+
+
+interface mixin NavigatorLocalePreferences {
+  readonly attribute LocalePreferencesLanguageRegion localeRegion;
+  readonly attribute LocalePreferencesDateTime dateTime;
+};
+
+Navigator includes NavigatorLocalePreferences;
+WorkerNavigator includes NavigatorLocalePreferences;
+```
+
+</pre>
+
+
+### Proposed Syntax ### {#user-locale-preferences-javascript-api-proposed-syntax}
 <div class=example>
 ```js
 
-navigator.localePreferences.calendar(); // =>  "gregory"
-navigator.localePreferences.currencyFormat(); // => "EUR"
-navigator.localePreferences.timeZone(); // =>  "Europe/London"
-navigator.localePreferences.region(); // => "GB"
- 
-// user has not set `firstDayOfTheWeek` value in their OS, it returns the default value for given locale
-navigator.localePreferences.firstDayOfTheWeek(); // =>  "7"
+// languageAndRegion
+navigator.localePreferences['languageRegion'];
+navigator.localePreferences.languageRegion;
+self.navigator.localePreferences.languageRegion;
+// Output =>  => {calendar: "buddhist", measurementSystem: "metric", ... }
+
+// languageAndRegion
+navigator.localePreferences['dateTime'];
+navigator.localePreferences.dateTime;
+self.navigator.localePreferences.dateTime;
+// Output => { dateFormat: "EEE, d MMM yyyy HH:mm:ss Z", ... }
+
+
+// Window or WorkerGlobalScope event 
+
+window.onlocalepreferences = (event) => {
+  console.log('localepreferences event detected!');
+};
+
+// Or 
+
+window.addEventListener('localepreferences', () => {
+  console.log('localepreferences event detected!');
+});
+
 ```
 </div>
-
+### Examples ### {#user-locale-preferences-javascript-api-examples}
 <div class=example>
+
+Use the `navigator.localePreferences` to populate data with user preferences
+
 ```js
 // User set locale preferences for calendar , region and hourCycle
-navigator.localePreferences.calendar(); // =>  "gregory"
-navigator.localePreferences.region(); // => 'GB'
-navigator.localePreferences.hourCycle(); // => 'h11';
-navigator.localePreferences.timeZone(); // =>  'Europe/London'
+navigator.localePreferences['languageRegion'];
+navigator.localePreferences['dateTime'];
 
-const localePreferences =  (...iterate over needed navigator.localePreferences )
+const preferences =  (...iterate over needed navigator.localePreferences )
 
-new Intl.Locale('es' ,  localePreferences ).maximize();
+
+new Intl.Locale('es' ,  preferences ).maximize();
 // => Locale {..., calendar:"gregory" , region:"GB" , hourCycle:"h11" }
 
-new Intl.DateTimeFormat('es', localePreferences).resolvedOptions();
+new Intl.DateTimeFormat('es', preferences ).resolvedOptions();
 // =>  {locale: 'es', calendar: 'gregory', numberingSystem: 'latn', timeZone: 'Europe/London', ...}
 
 ```
+
+
+
+
 </div>
 
  Privacy and Security Considerations {#privacy-and-security-considerations} 
