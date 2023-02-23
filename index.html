@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version f043d3484, updated Fri Feb 17 10:53:48 2023 -0800" name="generator">
   <link href="https://github.com/romulocintra/user-locale-client-hints" rel="canonical">
-  <meta content="ad85d5c00086e573b0579a800bc00efbf1219bf9" name="document-revision">
+  <meta content="e076f43dce1e04a3fbae45c88b31104db43b9b5d" name="document-revision">
 <style>/* style-autolinks */
 .css.css, .property.property, .descriptor.descriptor {
     color: var(--a-normal-text);
@@ -696,7 +696,7 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
     <figcaption>Browser conveys permitted OS preference information to server</figcaption>
    </figure>
    <h2 class="heading settled" data-level="2" id="user-locale-preferences-features"><span class="secno">2. </span><span class="content">User Locale Preferences Features</span><a class="self-link" href="#user-locale-preferences-features"></a></h2>
-   <p>We address the above use cases by using a pair of <a data-link-type="biblio" href="#biblio-client-hints" title="HTTP Client Hints">[CLIENT-HINTS]</a> headers and a homologous <a href="#javascript-api">§ 2.2 JavaScript API</a>. Both will be responsible for exposing and negotiating the exchange of user preferences from the OS to the required environment.</p>
+   <p>We propose to address the above use cases by using a pair of <a data-link-type="biblio" href="#biblio-client-hints" title="HTTP Client Hints">[CLIENT-HINTS]</a> headers and a homologous <a href="#javascript-api">§ 2.2 JavaScript API</a>. Both will be responsible for exposing and negotiating the exchange of user preferences from the OS to the required environment.</p>
    <p>We use <a data-link-type="dfn" href="https://cldr.unicode.org/index/bcp47-extension#unicode-extensions-for-bcp-47" id="ref-for-unicode-extensions-for-bcp-47">Unicode Extensions for BCP 47</a> or compatible as the main reference for the base mechanism for delivering user locale preferences. We define new standard <dfn data-dfn-type="dfn" data-export id="locale-preferences"><code>Locale-Preferences</code><a class="self-link" href="#locale-preferences"></a></dfn> Client Hints and <dfn data-dfn-for="NavigatorLocalePreferences" data-dfn-type="dfn" data-export id="navigatorlocalepreferences-navigatorlocalepreferences"><code>navigator.localePreferences</code><a class="self-link" href="#navigatorlocalepreferences-navigatorlocalepreferences"></a></dfn>, that would map the user locale preferences using the following steps:</p>
    <ol>
     <li data-md>
@@ -805,7 +805,7 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
     <p class="note" role="note"><span class="marker">Note:</span> The preferences ultimately included need to be validated and agreed to by security teams and stakeholders. For this proposal, we consider a subset of possible preferences that can be sorted into two categories: DateTime and LanguageRegion.</p>
    </blockquote>
    <h4 class="heading settled" data-level="2.1.3" id="client-hint-header-fields"><span class="secno">2.1.3. </span><span class="content"><code>Client Hint</code> Header fields</span><a class="self-link" href="#client-hint-header-fields"></a></h4>
-   <p>Servers will receive no information about the user’s locale preferences. Servers can instead opt-into receiving such information via a new <code>Locale-Preferences</code> Client Hints.</p>
+   <p>Servers will receive no information about the user’s locale preferences. Servers can instead opt-into receiving such information via  new <code>Locale-Preferences</code> Client Hints.</p>
    <p>To accomplish this, browsers should introduce a pair of new <code>Client Hint</code> header fields as part of a <a data-link-type="dfn" href="https://datatracker.ietf.org/doc/html/draft-ietf-httpbis-header-structure#structured-header" id="ref-for-structured-header">structured header</a> as defined in <a data-link-type="biblio" href="#biblio-draft-ietf-httpbis-header-structure-19" title="Structured Field Values for HTTP">[draft-ietf-httpbis-header-structure-19]</a>, sent over request whose value is a list of defined user locale preferences.</p>
    <p>**<code>Sec-CH-Locale-Preferences-*</code>**</p>
    <p>The following table represents the list of headers returning individual opted-in <code>Locale-Preferences</code>:</p>
@@ -822,8 +822,8 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
       <th left style="text-align:"> Example output 
    </table>
    <h4 class="heading settled" data-level="2.1.4" id="user-locale-client-hints-example"><span class="secno">2.1.4. </span><span class="content">Usage example</span><a class="self-link" href="#user-locale-client-hints-example"></a></h4>
-   <div class="example" id="example-0e394d2c">
-    <a class="self-link" href="#example-0e394d2c"></a> 
+   <div class="example" id="example-512b0263">
+    <a class="self-link" href="#example-512b0263"></a> 
     <ol>
      <li data-md>
       <p>The client makes an initial request to the server:</p>
@@ -845,7 +845,7 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
     </ol>
 <pre class="language-http highlight"><c- nf>GET</c-> <c- nn>/</c-> <c- kr>HTTP</c-><c- o>/</c-><c- m>1.1</c->
 <c- e>Host</c-><c- o>:</c-> <c- l>example.com</c->
-<c- e>Sec-CH-Locale-Preferences-DateTime</c-><c- o>:</c-> <c- l>timeZone=CET</c->
+<c- e>Sec-CH-Locale-Preferences-DateTime</c-><c- o>:</c-> <c- l>timeZone="CET"</c->
 <c- e>Sec-CH-Locale-Preferences-LanguageRegion</c-><c- o>:</c-> <c- l>numberingSystem=jpan </c->
 </pre>
     <ol start="3">

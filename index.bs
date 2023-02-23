@@ -89,7 +89,7 @@ For **server-side applications**, one way to get access to this information is v
 User Locale Preferences Features {#user-locale-preferences-features}
 =====================
 
-We address the above use cases by using a pair of [[!CLIENT-HINTS]] headers and a homologous [[#javascript-api]]. Both will be responsible for exposing and negotiating the exchange of user preferences from the OS to the required environment.
+We propose to address the above use cases by using a pair of [[!CLIENT-HINTS]] headers and a homologous [[#javascript-api]]. Both will be responsible for exposing and negotiating the exchange of user preferences from the OS to the required environment.
 
 We use [=Unicode Extensions for BCP 47=] or compatible as the main reference for the base mechanism for delivering user locale preferences. We define new standard <dfn export>`Locale-Preferences`</dfn> Client Hints and <dfn for='NavigatorLocalePreferences' export>`navigator.localePreferences`</dfn>, that would map the user locale preferences using the following steps:
 
@@ -132,22 +132,22 @@ Other user preferences that might be included based on user research about OS pr
 - show the day of the week
 - show date
 
-> Note: The preferences ultimately included need to be validated and agreed to by security teams and stakeholders. For this proposal, we consider a subset of possible preferences that can be sorted into two categories: DateTime and LanguageRegion. 
+> Note: The specific preferences ultimately included need to be validated and agreed to by security teams and stakeholders. For this proposal, we consider a subset of possible preferences that can be sorted into two categories: DateTime and LanguageRegion. 
 
 ### `Client Hint` Header fields ### {#client-hint-header-fields}
 
-Servers will receive no information about the user's locale preferences. Servers can instead opt-into receiving such information via a new `Locale-Preferences` Client Hints.
+Servers will receive no information about the user's locale preferences. Servers can instead opt into receiving such information via new `Locale-Preferences` Client Hints.
 
 To accomplish this, browsers should introduce a pair of new `Client Hint` header fields as part of a [=structured header=] as defined in [[!draft-ietf-httpbis-header-structure-19]], sent over request whose value is a list of defined user locale preferences.
 
 
 **`Sec-CH-Locale-Preferences-*`**
 
-The following table represents the list of headers returning individual opted-in `Locale-Preferences`:
+The following table represents the two headers returning individual opted-in `Locale-Preferences`. These headers group together related sets of preferences in two buckets:
 
 <table>
 <td><dfn export>Sec-CH-Locale-Preferences-DateTime</dfn>	<td> `Sec-CH-Locale-Preferences-DateTime`	:  hourCycle="h24";timeZone="CET";... </td>
-<td><dfn export>Sec-CH-Locale-Preferences-LanguageRegion</dfn>	<td> `Sec-CH-Locale-Preferences-LanguageRegion`	: calendar="buddhist"; measurementSystem="metric", ... </td>
+<td><dfn export>Sec-CH-Locale-Preferences-LanguageRegion</dfn>	<td> `Sec-CH-Locale-Preferences-LanguageRegion`	: calendar="buddhist"; measurementSystem="metric"; ... </td>
 <thead><tr><th style=text-align: left>Client hint<th style=text-align: left> Example output
 </table>
 
@@ -171,16 +171,16 @@ Content-Type: text/html
 Accept-CH: Sec-CH-Locale-Preferences-DateTime, Sec-CH-Locale-Preferences-LanguageRegion
 ```
 
-3. Then subsequent requests to https://example.com will include the following request headers in case the user sets `numberingSystem` and `timeZone` values:
+3. Subsequent requests to https://example.com will include the following request headers in case the user sets `numberingSystem` and `timeZone` values:
 
-```http
+```http`
 GET / HTTP/1.1
 Host: example.com
-Sec-CH-Locale-Preferences-DateTime: timeZone=CET
-Sec-CH-Locale-Preferences-LanguageRegion: numberingSystem=jpan 
+Sec-CH-Locale-Preferences-DateTime: timeZone="CET"
+Sec-CH-Locale-Preferences-LanguageRegion: numberingSystem="jpan"
 ```
 
-3. The server can then tailor the response to the client's preferences accordingly.
+4. The server can then tailor the response to the client's preferences accordingly.
 
 </div>
 
@@ -191,7 +191,7 @@ These client hints should also be exposed as JavaScript APIs via `navigator.loca
 
 ### IDL ### {#user-local-preferences-javascript-idl}
 
-<pre class='idl'>
+<pre class="idl">
 
 ```
 dictionary LocalePreferencesLocaleRegion {
@@ -224,7 +224,7 @@ WorkerNavigator includes NavigatorLocalePreferences;
 
 
 ### Proposed Syntax ### {#user-locale-preferences-javascript-api-proposed-syntax}
-<div class=example>
+<div class="example">
 ```js
 
 // languageAndRegion
